@@ -324,7 +324,6 @@ export function HeroSection() {
         {/* Trust line */}
         <motion.div
           {...fadeUp(1.05)}
-          animate="show"
           className="mt-10 flex flex-wrap items-center justify-center gap-6 text-slate-500 text-sm"
         >
           {[
