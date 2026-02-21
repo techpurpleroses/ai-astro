@@ -1,0 +1,87 @@
+{
+  "threads": {
+    "luna-rose": [
+      {
+        "id": "m1", "advisorId": "luna-rose", "role": "advisor",
+        "content": "Hello, beautiful soul! 🌙 I'm Luna Rose. I sense a significant shift in your relationship energy right now. What would you like to explore today?",
+        "timestamp": "2026-02-19T14:02:00Z"
+      },
+      {
+        "id": "m2", "advisorId": "luna-rose", "role": "user",
+        "content": "I'm feeling confused about a new relationship. It's intense but I don't know if it's right for me.",
+        "timestamp": "2026-02-19T14:03:30Z"
+      },
+      {
+        "id": "m3", "advisorId": "luna-rose", "role": "advisor",
+        "content": "That intensity you're feeling has a cosmic signature. With Venus in Pisces activating your 7th house right now, deep soul connections are opening — but they can feel overwhelming precisely because they're real. Can you tell me their sun sign?",
+        "timestamp": "2026-02-19T14:04:45Z"
+      },
+      {
+        "id": "m4", "advisorId": "luna-rose", "role": "user",
+        "content": "They're a Capricorn. And yes, the connection feels unlike anything I've experienced.",
+        "timestamp": "2026-02-19T14:05:20Z"
+      },
+      {
+        "id": "m5", "advisorId": "luna-rose", "role": "advisor",
+        "content": "Scorpio and Capricorn... this is one of the zodiac's most powerful unions. I pulled a card for your situation — let me share what the cosmos is saying.",
+        "timestamp": "2026-02-19T14:06:10Z",
+        "tarotCard": {
+          "id": "the-star",
+          "name": "The Star",
+          "number": 17,
+          "arcana": "major",
+          "uprightMeaning": "Hope, renewal, serenity, inspiration, faith in the future",
+          "reversedMeaning": "Despair, lack of faith, discouragement, insecurity",
+          "tipOfDay": "Trust the path unfolding before you — the stars are aligning in your favor.",
+          "imageSlug": "the-star"
+        }
+      },
+      {
+        "id": "m6", "advisorId": "luna-rose", "role": "advisor",
+        "content": "The Star — this is beautiful. It speaks of hope after difficulty, of a connection that renews your faith in love. This relationship has potential to be genuinely healing for both of you. Trust the process.",
+        "timestamp": "2026-02-19T14:07:00Z"
+      }
+    ],
+    "orion-black": [
+      {
+        "id": "m1", "advisorId": "orion-black", "role": "advisor",
+        "content": "Welcome. I'm Orion. I work with career astrology and life purpose. What direction are you navigating right now?",
+        "timestamp": "2026-02-18T10:00:00Z"
+      },
+      {
+        "id": "m2", "advisorId": "orion-black", "role": "user",
+        "content": "I'm considering leaving my corporate job to start my own business. I'm terrified but excited.",
+        "timestamp": "2026-02-18T10:01:30Z"
+      },
+      {
+        "id": "m3", "advisorId": "orion-black", "role": "advisor",
+        "content": "That tension between fear and excitement is exactly what a major life threshold feels like. With your Scorpio Sun in the 9th house and Jupiter transiting your 1st this year, 2026 is genuinely one of the most powerful years you'll have for launching something independent. The fear is wisdom — it means you know how important this is.",
+        "timestamp": "2026-02-18T10:03:00Z"
+      }
+    ],
+    "atlas-grey": [
+      {
+        "id": "m1", "advisorId": "atlas-grey", "role": "advisor",
+        "content": "Good to see you. What timeframe are you looking to understand? I work best when you give me a specific question about timing.",
+        "timestamp": "2026-02-17T09:00:00Z"
+      },
+      {
+        "id": "m2", "advisorId": "atlas-grey", "role": "user",
+        "content": "When is the best time this year to make a major move — either relocation or a big life decision?",
+        "timestamp": "2026-02-17T09:01:00Z"
+      },
+      {
+        "id": "m3", "advisorId": "atlas-grey", "role": "advisor",
+        "content": "Looking at your solar return and the Jupiter-Uranus cycle for 2026: April through June is exceptional for bold action, particularly anything involving travel, expansion, or changing your physical environment. Late September also opens a second window but is better for decisions you've been planning longer.",
+        "timestamp": "2026-02-17T09:03:30Z"
+      }
+    ]
+  },
+  "suggestedQuestions": [
+    "What does my birth chart say about love?",
+    "When will my career breakthrough happen?",
+    "What's blocking my spiritual growth?",
+    "Is this the right time to make a big change?",
+    "What karmic lessons am I working through?"
+  ]
+}

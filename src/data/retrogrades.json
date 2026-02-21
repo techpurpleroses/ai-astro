@@ -1,0 +1,33 @@
+{
+  "active": [
+    {
+      "planet": "Jupiter",
+      "startDate": "2025-10-09",
+      "endDate": "2026-02-04",
+      "sign": "Gemini",
+      "isActive": false,
+      "interpretation": "Jupiter retrograde invited a period of internal expansion — reviewing beliefs, revisiting abandoned opportunities, and questioning what growth truly means to you. With Jupiter now direct, the wisdom gathered is ready to be applied outwardly.",
+      "tags": ["Inner reflection", "Belief review", "Rewriting your truth"]
+    }
+  ],
+  "upcoming": [
+    {
+      "planet": "Mercury",
+      "startDate": "2026-03-15",
+      "endDate": "2026-04-07",
+      "sign": "Aries",
+      "isActive": false,
+      "interpretation": "Mercury's retrograde through bold Aries will challenge impulsive communications. Back up your data, re-read before sending, and revisit decisions made in haste. A powerful time for editing and revision.",
+      "tags": ["Communication caution", "Revision", "Patience"]
+    },
+    {
+      "planet": "Venus",
+      "startDate": "2026-03-01",
+      "endDate": "2026-04-12",
+      "sign": "Pisces",
+      "isActive": false,
+      "interpretation": "Venus retrograde in Pisces stirs the emotional waters of love and beauty. Past relationships may resurface. This is a time to clarify your values, not to begin new romantic pursuits.",
+      "tags": ["Past lovers", "Values clarity", "Inner beauty"]
+    }
+  ]
+}

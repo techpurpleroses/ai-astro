@@ -1,0 +1,50 @@
+{
+  "tarot": {
+    "id": "the-star",
+    "name": "The Star",
+    "number": 17,
+    "arcana": "major",
+    "uprightMeaning": "Hope, faith, renewal, inspiration, serenity, spirituality, and the promise of good things to come. After challenges, you emerge renewed with a clear sense of purpose.",
+    "reversedMeaning": "Lack of faith, despair, discouragement, feeling disconnected from the universe's guidance.",
+    "tipOfDay": "Allow yourself to receive. The universe is pouring blessings toward you — your only task is to open your hands and heart.",
+    "imageSlug": "the-star"
+  },
+  "magicBall": {
+    "answers": [
+      { "id": "1", "answer": "The stars align in your favor.", "sentiment": "positive" },
+      { "id": "2", "answer": "A resounding yes from the cosmos.", "sentiment": "positive" },
+      { "id": "3", "answer": "Without a doubt, the universe says yes.", "sentiment": "positive" },
+      { "id": "4", "answer": "The signs are promising — move forward.", "sentiment": "positive" },
+      { "id": "5", "answer": "Seek more clarity before you act.", "sentiment": "neutral" },
+      { "id": "6", "answer": "The cosmos remains silent on this matter.", "sentiment": "neutral" },
+      { "id": "7", "answer": "Mercury's position clouds the answer — try again.", "sentiment": "neutral" },
+      { "id": "8", "answer": "The stars advise caution at this time.", "sentiment": "negative" },
+      { "id": "9", "answer": "Not now — but the tides will shift.", "sentiment": "negative" },
+      { "id": "10", "answer": "Shadows obscure the path — patience is needed.", "sentiment": "negative" }
+    ],
+    "suggestedQuestions": [
+      "Will this week bring good news?",
+      "Is this the right path for me?",
+      "Should I take the leap?",
+      "Will love find me soon?",
+      "Is change coming my way?"
+    ]
+  },
+  "loveTip": "Open your heart to what arrives unannounced today. Venus is weaving connections you cannot yet see — trust the invisible threads.",
+  "loveDetail": "Your emotional world is rich with possibility right now. Venus in a harmonious position to your chart ruler creates an undeniable magnetism. Whether single or partnered, this is a day for authentic expression over performance. Say the thing you've been holding back. The stars support your vulnerability.",
+  "dos": [
+    "Trust your first instinct in all interactions",
+    "Begin a creative project you've been postponing",
+    "Reach out to someone who matters to you",
+    "Spend time in nature to ground your energy"
+  ],
+  "donts": [
+    "Avoid making irreversible financial decisions today",
+    "Don't engage in arguments that drain your energy",
+    "Resist the urge to overanalyze others' motives",
+    "Don't neglect your body's need for rest"
+  ],
+  "luckyNumber": 7,
+  "luckyNumberExplanation": "Seven resonates with Neptune, your spiritual guide, and aligns with the Chariot's energy of purposeful movement. When you see this number today, treat it as a cosmic wink — you are exactly where you need to be.",
+  "trendingQuestion": "Where on Earth will your stars align with destiny?"
+}

@@ -1,0 +1,131 @@
+{
+  "bigThree": {
+    "sun":       { "sign": "Scorpio",  "degree": 15, "glyph": "♏" },
+    "moon":      { "sign": "Cancer",   "degree": 8,  "glyph": "♋" },
+    "ascendant": { "sign": "Aquarius", "degree": 22, "glyph": "♒" }
+  },
+  "stellarComposition": {
+    "fire": 18,
+    "earth": 22,
+    "air": 28,
+    "water": 32,
+    "cardinal": 30,
+    "fixed": 42,
+    "mutable": 28
+  },
+  "planets": [
+    {
+      "name": "Sun",       "glyph": "☉", "sign": "Scorpio",    "house": 9,  "degree": 15, "absoluteDegree": 225, "isRetrograde": false,
+      "description": "Your core identity and life purpose. The Sun in Scorpio gives you intense focus, passion, and transformative power."
+    },
+    {
+      "name": "Moon",      "glyph": "☽", "sign": "Cancer",     "house": 5,  "degree": 8,  "absoluteDegree": 98,  "isRetrograde": false,
+      "description": "Your emotional nature and instincts. Moon in Cancer makes you deeply intuitive, nurturing, and emotionally sensitive."
+    },
+    {
+      "name": "Mercury",   "glyph": "☿", "sign": "Scorpio",    "house": 9,  "degree": 3,  "absoluteDegree": 213, "isRetrograde": false,
+      "description": "Your mind and communication style. Mercury in Scorpio brings penetrating intelligence and a talent for uncovering hidden truths."
+    },
+    {
+      "name": "Venus",     "glyph": "♀", "sign": "Libra",      "house": 8,  "degree": 27, "absoluteDegree": 207, "isRetrograde": false,
+      "description": "Your love nature and aesthetic sense. Venus in Libra seeks harmony, balance, and refined beauty in all relationships."
+    },
+    {
+      "name": "Mars",      "glyph": "♂", "sign": "Leo",        "house": 6,  "degree": 19, "absoluteDegree": 139, "isRetrograde": false,
+      "description": "Your drive and ambition. Mars in Leo gives bold, dramatic energy and a powerful desire to lead and shine."
+    },
+    {
+      "name": "Jupiter",   "glyph": "♃", "sign": "Pisces",     "house": 1,  "degree": 4,  "absoluteDegree": 334, "isRetrograde": false,
+      "description": "Your area of expansion and luck. Jupiter in Pisces blesses you with spiritual wisdom, compassion, and creative gifts."
+    },
+    {
+      "name": "Saturn",    "glyph": "♄", "sign": "Capricorn",  "house": 11, "degree": 12, "absoluteDegree": 282, "isRetrograde": false,
+      "description": "Your discipline and life lessons. Saturn in Capricorn builds mastery through patient effort, responsibility, and long-term planning."
+    },
+    {
+      "name": "Uranus",    "glyph": "♅", "sign": "Aquarius",   "house": 12, "degree": 18, "absoluteDegree": 318, "isRetrograde": false,
+      "description": "Your need for freedom and originality. Uranus in Aquarius brings revolutionary ideas and a desire to break conventional limits."
+    },
+    {
+      "name": "Neptune",   "glyph": "♆", "sign": "Capricorn",  "house": 11, "degree": 24, "absoluteDegree": 294, "isRetrograde": false,
+      "description": "Your spirituality and dreams. Neptune in Capricorn gives you mystical insight applied through practical, structured channels."
+    },
+    {
+      "name": "Pluto",     "glyph": "♇", "sign": "Scorpio",    "house": 9,  "degree": 28, "absoluteDegree": 238, "isRetrograde": false,
+      "description": "Your area of transformation. Pluto in Scorpio brings deep, generational power and the ability to regenerate from life's extremes."
+    },
+    {
+      "name": "Chiron",    "glyph": "⚷", "sign": "Virgo",      "house": 7,  "degree": 6,  "absoluteDegree": 156, "isRetrograde": false,
+      "description": "Your wound and greatest healing gift. Chiron in Virgo reveals sensitivity around perfectionism and service."
+    },
+    {
+      "name": "Ascendant", "glyph": "AC", "sign": "Aquarius",  "house": 1,  "degree": 22, "absoluteDegree": 322, "isRetrograde": false,
+      "description": "Your outer personality and how others see you. Aquarius rising gives you an air of cool independence and intellectual curiosity."
+    }
+  ],
+  "houses": [
+    { "number": 1,  "sign": "Aquarius",    "degree": 22, "absoluteDegree": 322 },
+    { "number": 2,  "sign": "Pisces",      "degree": 8,  "absoluteDegree": 338 },
+    { "number": 3,  "sign": "Aries",       "degree": 2,  "absoluteDegree": 2   },
+    { "number": 4,  "sign": "Taurus",      "degree": 5,  "absoluteDegree": 35  },
+    { "number": 5,  "sign": "Gemini",      "degree": 14, "absoluteDegree": 74  },
+    { "number": 6,  "sign": "Cancer",      "degree": 20, "absoluteDegree": 110 },
+    { "number": 7,  "sign": "Leo",         "degree": 22, "absoluteDegree": 142 },
+    { "number": 8,  "sign": "Virgo",       "degree": 8,  "absoluteDegree": 158 },
+    { "number": 9,  "sign": "Libra",       "degree": 2,  "absoluteDegree": 182 },
+    { "number": 10, "sign": "Scorpio",     "degree": 5,  "absoluteDegree": 215 },
+    { "number": 11, "sign": "Sagittarius", "degree": 14, "absoluteDegree": 254 },
+    { "number": 12, "sign": "Capricorn",   "degree": 20, "absoluteDegree": 290 }
+  ],
+  "aspects": [
+    { "planet1": "Sun",     "planet2": "Moon",    "type": "trine",       "orb": 1.2, "degree1": 225, "degree2": 98  },
+    { "planet1": "Sun",     "planet2": "Saturn",  "type": "sextile",     "orb": 2.7, "degree1": 225, "degree2": 282 },
+    { "planet1": "Moon",    "planet2": "Jupiter", "type": "sextile",     "orb": 1.9, "degree1": 98,  "degree2": 334 },
+    { "planet1": "Venus",   "planet2": "Mars",    "type": "square",      "orb": 3.3, "degree1": 207, "degree2": 139 },
+    { "planet1": "Mercury", "planet2": "Pluto",   "type": "conjunction", "orb": 1.0, "degree1": 213, "degree2": 238 },
+    { "planet1": "Jupiter", "planet2": "Saturn",  "type": "square",      "orb": 2.1, "degree1": 334, "degree2": 282 },
+    { "planet1": "Sun",     "planet2": "Uranus",  "type": "trine",       "orb": 3.0, "degree1": 225, "degree2": 318 },
+    { "planet1": "Moon",    "planet2": "Neptune", "type": "opposition",  "orb": 4.5, "degree1": 98,  "degree2": 294 }
+  ],
+  "dailyTransits": {
+    "shortTerm": [
+      {
+        "id": "dt-1", "transitingPlanet": "Mercury", "natalPlanet": "Sun", "aspect": "conjunction",
+        "orb": 0.8, "startDate": "2026-02-18", "endDate": "2026-02-22", "intensity": "high",
+        "title": "Mercury conjunct natal Sun",
+        "interpretation": "Your mind is razor-sharp today. Communication flows effortlessly and your ideas carry extra weight. Perfect for important conversations, writing, or presenting your vision.",
+        "tags": ["communication", "clarity", "expression"]
+      },
+      {
+        "id": "dt-2", "transitingPlanet": "Venus", "natalPlanet": "Moon", "aspect": "trine",
+        "orb": 1.4, "startDate": "2026-02-19", "endDate": "2026-02-24", "intensity": "medium",
+        "title": "Venus trine natal Moon",
+        "interpretation": "Emotional warmth and social grace blend beautifully now. Relationships deepen, creative inspiration flows, and you feel at peace with yourself.",
+        "tags": ["love", "harmony", "creativity"]
+      },
+      {
+        "id": "dt-3", "transitingPlanet": "Mars", "natalPlanet": "Ascendant", "aspect": "sextile",
+        "orb": 2.1, "startDate": "2026-02-17", "endDate": "2026-02-21", "intensity": "medium",
+        "title": "Mars sextile natal Ascendant",
+        "interpretation": "Extra vitality and magnetic presence. Others notice your energy and confidence. Take initiative in physical activities or personal projects.",
+        "tags": ["energy", "confidence", "action"]
+      }
+    ],
+    "longTerm": [
+      {
+        "id": "lt-1", "transitingPlanet": "Saturn", "natalPlanet": "Moon", "aspect": "square",
+        "orb": 1.8, "startDate": "2025-11-01", "endDate": "2026-05-15", "intensity": "high",
+        "title": "Saturn square natal Moon",
+        "interpretation": "A period of emotional maturation. Old patterns of dependency are being restructured. Though sometimes heavy, this transit builds profound emotional resilience and self-reliance.",
+        "tags": ["maturity", "discipline", "emotions"]
+      },
+      {
+        "id": "lt-2", "transitingPlanet": "Pluto", "natalPlanet": "Ascendant", "aspect": "sextile",
+        "orb": 2.4, "startDate": "2025-06-01", "endDate": "2026-12-31", "intensity": "high",
+        "title": "Pluto sextile natal Ascendant",
+        "interpretation": "Deep personal transformation is underway. Your outer presence is shifting powerfully — others sense a new magnetism and depth to your personality.",
+        "tags": ["transformation", "power", "identity"]
+      }
+    ]
+  }
+}

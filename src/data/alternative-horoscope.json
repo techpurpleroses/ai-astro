@@ -1,0 +1,22 @@
+{
+  "your-day": {
+    "text": "The cosmos align in your favor today, Scorpio. A potent blend of Neptunian intuition and Martian drive creates the perfect conditions for meaningful breakthroughs. Trust your gut above all else — your instincts are your most reliable navigation system right now.",
+    "rating": 4,
+    "keywords": ["Intuitive", "Driven", "Transformative"]
+  },
+  "love": {
+    "text": "Venus forms a harmonious trine to your natal Pluto, igniting a magnetic field around you that's difficult to ignore. For those in relationships, this energy deepens bonds and opens the door to transformative conversations. Singles may encounter someone whose soul feels strangely familiar — a connection that transcends the ordinary.",
+    "rating": 5,
+    "keywords": ["Magnetic", "Deep connection", "Passionate"]
+  },
+  "health": {
+    "text": "Your body is speaking clearly today — are you listening? The Moon's position highlights your 6th house of wellness, urging you to prioritize rest over restlessness. Incorporate grounding practices: a walk in nature, mindful eating, or a few minutes of conscious breathing can recalibrate your nervous system significantly.",
+    "rating": 3,
+    "keywords": ["Rest", "Grounding", "Mindfulness"]
+  },
+  "career": {
+    "text": "Professional opportunities are crystallizing beneath the surface. Mercury's precise sextile to your Midheaven gives your words unusual power today — presentations land with impact, emails get responses, negotiations favor your position. One carefully chosen conversation could open a door you've been waiting months to see.",
+    "rating": 4,
+    "keywords": ["Strategic", "Impactful", "Advancement"]
+  }
+}

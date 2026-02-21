@@ -1,0 +1,80 @@
+{
+  "pairs": {
+    "scorpio-cancer": {
+      "overall": 94, "love": 96, "career": 82, "friendship": 90, "sex": 98,
+      "summary": "A deeply intuitive and emotionally intense bond. Scorpio and Cancer form one of the most magnetic connections in the zodiac — both water signs, they understand each other's depths without words.",
+      "strengths": ["Profound emotional understanding", "Unshakeable loyalty", "Intense physical chemistry", "Shared need for depth and meaning"],
+      "challenges": ["Both can be too possessive", "Emotional storms can escalate", "Difficulty letting go of past wounds"]
+    },
+    "scorpio-pisces": {
+      "overall": 91, "love": 93, "career": 78, "friendship": 89, "sex": 95,
+      "summary": "A mystical, soulful pairing. Scorpio's depth meets Pisces' boundless imagination, creating a transcendent bond that feels fated and otherworldly.",
+      "strengths": ["Spiritual and emotional resonance", "Deep creative collaboration", "Natural psychic understanding", "Mutual acceptance"],
+      "challenges": ["Pisces may feel overwhelmed by Scorpio's intensity", "Both can avoid practical reality", "Trust needs constant nurturing"]
+    },
+    "scorpio-aries": {
+      "overall": 68, "love": 72, "career": 74, "friendship": 60, "sex": 88,
+      "summary": "A clash of titans — passionate, electric, and explosive. This pairing generates intense attraction but requires conscious work on power dynamics and respect.",
+      "strengths": ["Magnetic physical attraction", "Both are fearless and driven", "Exciting and never dull"],
+      "challenges": ["Power struggles are constant", "Aries impulsiveness vs Scorpio's need for control", "Tempers flare frequently"]
+    },
+    "scorpio-taurus": {
+      "overall": 75, "love": 80, "career": 70, "friendship": 68, "sex": 91,
+      "summary": "Opposite signs that create powerful magnetic pull. Scorpio's intensity meets Taurus's sensuality — deeply physical but prone to stubborn standoffs.",
+      "strengths": ["Incredible physical chemistry", "Mutual devotion", "Complementary strengths"],
+      "challenges": ["Both are extremely stubborn", "Jealousy can become toxic", "Different approaches to security"]
+    },
+    "scorpio-virgo": {
+      "overall": 85, "love": 82, "career": 92, "friendship": 84, "sex": 80,
+      "summary": "A power couple built on mutual respect and shared standards. Scorpio's strategic mind pairs beautifully with Virgo's analytical precision.",
+      "strengths": ["Intellectual depth and trust", "Complementary strengths", "High standards shared", "Exceptional professional partnership"],
+      "challenges": ["Scorpio may find Virgo overly critical", "Virgo may feel Scorpio is too secretive", "Both can be perfectionists"]
+    },
+    "scorpio-capricorn": {
+      "overall": 88, "love": 84, "career": 96, "friendship": 86, "sex": 84,
+      "summary": "A powerhouse pairing. Both are ambitious, strategic, and intensely focused — together they can conquer almost anything they set their minds to.",
+      "strengths": ["Shared ambition and drive", "Mutual respect for strength", "Long-term thinking", "Powerful professional synergy"],
+      "challenges": ["Both can be emotionally guarded", "Workaholism can sideline intimacy", "Both struggle to be vulnerable"]
+    }
+  },
+  "bestMatches": {
+    "aries":       ["Leo", "Sagittarius", "Gemini", "Aquarius"],
+    "taurus":      ["Virgo", "Capricorn", "Cancer", "Pisces"],
+    "gemini":      ["Libra", "Aquarius", "Aries", "Leo"],
+    "cancer":      ["Scorpio", "Pisces", "Taurus", "Virgo"],
+    "leo":         ["Aries", "Sagittarius", "Gemini", "Libra"],
+    "virgo":       ["Taurus", "Capricorn", "Cancer", "Scorpio"],
+    "libra":       ["Gemini", "Aquarius", "Leo", "Sagittarius"],
+    "scorpio":     ["Cancer", "Pisces", "Virgo", "Capricorn"],
+    "sagittarius": ["Aries", "Leo", "Libra", "Aquarius"],
+    "capricorn":   ["Taurus", "Virgo", "Scorpio", "Pisces"],
+    "aquarius":    ["Gemini", "Libra", "Aries", "Sagittarius"],
+    "pisces":      ["Cancer", "Scorpio", "Taurus", "Capricorn"]
+  },
+  "todaysMatches": {
+    "love": [
+      { "sign1": "Scorpio", "sign2": "Cancer",      "score": 97, "note": "Venus aligns perfectly — deep emotional bonding today" },
+      { "sign1": "Leo",     "sign2": "Sagittarius",  "score": 94, "note": "Fire energy ignites — passionate and playful connection" },
+      { "sign1": "Taurus",  "sign2": "Pisces",        "score": 91, "note": "Earth meets water — tender and dreamy romance" },
+      { "sign1": "Libra",   "sign2": "Aquarius",      "score": 88, "note": "Mental sparks fly — intellectual seduction at its best" }
+    ],
+    "career": [
+      { "sign1": "Capricorn", "sign2": "Scorpio",    "score": 95, "note": "Unstoppable ambition — close a deal or start a venture" },
+      { "sign1": "Virgo",     "sign2": "Capricorn",  "score": 93, "note": "Precision and persistence — ideal project partnership" },
+      { "sign1": "Aries",     "sign2": "Leo",        "score": 89, "note": "Bold leadership — great for pitching ideas today" },
+      { "sign1": "Gemini",    "sign2": "Libra",      "score": 85, "note": "Communication genius — negotiations go smoothly" }
+    ],
+    "friendship": [
+      { "sign1": "Gemini",      "sign2": "Aquarius",   "score": 96, "note": "Spontaneous adventures — say yes to an impromptu plan" },
+      { "sign1": "Aries",       "sign2": "Sagittarius", "score": 93, "note": "Boundless energy — active hangout will be epic" },
+      { "sign1": "Cancer",      "sign2": "Taurus",     "score": 90, "note": "Cozy comfort — perfect for a heartfelt catch-up" },
+      { "sign1": "Pisces",      "sign2": "Virgo",      "score": 86, "note": "Healing energy — support each other's creative dreams" }
+    ],
+    "sex": [
+      { "sign1": "Scorpio", "sign2": "Aries",        "score": 98, "note": "Explosive chemistry — raw and magnetic tension" },
+      { "sign1": "Taurus",  "sign2": "Scorpio",       "score": 95, "note": "Sensual depth — slow burn with unforgettable intensity" },
+      { "sign1": "Leo",     "sign2": "Libra",         "score": 91, "note": "Theatrical and beautiful — pleasure-focused pairing" },
+      { "sign1": "Pisces",  "sign2": "Cancer",        "score": 88, "note": "Oceanic intimacy — tender, merging, and intuitive" }
+    ]
+  }
+}

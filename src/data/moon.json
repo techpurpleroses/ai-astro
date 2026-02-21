@@ -1,0 +1,46 @@
+{
+  "currentPhase": {
+    "name": "Waxing Crescent",
+    "illumination": 28,
+    "age": 4.2,
+    "sign": "taurus",
+    "startDate": "2026-02-18",
+    "endDate": "2026-02-24",
+    "isWaxing": true,
+    "phaseInterpretation": "The Waxing Crescent is the time of intention-setting and quiet momentum. Seeds planted at the New Moon are beginning to germinate beneath the surface. Your dreams are finding their roots. Nurture them with patience and deliberate action — do not rush what wants to unfold naturally.",
+    "signInterpretation": "The Moon in Taurus grounds your emotions in the physical world. Your senses are sharpened — food tastes richer, music moves you more deeply, and the comfort of stability calls. This is an excellent time to plant literal or metaphorical seeds: start the project, open the savings account, plant the garden.",
+    "tags": ["Rising Light", "Quiet Progress", "Awakened Dreams"]
+  },
+  "upcomingEvents": [
+    {
+      "date": "2026-02-24",
+      "type": "First Quarter",
+      "sign": "gemini",
+      "description": "Decision point energy crests. You'll feel a push to act on what you've been contemplating. A necessary tension between intention and reality — lean into it."
+    },
+    {
+      "date": "2026-03-03",
+      "type": "Full Moon",
+      "sign": "virgo",
+      "description": "The Full Moon in Virgo illuminates matters of health, service, and daily rhythms. What systems in your life are working? What needs to be refined or released?"
+    },
+    {
+      "date": "2026-03-11",
+      "type": "Last Quarter",
+      "sign": "sagittarius",
+      "description": "A time of release and forgiveness. Let go of beliefs that have outgrown their usefulness. The philosophical Sagittarius energy supports expanding your worldview."
+    },
+    {
+      "date": "2026-03-18",
+      "type": "New Moon",
+      "sign": "pisces",
+      "description": "The most spiritual New Moon of the year. Set intentions around compassion, creativity, and spiritual deepening. Your dreams are particularly prophetic now."
+    },
+    {
+      "date": "2026-04-01",
+      "type": "Full Moon",
+      "sign": "libra",
+      "description": "Balance, partnership, and beauty come into sharp focus. Relationships reach a turning point — clarity emerges about who and what truly brings harmony to your life."
+    }
+  ]
+}

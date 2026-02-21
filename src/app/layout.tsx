@@ -1,0 +1,65 @@
+import type { Metadata, Viewport } from 'next'
+import { Space_Grotesk, Inter, Cinzel } from 'next/font/google'
+import './globals.css'
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-space-grotesk',
+  weight: ['300', '400', '500', '600', '700'],
+  display: 'swap',
+})
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+})
+
+const cinzel = Cinzel({
+  subsets: ['latin'],
+  variable: '--font-cinzel',
+  weight: ['400', '700'],
+  display: 'swap',
+})
+
+export const metadata: Metadata = {
+  title: 'AstroAI – Your Cosmic Guide',
+  description: 'Personalized astrology readings, birth charts, tarot, and cosmic guidance powered by AI.',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'AstroAI',
+  },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#0A1628',
+}
+
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <html
+      lang="en"
+      className="dark"
+      suppressHydrationWarning
+    >
+      <body
+        className={`
+          ${spaceGrotesk.variable}
+          ${inter.variable}
+          ${cinzel.variable}
+          antialiased
+        `}
+      >
+        {children}
+      </body>
+    </html>
+  )
+}
