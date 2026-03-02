@@ -11,7 +11,7 @@
 
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Camera, Upload, RotateCcw, X, Lightbulb, CheckCircle, AlertCircle } from 'lucide-react'
+import { Camera, Upload, RotateCcw, X, Lightbulb, CheckCircle, AlertCircle, Hand } from 'lucide-react'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -110,44 +110,24 @@ function drawLine(
 // ── Hand guide overlay ────────────────────────────────────────────────────────
 
 function HandGuideOverlay({ hand }: { hand: 'left' | 'right' }) {
-  const d = [
-    'M 22 496',
-    'C 20 440 18 360 18 268',
-    'C 18 244 19 228 22 213',
-    'C 26 197 62 197 66 213',
-    'C 62 228 68 244 70 258',
-    'C 72 286 80 286 82 258',
-    'C 82 216 83 183 86 150',
-    'C 90 130 124 130 128 150',
-    'C 128 183 130 216 132 258',
-    'C 134 286 142 286 144 258',
-    'C 144 196 145 152 148 110',
-    'C 152 88 190 88 194 110',
-    'C 194 152 197 196 198 258',
-    'C 200 286 208 286 210 258',
-    'C 210 216 211 183 214 150',
-    'C 218 130 252 130 256 150',
-    'C 256 183 258 216 260 272',
-    'C 260 340 262 358 264 368',
-    'C 280 350 294 316 294 288',
-    'C 292 264 275 250 257 256',
-    'C 246 262 242 305 244 372',
-    'C 244 448 243 472 242 494',
-    'C 196 510 88 510 22 496 Z',
-  ].join(' ')
-
   return (
-    <motion.svg
-      viewBox="0 0 300 540"
-      preserveAspectRatio="xMidYMid meet"
-      className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ transform: hand === 'left' ? 'scaleX(-1)' : undefined }}
-      animate={{ opacity: [0.85, 1, 0.85] }}
+    <motion.div
+      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+      animate={{ opacity: [0.3, 0.55, 0.3] }}
       transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
     >
-      <path d={d} fill="none" stroke="rgba(255,255,255,0.14)" strokeWidth="20" strokeLinejoin="round" strokeLinecap="round" />
-      <path d={d} fill="rgba(0,0,0,0.35)" stroke="white" strokeWidth="4" strokeLinejoin="round" strokeLinecap="round" />
-    </motion.svg>
+      <Hand
+        strokeWidth={0.5}
+        color="white"
+        style={{
+          width: 'auto',
+          height: '62%',
+          // Lucide Hand icon is a left hand by default; flip for right
+          transform: hand === 'right' ? 'scaleX(-1)' : undefined,
+          filter: 'drop-shadow(0 0 18px rgba(255,255,255,0.4))',
+        }}
+      />
+    </motion.div>
   )
 }
 
