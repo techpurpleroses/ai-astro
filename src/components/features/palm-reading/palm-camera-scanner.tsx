@@ -58,278 +58,80 @@ const LINE_COLORS: Record<'heart' | 'head' | 'life' | 'fate', string> = {
   heart: '#F43F5E', head: '#06B6D4', life: '#84CC16', fate: '#F59E0B',
 }
 
-// ── Real palm-crease detection — two-stage pixel pipeline ────────────────────
+// ── Landmark-based palm line geometry ────────────────────────────────────────
 //
-// Stage 1: MediaPipe landmarks (already provided) → hand present, coordinate frame
-// Stage 2: Normalize palm orientation on a temp canvas, run Sobel edge detection,
-//          locate actual skin-crease pixels via projection profiles, inverse-transform
-//          the detected positions back to the original image coordinate space.
+// Computes anatomically correct bezier control points for the four classical
+// palm lines using only MediaPipe 21-point hand skeleton positions.
+// No pixel analysis, no canvas normalization, no edge detection.
 //
-// Falls back per-line to an anatomical estimate (based on landmark geometry in the
-// normalised frame) if no clear crease signal is found (poor lighting, faint lines).
+// Returns start/control/end [x,y] triplets in canvas pixel coordinates,
+// matching the [[x,y],[x,y],[x,y]] type consumed by drawLine().
+//
+// Landmark indices:
+//   lm[0]=wrist  lm[1]=thumbCMC  lm[5]=indexMCP  lm[9]=midMCP
+//   lm[13]=ringMCP  lm[17]=pinkyMCP
 
-const NORM_W = 320
-const NORM_H = 420
-
-function toGrayscale(ctx: CanvasRenderingContext2D, w: number, h: number): Uint8Array {
-  const { data } = ctx.getImageData(0, 0, w, h)
-  const gray = new Uint8Array(w * h)
-  for (let i = 0; i < w * h; i++) {
-    gray[i] = Math.round(0.299 * data[i * 4] + 0.587 * data[i * 4 + 1] + 0.114 * data[i * 4 + 2])
-  }
-  return gray
-}
-
-// 3×3 Gaussian blur (σ≈1) — reduces noise while preserving crease edges
-function gaussianBlur(src: Uint8Array, w: number, h: number): Uint8Array {
-  const out = new Uint8Array(w * h)
-  for (let y = 1; y < h - 1; y++) {
-    for (let x = 1; x < w - 1; x++) {
-      out[y * w + x] = Math.round((
-        src[(y-1)*w+(x-1)] + 2*src[(y-1)*w+x] + src[(y-1)*w+(x+1)] +
-        2*src[y*w+(x-1)]   + 4*src[y*w+x]     + 2*src[y*w+(x+1)]   +
-        src[(y+1)*w+(x-1)] + 2*src[(y+1)*w+x] + src[(y+1)*w+(x+1)]
-      ) / 16)
-    }
-  }
-  return out
-}
-
-// Sobel operator — gradient magnitude image
-function sobelMagnitude(src: Uint8Array, w: number, h: number): Uint8Array {
-  const out = new Uint8Array(w * h)
-  for (let y = 1; y < h - 1; y++) {
-    for (let x = 1; x < w - 1; x++) {
-      const gx = (
-        -src[(y-1)*w+(x-1)] + src[(y-1)*w+(x+1)]
-        - 2*src[y*w+(x-1)] + 2*src[y*w+(x+1)]
-        - src[(y+1)*w+(x-1)] + src[(y+1)*w+(x+1)]
-      )
-      const gy = (
-        src[(y-1)*w+(x-1)] + 2*src[(y-1)*w+x] + src[(y-1)*w+(x+1)]
-        - src[(y+1)*w+(x-1)] - 2*src[(y+1)*w+x] - src[(y+1)*w+(x+1)]
-      )
-      out[y * w + x] = Math.min(255, Math.round(Math.sqrt(gx * gx + gy * gy)))
-    }
-  }
-  return out
-}
-
-// Return the y-row with the largest horizontal Sobel sum in [yMin,yMax].
-// If the peak score is below the noise threshold, return fallback.
-function detectHorizontalCrease(
-  sobel: Uint8Array, w: number,
-  yMin: number, yMax: number, xMin: number, xMax: number,
-  fallback: number,
-): number {
-  const span = xMax - xMin
-  let bestY = fallback, bestScore = 0
-  for (let y = Math.round(yMin); y <= Math.round(yMax); y++) {
-    let score = 0
-    for (let x = Math.round(xMin); x <= Math.round(xMax); x++) score += sobel[y * w + x]
-    if (score > bestScore) { bestScore = score; bestY = y }
-  }
-  // Require at least 12 Sobel units per pixel-column — weak signal = use fallback
-  return bestScore > span * 12 ? bestY : fallback
-}
-
-// For a detected horizontal-crease row, sample 3 (x,y) points across [xMin,xMax].
-// At each sample x, follow the local Sobel peak within ±5px to hug the real crease.
-function sampleHorizontal(
-  sobel: Uint8Array, w: number,
-  seedY: number, xMin: number, xMax: number,
-): [[number, number], [number, number], [number, number]] {
-  const xRange = xMax - xMin
-  return ([0.15, 0.50, 0.85] as const).map(f => {
-    const x = Math.round(xMin + xRange * f)
-    let bestY = seedY, bestVal = 0
-    for (let dy = -5; dy <= 5; dy++) {
-      const y = seedY + dy
-      if (y < 1 || y >= NORM_H - 1) continue
-      const val = sobel[y * w + x]
-      if (val > bestVal) { bestVal = val; bestY = y }
-    }
-    return [x, bestY] as [number, number]
-  }) as [[number, number], [number, number], [number, number]]
-}
-
-// Return the x-column with the largest vertical Sobel sum in [xMin,xMax].
-function detectVerticalCrease(
-  sobel: Uint8Array, w: number,
-  xMin: number, xMax: number, yMin: number, yMax: number,
-  fallback: number,
-): number {
-  const span = yMax - yMin
-  let bestX = fallback, bestScore = 0
-  for (let x = Math.round(xMin); x <= Math.round(xMax); x++) {
-    let score = 0
-    for (let y = Math.round(yMin); y <= Math.round(yMax); y++) score += sobel[y * w + x]
-    if (score > bestScore) { bestScore = score; bestX = x }
-  }
-  return bestScore > span * 8 ? bestX : fallback
-}
-
-// For a detected vertical-crease column, sample 3 (x,y) points along [yMin,yMax].
-function sampleVertical(
-  sobel: Uint8Array, w: number,
-  seedX: number, yMin: number, yMax: number,
-): [[number, number], [number, number], [number, number]] {
-  const yRange = yMax - yMin
-  return ([0.15, 0.50, 0.85] as const).map(f => {
-    const y = Math.round(yMin + yRange * f)
-    let bestX = seedX, bestVal = 0
-    for (let dx = -5; dx <= 5; dx++) {
-      const x = seedX + dx
-      if (x < 1 || x >= w - 1) continue
-      const val = sobel[y * w + x]
-      if (val > bestVal) { bestVal = val; bestX = x }
-    }
-    return [bestX, y] as [number, number]
-  }) as [[number, number], [number, number], [number, number]]
-}
-
-// Life line: arc on the thumb side. Scan in 6 horizontal bands, find peak-Sobel
-// column per band, use 3 of the 6 samples as bezier control points.
-function sampleLifeLine(
-  sobel: Uint8Array, w: number,
-  xMin: number, xMax: number, yMin: number, yMax: number,
-  thumbOnLeft: boolean,
-): [[number, number], [number, number], [number, number]] {
-  const numBands = 6
-  const bandH = (yMax - yMin) / numBands
-  const pts: [number, number][] = []
-  for (let b = 0; b < numBands; b++) {
-    const by0 = Math.round(yMin + b * bandH)
-    const by1 = Math.round(yMin + (b + 1) * bandH)
-    let bestX = thumbOnLeft ? Math.round(xMin) : Math.round(xMax), bestScore = 0
-    for (let x = Math.round(xMin); x <= Math.round(xMax); x++) {
-      let score = 0
-      for (let y = by0; y < by1; y++) score += sobel[y * w + x]
-      if (score > bestScore) { bestScore = score; bestX = x }
-    }
-    pts.push([bestX, Math.round((by0 + by1) / 2)])
-  }
-  return [pts[0], pts[2], pts[5]] as [[number, number], [number, number], [number, number]]
-}
-
-/**
- * detectPalmCreases — production palm-line locator.
- *
- * 1. Crops + rotates the palm image into a standard upright orientation using
- *    the MediaPipe landmark geometry (wrist→middleMCP = vertical axis).
- * 2. Runs Sobel edge detection on the normalised canvas.
- * 3. Uses per-zone projection profiles to locate each crease row/column from
- *    the actual image pixels.
- * 4. Inverse-transforms detected positions back to the original image space,
- *    returning bezier control points ready for drawLine().
- */
-function detectPalmCreases(
-  src: HTMLImageElement | HTMLCanvasElement,
+function computePalmLines(
   lm: NormalizedLandmark[],
-  srcW: number,
-  srcH: number,
+  W: number,
+  H: number,
 ): Record<'heart' | 'head' | 'life' | 'fate', [[number, number], [number, number], [number, number]]> {
-  // ── 1. Normalisation transform ────────────────────────────────────────────
-  const wristX = lm[0].x * srcW,  wristY = lm[0].y * srcH
-  const midX   = lm[9].x * srcW,  midY   = lm[9].y * srcH
-  const palmLen = Math.sqrt((midX - wristX) ** 2 + (midY - wristY) ** 2)
-  const scale   = (NORM_H - 60) / palmLen
-  // Rotation to make wrist→middleMCP point straight up (−y direction)
-  const angle = -(Math.PI / 2 + Math.atan2(midY - wristY, midX - wristX))
-  const cosA = Math.cos(angle), sinA = Math.sin(angle)
-  const originY = NORM_H - 30   // wrist y in normalised canvas
+  const p = (i: number): [number, number] => [lm[i].x * W, lm[i].y * H]
+  const lerp = (a: [number,number], b: [number,number], t: number): [number,number] =>
+    [a[0] + (b[0]-a[0])*t, a[1] + (b[1]-a[1])*t]
 
-  // Draw normalised palm onto a temp canvas
-  const nc = document.createElement('canvas')
-  nc.width = NORM_W; nc.height = NORM_H
-  const nCtx = nc.getContext('2d')!
-  nCtx.save()
-  nCtx.translate(NORM_W / 2, originY)
-  nCtx.rotate(angle)
-  nCtx.scale(scale, scale)
-  nCtx.drawImage(src as CanvasImageSource, -wristX, -wristY)
-  nCtx.restore()
+  const wrist = p(0), thumbC = p(1), iMCP = p(5), mMCP = p(9), rMCP = p(13), pMCP = p(17)
 
-  // Forward: source pixel → normalised pixel
-  const toNorm = (px: number, py: number): [number, number] => {
-    const dx = px - wristX, dy = py - wristY
-    return [NORM_W / 2 + (cosA * dx - sinA * dy) * scale,
-            originY    + (sinA * dx + cosA * dy) * scale]
-  }
-  // Inverse: normalised pixel → source pixel
-  const toOrig = (nx: number, ny: number): [number, number] => {
-    const dx = nx - NORM_W / 2, dy = ny - originY
-    return [wristX + (cosA * dx + sinA * dy) / scale,
-            wristY + (-sinA * dx + cosA * dy) / scale]
-  }
+  // Palm axis: wrist → middle MCP
+  const ax = mMCP[0]-wrist[0], ay = mMCP[1]-wrist[1]
+  const palmLen = Math.sqrt(ax*ax + ay*ay) || 1
+  const axU: [number,number] = [ax/palmLen, ay/palmLen]   // unit along palm (toward fingers)
+  const axP: [number,number] = [-axU[1], axU[0]]          // perpendicular (90° CCW)
 
-  // ── 2. Pixel analysis ──────────────────────────────────────────────────────
-  const gray  = toGrayscale(nCtx, NORM_W, NORM_H)
-  const blur  = gaussianBlur(gray,  NORM_W, NORM_H)
-  const sobel = sobelMagnitude(blur, NORM_W, NORM_H)
+  // Thumb-side detection: thumb CMC left of index MCP → thumb is on left of image
+  const thumbSign = thumbC[0] < iMCP[0] ? -1 : 1          // +1 toward thumb via axP
 
-  // ── 3. Zone geometry from projected landmarks ──────────────────────────────
-  const nLm     = lm.map(l => toNorm(l.x * srcW, l.y * srcH))
-  const mcpRowY = ([5, 9, 13, 17] as const).reduce((s, i) => s + nLm[i][1], 0) / 4
-  const wristNY = nLm[0][1]
-  const palmHN  = wristNY - mcpRowY
-  const mcpXs   = ([5, 9, 13, 17] as const).map(i => nLm[i][0])
-  const leftX   = Math.max(5,           Math.min(...mcpXs) - 15)
-  const rightX  = Math.min(NORM_W - 5,  Math.max(...mcpXs) + 15)
-  const thumbLeft = nLm[1][0] < NORM_W / 2
+  const mcpMid = lerp(rMCP, mMCP, 0.5)
 
-  // ── 4. Detect each line ───────────────────────────────────────────────────
+  // ── Heart Line (distal transverse crease) ──────────────────────────────────
+  // Horizontal arc from pinky side to index side, ~15% below the MCP row
+  const hDrop = palmLen * 0.15
+  const heart: [[number,number],[number,number],[number,number]] = [
+    [pMCP[0]   + axU[0]*hDrop,        pMCP[1]   + axU[1]*hDrop],
+    [mcpMid[0] + axU[0]*hDrop*1.25,   mcpMid[1] + axU[1]*hDrop*1.25],
+    [iMCP[0]   + axU[0]*hDrop*0.85,   iMCP[1]   + axU[1]*hDrop*0.85],
+  ]
 
-  // Heart line: first major crease below the finger bases.
-  // Start search at 5% to skip the noisy finger-palm junction itself;
-  // end at 22% so we don't bleed into the head-line zone.
-  const heartFallY = Math.round(mcpRowY + palmHN * 0.13)
-  const heartSeedY = detectHorizontalCrease(
-    sobel, NORM_W,
-    mcpRowY + palmHN * 0.05, mcpRowY + palmHN * 0.22,
-    leftX, rightX, heartFallY,
-  )
-  const heartNorm = sampleHorizontal(sobel, NORM_W, heartSeedY, leftX, rightX)
+  // ── Head Line (proximal transverse crease) ─────────────────────────────────
+  // From thumb-index web toward ulnar (pinky) edge, ~40% from MCP row
+  const headOrigin = lerp(thumbC, iMCP, 0.5)
+  const hdDrop = palmLen * 0.40
+  const head: [[number,number],[number,number],[number,number]] = [
+    [headOrigin[0] + axU[0]*hdDrop,        headOrigin[1] + axU[1]*hdDrop],
+    [mcpMid[0]    + axU[0]*hdDrop*1.05,   mcpMid[1]    + axU[1]*hdDrop*1.05],
+    [pMCP[0]      + axU[0]*hdDrop*1.15,   pMCP[1]      + axU[1]*hdDrop*1.15],
+  ]
 
-  // Head line: second major crease, well below the heart line.
-  // Start at 35% (15% gap from heart zone end) to prevent cross-contamination.
-  const headFallY = Math.round(mcpRowY + palmHN * 0.48)
-  const headSeedY = detectHorizontalCrease(
-    sobel, NORM_W,
-    mcpRowY + palmHN * 0.35, mcpRowY + palmHN * 0.62,
-    leftX, rightX, headFallY,
-  )
-  const headNorm = sampleHorizontal(sobel, NORM_W, headSeedY, leftX, rightX)
+  // ── Life Line (thenar arc) ─────────────────────────────────────────────────
+  // Starts near head line origin, arcs around thumb base down to wrist
+  const lifeOrigin = lerp(thumbC, iMCP, 0.35)
+  const life: [[number,number],[number,number],[number,number]] = [
+    [lifeOrigin[0] + axU[0]*palmLen*0.38, lifeOrigin[1] + axU[1]*palmLen*0.38],
+    [wrist[0] + axU[0]*palmLen*0.55 + axP[0]*thumbSign*palmLen*0.28,
+     wrist[1] + axU[1]*palmLen*0.55 + axP[1]*thumbSign*palmLen*0.28],
+    [wrist[0] + axP[0]*thumbSign*palmLen*0.12, wrist[1] + axP[1]*thumbSign*palmLen*0.12],
+  ]
 
-  // Life line: curved crease arcing around the thumb base.
-  // Cap the bottom at 85% of palm height so it doesn't merge with the wrist crease.
-  const lifeXmin = thumbLeft ? leftX         : NORM_W * 0.35
-  const lifeXmax = thumbLeft ? NORM_W * 0.65 : rightX
-  const lifeNorm = sampleLifeLine(
-    sobel, NORM_W,
-    lifeXmin, lifeXmax,
-    mcpRowY + palmHN * 0.15, mcpRowY + palmHN * 0.85,
-    thumbLeft,
-  )
+  // ── Fate Line (central vertical) ──────────────────────────────────────────
+  // From ~10% above wrist toward middle MCP, slight lateral drift at base
+  const fate: [[number,number],[number,number],[number,number]] = [
+    [wrist[0] + axU[0]*palmLen*0.12,  wrist[1] + axU[1]*palmLen*0.12],
+    [wrist[0] + axU[0]*palmLen*0.45 + axP[0]*thumbSign*palmLen*0.06,
+     wrist[1] + axU[1]*palmLen*0.45 + axP[1]*thumbSign*palmLen*0.06],
+    [mMCP[0]  + axU[0]*palmLen*-0.25, mMCP[1]  + axU[1]*palmLen*-0.25],
+  ]
 
-  // Fate line: near-vertical crease through the centre of the palm
-  const fateCenter = nLm[9][0]
-  const fateSeedX  = detectVerticalCrease(
-    sobel, NORM_W,
-    fateCenter - 25, fateCenter + 25,
-    mcpRowY + palmHN * 0.05, wristNY - 30,
-    fateCenter,
-  )
-  const fateNorm = sampleVertical(
-    sobel, NORM_W, fateSeedX,
-    mcpRowY + palmHN * 0.05, wristNY - 30,
-  )
-
-  // ── 5. Inverse-transform → original image coordinates ────────────────────
-  const inv = (pts: [[number,number],[number,number],[number,number]]) =>
-    pts.map(([nx, ny]) => toOrig(nx, ny)) as [[number,number],[number,number],[number,number]]
-
-  return { heart: inv(heartNorm), head: inv(headNorm), life: inv(lifeNorm), fate: inv(fateNorm) }
+  return { heart, head, life, fate }
 }
 
 function computeScores(lm: NormalizedLandmark[]): Record<string, number> {
@@ -409,41 +211,45 @@ function drawLine(
 // can easily align their palm. Mirrors for left-hand mode.
 
 function HandGuideOverlay({ hand }: { hand: 'left' | 'right' }) {
-  // Single unified closed path tracing the entire hand boundary — exactly like Astroline.
-  // Right-hand design (thumb exits RIGHT). Left hand uses CSS scaleX(-1).
-  //
-  // Path traces clockwise from wrist-left:
-  //   up left palm → pinky → ring → middle (tallest) → index → down right palm →
-  //   thumb bulge → back down → wrist curve → close.
-  //
-  // viewBox 0 0 300 540:
-  //   fingers span x 18–260, palm x 18–260, thumb extends to x≈292
-  //   finger peaks: pinky y=187, ring/index y=125, middle y=83 (tallest)
-  //   wrist bottom: y≈510
-  const d =
-    'M 22 496 ' +
-    'C 20 440 18 360 18 268 ' +   // left palm edge (slight curve from wrist)
-    'L 18 213 ' +                  // pinky left side
-    'A 26 26 0 0 1 70 213 ' +      // pinky tip arc (radius 26, chord 52 = 2r ✓)
-    'L 70 258 ' +                  // pinky right side down
-    'C 72 286 80 286 82 258 ' +    // valley: pinky → ring
-    'L 82 150 ' +                  // ring left side up
-    'A 25 25 0 0 1 132 150 ' +     // ring tip arc
-    'L 132 258 ' +                 // ring right down
-    'C 134 286 142 286 144 258 ' + // valley: ring → middle
-    'L 144 110 ' +                 // middle left up (tallest)
-    'A 27 27 0 0 1 198 110 ' +     // middle tip arc
-    'L 198 258 ' +                 // middle right down
-    'C 200 286 208 286 210 258 ' + // valley: middle → index
-    'L 210 150 ' +                 // index left up
-    'A 25 25 0 0 1 260 150 ' +     // index tip arc
-    'L 260 272 ' +                 // index right side to palm
-    'C 260 340 262 358 264 368 ' + // right palm curving to thumb junction
-    'C 280 350 294 316 294 288 ' + // thumb outer boundary (up-right)
-    'C 292 264 275 250 257 256 ' + // around thumb tip
-    'C 246 262 242 305 244 372 ' + // thumb inner back down
-    'L 244 494 ' +                 // right palm straight down
-    'C 196 510 88 510 22 496 Z'    // wrist bottom curve, close
+  // All-bezier closed path — no L (straight line) or A (arc) segments.
+  // Every finger side uses easing cubic beziers; every fingertip uses a
+  // bezier pair for organic, slightly-tapered rounding (not a rigid semicircle).
+  // Right-hand design. Left hand: CSS scaleX(-1).
+  const d = [
+    'M 22 496',
+    'C 20 440 18 360 18 268',    // left palm edge
+
+    // Pinky — tapered (base 52px wide, tip 44px)
+    'C 18 244 19 228 22 213',    // left side ease-in
+    'C 26 197 62 197 66 213',    // rounded tip
+    'C 62 228 68 244 70 258',    // right side ease-out
+    'C 72 286 80 286 82 258',    // valley → ring
+
+    // Ring — tapered (base 50px, tip 38px)
+    'C 82 216 83 183 86 150',    // left side
+    'C 90 130 124 130 128 150',  // rounded tip
+    'C 128 183 130 216 132 258', // right side
+    'C 134 286 142 286 144 258', // valley → middle
+
+    // Middle — tallest, tapered (base 54px, tip 46px)
+    'C 144 196 145 152 148 110', // left side
+    'C 152 88 190 88 194 110',   // rounded tip
+    'C 194 152 197 196 198 258', // right side
+    'C 200 286 208 286 210 258', // valley → index
+
+    // Index — tapered (base 50px, tip 38px)
+    'C 210 216 211 183 214 150', // left side
+    'C 218 130 252 130 256 150', // rounded tip
+    'C 256 183 258 216 260 272', // right side to palm
+
+    // Thumb and right palm
+    'C 260 340 262 358 264 368', // right palm to thumb junction
+    'C 280 350 294 316 294 288', // thumb outer boundary
+    'C 292 264 275 250 257 256', // around thumb tip
+    'C 246 262 242 305 244 372', // thumb inner back down
+    'C 244 448 243 472 242 494', // right palm down (curved)
+    'C 196 510 88 510 22 496 Z', // wrist close
+  ].join(' ')
 
   return (
     <motion.svg
@@ -451,13 +257,11 @@ function HandGuideOverlay({ hand }: { hand: 'left' | 'right' }) {
       preserveAspectRatio="xMidYMid meet"
       className="absolute inset-0 w-full h-full pointer-events-none"
       style={{ transform: hand === 'left' ? 'scaleX(-1)' : undefined }}
-      animate={{ opacity: [0.88, 1, 0.88] }}
+      animate={{ opacity: [0.85, 1, 0.85] }}
       transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
     >
-      {/* Outer glow ring */}
-      <path d={d} fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="16" strokeLinejoin="round" />
-      {/* Dark filled silhouette with solid white outline */}
-      <path d={d} fill="rgba(0,0,0,0.52)" stroke="white" strokeWidth="5.5" strokeLinejoin="round" />
+      <path d={d} fill="none" stroke="rgba(255,255,255,0.14)" strokeWidth="20" strokeLinejoin="round" strokeLinecap="round" />
+      <path d={d} fill="rgba(0,0,0,0.35)" stroke="white" strokeWidth="4" strokeLinejoin="round" strokeLinecap="round" />
     </motion.svg>
   )
 }
@@ -473,8 +277,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
   const landmarkerRef = useRef<unknown>(null)
   const rafRef        = useRef<number>(0)
   const streamRef     = useRef<MediaStream | null>(null)
-  // Source image/canvas kept so detectPalmCreases can read pixels in the drawing phase
-  const srcRef        = useRef<HTMLImageElement | HTMLCanvasElement | null>(null)
+  const isBackCamRef  = useRef(false)   // true when back (environment) camera is active
 
   const [phase, setPhase]               = useState<Phase>('intro')
   const [imageUrl, setImageUrl]         = useState<string | null>(null)
@@ -485,6 +288,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
   const [palmLines, setPalmLines]       = useState<PalmLine[]>(LINE_META)
   const [currentLine, setCurrentLine]   = useState(-1)
   const [landmarks, setLandmarks]       = useState<NormalizedLandmark[] | null>(null)
+  const [isBackCam, setIsBackCam]       = useState(false)
   // ── Load model ──
   const loadModel = useCallback(async () => {
     if (landmarkerRef.current) return true
@@ -559,8 +363,6 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
         prev.map((l) => ({ ...l, score: Math.min(99, Math.max(55, scores[l.id] ?? 70)) })),
       )
 
-      // Keep source element alive so the drawing effect can read its pixels
-      srcRef.current = src
       setPhase('drawing')
     } catch (err) {
       console.error('Detection error:', err)
@@ -574,21 +376,25 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     setPhase('loading-model')
     if (!await loadModel()) return
 
-    // Most permissive first so desktop browsers always get a camera.
-    // On mobile, facingMode hints are tried after the generic fallback succeeds elsewhere.
-    const videoConstraints: MediaTrackConstraints[] = [
-      { width: { ideal: 1280 }, height: { ideal: 720 } },          // any camera (desktop safe)
-      { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },   // front
-      { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }, // back
+    // Back camera first (no mirroring needed), fallback to front/any for desktop.
+    const videoConstraints: Array<{ video: MediaTrackConstraints; isBack: boolean }> = [
+      { video: { facingMode: { exact: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, isBack: true },
+      { video: { facingMode: 'environment',            width: { ideal: 1280 }, height: { ideal: 720 } }, isBack: true },
+      { video: { facingMode: 'user',                   width: { ideal: 1280 }, height: { ideal: 720 } }, isBack: false },
+      { video: {                                        width: { ideal: 1280 }, height: { ideal: 720 } }, isBack: false },
     ]
 
     let stream: MediaStream | null = null
-    for (const video of videoConstraints) {
+    let isBack = false
+    for (const { video, isBack: b } of videoConstraints) {
       try {
         stream = await navigator.mediaDevices.getUserMedia({ video })
+        isBack = b
         break
       } catch { /* try next constraint */ }
     }
+    isBackCamRef.current = isBack
+    setIsBackCam(isBack)
 
     if (!stream) {
       setErrorMsg('Camera access denied. Please grant permission or upload a photo instead.')
@@ -630,9 +436,12 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     canvas.height = video.videoHeight
     const ctx = canvas.getContext('2d')!
     ctx.save()
-    // Always mirror the captured frame to match the selfie-mirror display (scaleX(-1))
-    ctx.translate(canvas.width, 0)
-    ctx.scale(-1, 1)
+    if (!isBackCamRef.current) {
+      // Front camera is displayed mirrored (scaleX(-1)) — counter-mirror the capture
+      // so MediaPipe sees the real (non-flipped) hand orientation.
+      ctx.translate(canvas.width, 0)
+      ctx.scale(-1, 1)
+    }
     ctx.drawImage(video, 0, 0)
     ctx.restore()
 
@@ -652,16 +461,14 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
 
     const canvas = overlayRef.current
     if (!canvas) return
-    const src = srcRef.current
-    if (!src) return
 
     // Size canvas to match the natural image dimensions exactly
     canvas.width  = imgSize.w
     canvas.height = imgSize.h
     const ctx = canvas.getContext('2d')!
 
-    // Detect actual skin creases from the image pixels (two-stage pipeline)
-    const palmPts = detectPalmCreases(src, landmarks, imgSize.w, imgSize.h)
+    // Compute palm line geometry purely from landmark positions
+    const palmPts = computePalmLines(landmarks, imgSize.w, imgSize.h)
     let lineIdx  = 0
     let startTs: number | null = null
     const DURATION = 1400 // ms per line
@@ -721,7 +528,6 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     setDrawnCount(0)
     setCurrentLine(-1)
     setLandmarks(null)
-    srcRef.current = null
     setPalmLines(LINE_META)
   }, [stopStream, imageUrl])
 
@@ -780,7 +586,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
             playsInline
             muted
             className="absolute inset-0 w-full h-full object-cover"
-            style={{ transform: 'scaleX(-1)' }}
+            style={{ transform: isBackCam ? undefined : 'scaleX(-1)' }}
           />
           {/* Hidden capture canvas */}
           <canvas ref={captureCanvas} className="hidden" />
