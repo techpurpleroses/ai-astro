@@ -1,10 +1,10 @@
 'use client'
 
-import { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef, useState, useCallback, useEffect } from 'react'
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, Heart, Brain, Activity, Navigation } from 'lucide-react'
+import { ArrowRight, Heart, Brain, Activity, Navigation, Camera, Upload, RotateCcw, Sparkles, CheckCircle } from 'lucide-react'
 
 const PALM_LINES = [
   {
@@ -80,6 +80,586 @@ const PALM_LINES = [
     ],
   },
 ]
+
+// ── Palm Scanner ─────────────────────────────────────────────────────────────
+
+type ScanPhase = 'idle' | 'uploading' | 'scanning' | 'drawing' | 'done'
+
+const DETECTED_LINES = [
+  {
+    id: 'heart',
+    label: 'Heart Line',
+    color: '#F43F5E',
+    // Positions as % of container (for a hand held palm-up, these are approximate)
+    path: 'M 20% 32% Q 40% 28% 60% 30% Q 75% 32% 85% 26%',
+    score: 87,
+    trait: 'Deep emotional intelligence',
+  },
+  {
+    id: 'head',
+    label: 'Head Line',
+    color: '#A78BFA',
+    path: 'M 22% 46% Q 45% 42% 65% 45% Q 78% 47% 88% 41%',
+    score: 93,
+    trait: 'Exceptional analytical mind',
+  },
+  {
+    id: 'life',
+    label: 'Life Line',
+    color: '#34D399',
+    path: 'M 42% 22% Q 28% 45% 25% 62% Q 23% 78% 30% 88%',
+    score: 79,
+    trait: 'Vibrant vital energy',
+  },
+  {
+    id: 'fate',
+    label: 'Fate Line',
+    color: '#F59E0B',
+    path: 'M 52% 85% Q 51% 65% 52% 48% Q 53% 34% 54% 20%',
+    score: 71,
+    trait: 'Purposeful life direction',
+  },
+]
+
+// Animated drawn line using stroke-dashoffset trick via CSS animation
+function DrawnLine({ line, delay }: { line: typeof DETECTED_LINES[0]; delay: number }) {
+  // We use a fixed SVG viewBox with absolute positions instead of % in path
+  // Heart: roughly left-to-right at 32% height
+  // Head: roughly left-to-right at 46% height
+  // Life: arc from top of thumb area
+  // Fate: vertical from bottom to top center
+  const paths: Record<string, string> = {
+    heart: 'M 20 32 Q 40 28 60 30 Q 75 32 85 26',
+    head:  'M 22 46 Q 45 42 65 45 Q 78 47 88 41',
+    life:  'M 42 22 Q 28 45 25 62 Q 23 78 30 88',
+    fate:  'M 52 85 Q 51 65 52 48 Q 53 34 54 20',
+  }
+
+  return (
+    <motion.path
+      d={paths[line.id]}
+      fill="none"
+      stroke={line.color}
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      initial={{ pathLength: 0, opacity: 0 }}
+      animate={{ pathLength: 1, opacity: 0.9 }}
+      transition={{ duration: 1.4, delay, ease: 'easeInOut' }}
+      style={{ filter: `drop-shadow(0 0 4px ${line.color})` }}
+    />
+  )
+}
+
+function GlowLine({ line, delay }: { line: typeof DETECTED_LINES[0]; delay: number }) {
+  const paths: Record<string, string> = {
+    heart: 'M 20 32 Q 40 28 60 30 Q 75 32 85 26',
+    head:  'M 22 46 Q 45 42 65 45 Q 78 47 88 41',
+    life:  'M 42 22 Q 28 45 25 62 Q 23 78 30 88',
+    fate:  'M 52 85 Q 51 65 52 48 Q 53 34 54 20',
+  }
+
+  return (
+    <motion.path
+      d={paths[line.id]}
+      fill="none"
+      stroke={line.color}
+      strokeWidth={4}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      initial={{ pathLength: 0, opacity: 0 }}
+      animate={{ pathLength: 1, opacity: 0.18 }}
+      transition={{ duration: 1.4, delay, ease: 'easeInOut' }}
+    />
+  )
+}
+
+function PalmScanner() {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [phase, setPhase] = useState<ScanPhase>('idle')
+  const [imageUrl, setImageUrl] = useState<string | null>(null)
+  const [progress, setProgress] = useState(0)
+  const [drawnLines, setDrawnLines] = useState(0)
+  const [hand, setHand] = useState<'left' | 'right'>('left')
+
+  const reset = useCallback(() => {
+    if (imageUrl) URL.revokeObjectURL(imageUrl)
+    setImageUrl(null)
+    setPhase('idle')
+    setProgress(0)
+    setDrawnLines(0)
+  }, [imageUrl])
+
+  const handleFile = useCallback((file: File) => {
+    if (!file.type.startsWith('image/')) return
+    const url = URL.createObjectURL(file)
+    setImageUrl(url)
+    setPhase('scanning')
+    setProgress(0)
+    setDrawnLines(0)
+  }, [])
+
+  const onFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) handleFile(file)
+    e.target.value = ''
+  }, [handleFile])
+
+  // Progress & phase state machine
+  useEffect(() => {
+    if (phase !== 'scanning') return
+
+    const interval = setInterval(() => {
+      setProgress((p) => {
+        if (p >= 100) {
+          clearInterval(interval)
+          return 100
+        }
+        return p + 2
+      })
+    }, 40)
+
+    return () => clearInterval(interval)
+  }, [phase])
+
+  useEffect(() => {
+    if (progress >= 100 && phase === 'scanning') {
+      setPhase('drawing')
+    }
+  }, [progress, phase])
+
+  // Draw lines sequentially
+  useEffect(() => {
+    if (phase !== 'drawing') return
+
+    let count = 0
+    const drawNext = () => {
+      count += 1
+      setDrawnLines(count)
+      if (count < DETECTED_LINES.length) {
+        setTimeout(drawNext, 1600)
+      } else {
+        setTimeout(() => setPhase('done'), 800)
+      }
+    }
+
+    const timer = setTimeout(drawNext, 400)
+    return () => clearTimeout(timer)
+  }, [phase])
+
+  return (
+    <section className="py-16 px-6">
+      <div className="max-w-2xl mx-auto">
+        {/* Section header */}
+        <div className="text-center mb-8">
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-400/20 bg-amber-400/8 text-amber-400 text-xs font-semibold tracking-widest uppercase mb-4">
+            <Sparkles className="w-3.5 h-3.5" />
+            AI Palm Scanner — Try It Free
+          </span>
+          <h2 className="font-mystical text-3xl lg:text-4xl font-bold text-white mb-3">
+            Scan Your Palm Now
+          </h2>
+          <p className="text-slate-400 text-base">
+            Upload or take a photo of your palm and watch our AI detect your lines in real time.
+          </p>
+        </div>
+
+        {/* Hand toggle */}
+        <div className="flex gap-3 justify-center mb-6">
+          {(['left', 'right'] as const).map((h) => (
+            <button
+              key={h}
+              onClick={() => { setHand(h); reset() }}
+              className="px-5 py-2 rounded-full text-sm font-semibold capitalize transition-all"
+              style={{
+                color: hand === h ? '#F59E0B' : '#64748b',
+                background: hand === h ? 'rgba(245,158,11,0.12)' : 'rgba(255,255,255,0.04)',
+                border: hand === h ? '1px solid rgba(245,158,11,0.35)' : '1px solid rgba(255,255,255,0.08)',
+              }}
+            >
+              {h} Hand
+            </button>
+          ))}
+        </div>
+
+        {/* Scanner box */}
+        <div
+          className="relative rounded-3xl overflow-hidden"
+          style={{
+            background: 'rgba(15,30,53,0.85)',
+            border: '1px solid rgba(245,158,11,0.15)',
+            boxShadow: '0 0 40px rgba(245,158,11,0.05)',
+          }}
+        >
+          {/* ── IDLE state ── */}
+          <AnimatePresence>
+            {phase === 'idle' && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex flex-col items-center justify-center gap-5 py-14 px-6 text-center"
+              >
+                {/* Animated hand icon */}
+                <div className="relative">
+                  <motion.div
+                    className="w-24 h-24 rounded-full flex items-center justify-center"
+                    style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.2)' }}
+                    animate={{ scale: [1, 1.05, 1] }}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                  >
+                    <span className="text-5xl select-none">
+                      {hand === 'left' ? '🤚' : '✋'}
+                    </span>
+                  </motion.div>
+                  {/* Ripple rings */}
+                  {[1, 2].map((i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute inset-0 rounded-full border border-amber-400/20"
+                      animate={{ scale: [1, 1.6], opacity: [0.5, 0] }}
+                      transition={{ duration: 2, delay: i * 0.8, repeat: Infinity, ease: 'easeOut' }}
+                    />
+                  ))}
+                </div>
+
+                <div>
+                  <p className="text-white font-semibold text-base mb-1">
+                    Place your {hand} hand palm-up
+                  </p>
+                  <p className="text-slate-500 text-sm">
+                    Take a clear photo in good lighting for best results
+                  </p>
+                </div>
+
+                {/* Upload buttons */}
+                <div className="flex gap-3 flex-wrap justify-center">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    className="hidden"
+                    onChange={onFileChange}
+                  />
+                  <motion.button
+                    onClick={() => fileInputRef.current?.click()}
+                    whileHover={{ scale: 1.04 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm"
+                    style={{
+                      background: 'linear-gradient(135deg, #F59E0B, #F97316)',
+                      color: '#0A1628',
+                    }}
+                  >
+                    <Camera className="w-4 h-4" />
+                    Take Photo
+                  </motion.button>
+                  <motion.button
+                    onClick={() => {
+                      const input = document.createElement('input')
+                      input.type = 'file'
+                      input.accept = 'image/*'
+                      input.onchange = (e) => {
+                        const file = (e.target as HTMLInputElement).files?.[0]
+                        if (file) handleFile(file)
+                      }
+                      input.click()
+                    }}
+                    whileHover={{ scale: 1.04 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm border border-amber-400/30 text-amber-400"
+                    style={{ background: 'rgba(245,158,11,0.08)' }}
+                  >
+                    <Upload className="w-4 h-4" />
+                    Upload Photo
+                  </motion.button>
+                </div>
+
+                <p className="text-slate-600 text-xs">
+                  Your photo is processed locally and never stored
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* ── SCANNING / DRAWING / DONE states ── */}
+          <AnimatePresence>
+            {imageUrl && phase !== 'idle' && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="relative"
+              >
+                {/* Photo */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={imageUrl}
+                  alt="Your palm"
+                  className="w-full object-cover"
+                  style={{
+                    aspectRatio: '4/3',
+                    maxHeight: '420px',
+                    transform: hand === 'right' ? 'scaleX(-1)' : undefined,
+                  }}
+                />
+
+                {/* Dark overlay to make lines pop */}
+                <div
+                  className="absolute inset-0"
+                  style={{ background: 'rgba(6,13,27,0.45)' }}
+                />
+
+                {/* Scanning beam */}
+                {phase === 'scanning' && (
+                  <motion.div
+                    className="absolute inset-x-0 h-1"
+                    style={{
+                      background: 'linear-gradient(90deg, transparent, rgba(6,182,212,0.8), rgba(6,182,212,1), rgba(6,182,212,0.8), transparent)',
+                      boxShadow: '0 0 20px rgba(6,182,212,0.8), 0 0 60px rgba(6,182,212,0.3)',
+                    }}
+                    initial={{ top: '0%' }}
+                    animate={{ top: '100%' }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: 'linear',
+                      repeatType: 'loop',
+                    }}
+                  />
+                )}
+
+                {/* Corner scan brackets */}
+                {(phase === 'scanning' || phase === 'drawing') && (
+                  <>
+                    {[
+                      { top: '8px', left: '8px', borderTop: '2px solid', borderLeft: '2px solid' },
+                      { top: '8px', right: '8px', borderTop: '2px solid', borderRight: '2px solid' },
+                      { bottom: '8px', left: '8px', borderBottom: '2px solid', borderLeft: '2px solid' },
+                      { bottom: '8px', right: '8px', borderBottom: '2px solid', borderRight: '2px solid' },
+                    ].map((style, i) => (
+                      <motion.div
+                        key={i}
+                        className="absolute w-6 h-6"
+                        style={{ ...style, borderColor: 'rgba(6,182,212,0.7)' }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: [0, 1, 0.5, 1] }}
+                        transition={{ duration: 0.6, delay: i * 0.1 }}
+                      />
+                    ))}
+                  </>
+                )}
+
+                {/* SVG overlay for detected lines */}
+                {(phase === 'drawing' || phase === 'done') && (
+                  <svg
+                    className="absolute inset-0 w-full h-full pointer-events-none"
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="none"
+                  >
+                    {DETECTED_LINES.slice(0, drawnLines).map((line, i) => (
+                      <g key={line.id}>
+                        <GlowLine line={line} delay={0} />
+                        <DrawnLine line={line} delay={0} />
+                      </g>
+                    ))}
+
+                    {/* Detection dots at line midpoints */}
+                    {DETECTED_LINES.slice(0, drawnLines).map((line, i) => {
+                      const mids = [
+                        { cx: 52, cy: 29 },
+                        { cx: 55, cy: 44 },
+                        { cx: 26, cy: 60 },
+                        { cx: 52, cy: 52 },
+                      ]
+                      const m = mids[i]
+                      return (
+                        <motion.circle
+                          key={line.id + '-dot'}
+                          cx={m.cx}
+                          cy={m.cy}
+                          r={1.8}
+                          fill={line.color}
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ scale: [0, 2, 1], opacity: 1 }}
+                          transition={{ duration: 0.5, delay: 1.2 }}
+                        />
+                      )
+                    })}
+                  </svg>
+                )}
+
+                {/* Progress bar (scanning phase) */}
+                {phase === 'scanning' && (
+                  <div className="absolute bottom-0 inset-x-0 p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <motion.div
+                        className="w-1.5 h-1.5 rounded-full bg-cyan-400"
+                        animate={{ opacity: [1, 0.2, 1] }}
+                        transition={{ duration: 0.8, repeat: Infinity }}
+                      />
+                      <span className="text-cyan-300 text-xs font-mono">
+                        Scanning palm… {progress}%
+                      </span>
+                    </div>
+                    <div className="h-1 rounded-full bg-white/10 overflow-hidden">
+                      <motion.div
+                        className="h-full rounded-full"
+                        style={{
+                          background: 'linear-gradient(90deg, #06B6D4, #A78BFA)',
+                          boxShadow: '0 0 8px rgba(6,182,212,0.6)',
+                        }}
+                        animate={{ width: `${progress}%` }}
+                        transition={{ duration: 0.1 }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Drawing labels */}
+                {(phase === 'drawing' || phase === 'done') && drawnLines > 0 && (
+                  <div className="absolute top-3 right-3 flex flex-col gap-1.5">
+                    {DETECTED_LINES.slice(0, drawnLines).map((line) => (
+                      <motion.div
+                        key={line.id}
+                        initial={{ x: 20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                        className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold"
+                        style={{
+                          background: `${line.color}18`,
+                          border: `1px solid ${line.color}40`,
+                          color: line.color,
+                        }}
+                      >
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ background: line.color }} />
+                        {line.label}
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Done checkmark */}
+                {phase === 'done' && (
+                  <motion.div
+                    className="absolute top-3 left-3"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                  >
+                    <div
+                      className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold"
+                      style={{
+                        background: 'rgba(52,211,153,0.15)',
+                        border: '1px solid rgba(52,211,153,0.4)',
+                        color: '#34D399',
+                      }}
+                    >
+                      <CheckCircle className="w-3 h-3" />
+                      Lines Detected
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Reset button */}
+                <button
+                  onClick={reset}
+                  className="absolute bottom-3 right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs text-slate-400 border border-white/10"
+                  style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)' }}
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  Rescan
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Results — shown when done */}
+        <AnimatePresence>
+          {phase === 'done' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mt-5 space-y-3"
+            >
+              <p className="text-center text-sm font-semibold text-slate-300 mb-4">
+                Palm Analysis Results — {hand === 'left' ? 'Left' : 'Right'} Hand
+              </p>
+              {DETECTED_LINES.map((line, i) => (
+                <motion.div
+                  key={line.id}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  className="rounded-xl p-3.5"
+                  style={{
+                    background: 'rgba(15,30,53,0.9)',
+                    border: `1px solid ${line.color}25`,
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full" style={{ background: line.color }} />
+                      <span className="text-sm font-semibold text-white">{line.label}</span>
+                    </div>
+                    <span className="text-xs font-bold" style={{ color: line.color }}>
+                      {line.score}%
+                    </span>
+                  </div>
+                  <div className="h-1.5 rounded-full bg-white/6 overflow-hidden mb-2">
+                    <motion.div
+                      className="h-full rounded-full"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${line.score}%` }}
+                      transition={{ duration: 0.8, delay: 0.2 + i * 0.1, ease: 'easeOut' }}
+                      style={{
+                        background: `linear-gradient(90deg, ${line.color}80, ${line.color})`,
+                        boxShadow: `0 0 6px ${line.color}40`,
+                      }}
+                    />
+                  </div>
+                  <p className="text-xs text-slate-400">{line.trait}</p>
+                </motion.div>
+              ))}
+
+              {/* CTA */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+                className="pt-2"
+              >
+                <Link href="/features/palm-reading">
+                  <motion.button
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="w-full py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2"
+                    style={{
+                      background: 'linear-gradient(135deg, #F59E0B, #F97316)',
+                      color: '#0A1628',
+                    }}
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    Get Your Full Palm Reading
+                    <ArrowRight className="w-4 h-4" />
+                  </motion.button>
+                </Link>
+                <p className="text-center text-xs text-slate-500 mt-2">
+                  Full reading includes personality insights, relationship compatibility, and life path guidance
+                </p>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </section>
+  )
+}
+
+// ── Parallax info sections ────────────────────────────────────────────────────
 
 function ParallaxSection({
   line,
@@ -163,6 +743,8 @@ function ParallaxSection({
   )
 }
 
+// ── Page ──────────────────────────────────────────────────────────────────────
+
 export default function PalmPage() {
   return (
     <>
@@ -206,6 +788,12 @@ export default function PalmPage() {
 
       {/* ── Divider ── */}
       <div className="h-px bg-linear-to-r from-transparent via-amber-500/20 to-transparent mx-6" />
+
+      {/* ── Interactive Palm Scanner ── */}
+      <PalmScanner />
+
+      {/* ── Divider ── */}
+      <div className="h-px bg-linear-to-r from-transparent via-amber-500/10 to-transparent mx-6" />
 
       {/* ── Four palm lines ── */}
       {PALM_LINES.map((line, i) => (

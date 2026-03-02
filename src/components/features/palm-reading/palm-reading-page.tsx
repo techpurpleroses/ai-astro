@@ -4,6 +4,12 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Camera } from 'lucide-react'
+import dynamic from 'next/dynamic'
+
+const PalmCameraScanner = dynamic(
+  () => import('./palm-camera-scanner').then((m) => ({ default: m.PalmCameraScanner })),
+  { ssr: false },
+)
 
 // ── Palm SVG illustration ─────────────────────────────────────────────────────
 
@@ -186,6 +192,7 @@ function LineLegend() {
 export function PalmReadingClient() {
   const router = useRouter()
   const [hand, setHand] = useState<'left' | 'right'>('left')
+  const [scannerOpen, setScannerOpen] = useState(false)
 
   return (
     <div className="flex flex-col">
@@ -259,18 +266,35 @@ export function PalmReadingClient() {
         </div>
 
         {/* Camera CTA */}
-        <button
-          className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl font-display text-sm font-semibold transition-all active:scale-98"
+        <motion.button
+          onClick={() => setScannerOpen(true)}
+          whileTap={{ scale: 0.97 }}
+          className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl font-display text-sm font-semibold transition-all"
           style={{
-            background: 'linear-gradient(135deg, rgba(244,63,94,0.2), rgba(244,63,94,0.08))',
-            border: '1px solid rgba(244,63,94,0.3)',
-            color: '#F43F5E',
+            background: 'linear-gradient(135deg, #F43F5E, #E11D48)',
+            color: 'white',
+            boxShadow: '0 4px 24px rgba(244,63,94,0.25)',
           }}
         >
           <Camera size={17} />
-          Scan Your Palm (Coming Soon)
-        </button>
+          Scan Your Palm
+        </motion.button>
       </div>
+
+      {/* Scanner modal */}
+      <AnimatePresence>
+        {scannerOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: '100%' }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: '100%' }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            className="fixed inset-0 z-50"
+          >
+            <PalmCameraScanner hand={hand} onClose={() => setScannerOpen(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
