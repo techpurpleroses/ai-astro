@@ -1,19 +1,20 @@
-'use client'
+﻿'use client'
 
 /**
  * PalmCameraScanner
  *
- * Captures a palm photo (camera or upload), sends it to /api/palm-detect
- * (GPT-4o Vision), receives normalized crease-line coordinates, and
+ * Captures a palm photo (camera or upload), sends it to /api/palm/scan,
+ * receives normalized line coordinates and interpreted scores, and
  * animates the four classical palm lines (heart / head / life / fate)
- * onto a canvas overlay.
+ * on a canvas overlay.
  */
 
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Camera, Upload, RotateCcw, X, Lightbulb, CheckCircle, AlertCircle, Hand } from 'lucide-react'
+import type { PalmScanRecord } from '@/lib/palm/contracts'
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type Phase = 'intro' | 'camera' | 'scanning' | 'drawing' | 'results' | 'error'
 
@@ -35,7 +36,7 @@ interface PalmLine {
   trait: string
 }
 
-// ── Constants ─────────────────────────────────────────────────────────────────
+// â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const LINE_META: PalmLine[] = [
   { id: 'heart', label: 'Heart Line', color: '#F43F5E', score: 0, trait: 'Emotional depth & relationships' },
@@ -49,7 +50,32 @@ const LINE_COLORS: Record<'heart' | 'head' | 'life' | 'fate', string> = {
   heart: '#F43F5E', head: '#06B6D4', life: '#84CC16', fate: '#F59E0B',
 }
 
-// ── Canvas drawing ────────────────────────────────────────────────────────────
+function getOrCreatePalmClientId() {
+  const key = 'astroai_palm_client_id'
+  const existing = window.localStorage.getItem(key)
+  if (existing) return existing
+  const created = crypto.randomUUID()
+  window.localStorage.setItem(key, created)
+  return created
+}
+
+function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onerror = () => reject(new Error('file_read_failed'))
+    reader.onload = () => {
+      const value = reader.result
+      if (typeof value !== 'string') {
+        reject(new Error('invalid_file_data'))
+        return
+      }
+      resolve(value)
+    }
+    reader.readAsDataURL(file)
+  })
+}
+
+// â”€â”€ Canvas drawing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function drawLine(
   ctx: CanvasRenderingContext2D,
@@ -73,7 +99,7 @@ function drawLine(
   ctx.stroke()
   ctx.restore()
 
-  // Main line — partial bezier via t-steps
+  // Main line â€” partial bezier via t-steps
   ctx.save()
   ctx.beginPath()
   const steps = 80
@@ -107,7 +133,7 @@ function drawLine(
   }
 }
 
-// ── Hand guide overlay ────────────────────────────────────────────────────────
+// â”€â”€ Hand guide overlay â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function HandGuideOverlay({ hand }: { hand: 'left' | 'right' }) {
   return (
@@ -131,7 +157,7 @@ function HandGuideOverlay({ hand }: { hand: 'left' | 'right' }) {
   )
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
+// â”€â”€ Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 interface Props { hand: 'left' | 'right'; onClose: () => void }
 
@@ -142,6 +168,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
   const rafRef        = useRef<number>(0)
   const streamRef     = useRef<MediaStream | null>(null)
   const isBackCamRef  = useRef(false)
+  const clientIdRef   = useRef('')
 
   const [phase, setPhase]             = useState<Phase>('intro')
   const [imageUrl, setImageUrl]       = useState<string | null>(null)
@@ -159,7 +186,14 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     cancelAnimationFrame(rafRef.current)
   }, [])
 
-  useEffect(() => () => { stopStream(); if (imageUrl) URL.revokeObjectURL(imageUrl) }, [])
+  useEffect(() => {
+    clientIdRef.current = getOrCreatePalmClientId()
+  }, [])
+
+  useEffect(() => () => {
+    stopStream()
+    if (imageUrl?.startsWith('blob:')) URL.revokeObjectURL(imageUrl)
+  }, [imageUrl, stopStream])
 
   // Attach stream to <video> after camera phase mounts the element
   useEffect(() => {
@@ -171,18 +205,22 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     video.play().catch(() => {})
   }, [phase])
 
-  // ── Call OpenAI Vision API to detect palm lines ──
+  // Call server palm scan pipeline
   const analyzeImage = useCallback(async (dataUrl: string, w: number, h: number) => {
     setPhase('scanning')
     try {
-      const res = await fetch('/api/palm-detect', {
+      const res = await fetch('/api/palm/scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: dataUrl }),
+        body: JSON.stringify({
+          image: dataUrl,
+          side: hand,
+          clientId: clientIdRef.current || getOrCreatePalmClientId(),
+        }),
       })
-      const data = await res.json()
+      const data = await res.json() as (PalmScanRecord & { error?: string })
 
-      if (data.error) {
+      if (!res.ok || data.error || !data.detect?.lines || !data.interpret?.core) {
         setErrorMsg(
           data.error === 'no_palm'
             ? 'No palm detected. Point the camera at your open palm and try again.'
@@ -196,31 +234,31 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
       const scale = (pts: LinePts): LinePts =>
         pts.map(([x, y]) => [x * w, y * h]) as LinePts
 
+      const detected = data.detect.lines
       const lines: DetectedLines = {
-        heart: scale(data.heart),
-        head:  scale(data.head),
-        life:  scale(data.life),
-        fate:  scale(data.fate),
+        heart: scale(detected.heart),
+        head: scale(detected.head),
+        life: scale(detected.life),
+        fate: scale(detected.fate),
       }
       setDetectedLines(lines)
 
-      // Generate scores (cosmetic — based on line length ratios)
-      const lineLen = ([s, , e]: LinePts) =>
-        Math.sqrt((e[0]-s[0])**2 + (e[1]-s[1])**2)
-      const maxLen = Math.max(lineLen(lines.heart), lineLen(lines.head), lineLen(lines.life), lineLen(lines.fate)) || 1
-      setPalmLines(LINE_META.map((l) => ({
-        ...l,
-        score: Math.min(99, Math.max(55, Math.round(60 + (lineLen(lines[l.id]) / maxLen) * 35 + Math.random() * 5))),
+      setPalmLines(LINE_META.map((line) => ({
+        ...line,
+        score: data.interpret.core.lineScore[line.id],
+        trait: data.interpret.core.lineSuggestion[line.id],
       })))
 
+      setCurrentLine(0)
+      setDrawnCount(0)
       setPhase('drawing')
     } catch {
       setErrorMsg('Analysis failed. Check your connection and try again.')
       setPhase('error')
     }
-  }, [])
+  }, [hand])
 
-  // ── Open camera ──
+  // â”€â”€ Open camera â”€â”€
   const startCamera = useCallback(async () => {
     const constraints: Array<{ video: MediaTrackConstraints; isBack: boolean }> = [
       { video: { facingMode: { exact: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, isBack: true },
@@ -248,20 +286,21 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     setPhase('camera')
   }, [])
 
-  // ── Upload photo ──
+  // â”€â”€ Upload photo â”€â”€
   const handleFile = useCallback(async (file: File) => {
     if (!file.type.startsWith('image/')) return
+    const dataUrl = await fileToDataUrl(file)
     const url = URL.createObjectURL(file)
     setImageUrl(url)
     const img = new window.Image()
     img.onload = () => {
       setImgSize({ w: img.naturalWidth, h: img.naturalHeight })
-      analyzeImage(url, img.naturalWidth, img.naturalHeight)
+      analyzeImage(dataUrl, img.naturalWidth, img.naturalHeight)
     }
     img.src = url
   }, [analyzeImage])
 
-  // ── Capture from camera ──
+  // â”€â”€ Capture from camera â”€â”€
   const captureFrame = useCallback(async () => {
     const video  = videoRef.current
     const canvas = captureCanvas.current
@@ -286,7 +325,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     await analyzeImage(dataUrl, canvas.width, canvas.height)
   }, [stopStream, analyzeImage])
 
-  // ── Animate lines onto canvas when phase = drawing ──
+  // â”€â”€ Animate lines onto canvas when phase = drawing â”€â”€
   useEffect(() => {
     if (phase !== 'drawing' || !detectedLines || !imgSize) return
     const canvas = overlayRef.current
@@ -299,9 +338,6 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     let lineIdx = 0
     let startTs: number | null = null
     const DURATION = 1400
-
-    setCurrentLine(0)
-    setDrawnCount(0)
 
     const animate = (ts: number) => {
       if (!startTs) startTs = ts
@@ -338,11 +374,11 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     return () => { cancelAnimationFrame(rafRef.current) }
   }, [phase, detectedLines, imgSize])
 
-  // ── Reset ──
+  // â”€â”€ Reset â”€â”€
   const reset = useCallback(() => {
     stopStream()
     cancelAnimationFrame(rafRef.current)
-    if (imageUrl) URL.revokeObjectURL(imageUrl)
+    if (imageUrl?.startsWith('blob:')) URL.revokeObjectURL(imageUrl)
     setImageUrl(null)
     setImgSize(null)
     setPhase('intro')
@@ -366,7 +402,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
 
   const isImagePhase = phase === 'scanning' || phase === 'drawing' || phase === 'results'
 
-  // ── Render ────────────────────────────────────────────────────────────────
+  // â”€â”€ Render â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   return (
     <div className="fixed inset-0 z-50 flex justify-center" style={{ background: 'rgba(0,0,0,0.7)' }}>
@@ -374,7 +410,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
         className="w-full max-w-107.5 h-full flex flex-col"
         style={{ background: 'rgba(6,13,27,0.97)', backdropFilter: 'blur(20px)' }}
       >
-        {/* ── Header ── */}
+        {/* â”€â”€ Header â”€â”€ */}
         <div
           className="flex items-center justify-between px-4 py-3 shrink-0"
           style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}
@@ -382,7 +418,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-rose-500" />
             <span className="text-sm font-semibold text-white">Palm Scanner</span>
-            <span className="text-xs text-slate-500 capitalize">· {hand} hand</span>
+            <span className="text-xs text-slate-500 capitalize">Â· {hand} hand</span>
           </div>
           <button
             onClick={onClose}
@@ -392,7 +428,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
           </button>
         </div>
 
-        {/* ── CAMERA phase — full-screen live view ── */}
+        {/* â”€â”€ CAMERA phase â€” full-screen live view â”€â”€ */}
         {phase === 'camera' && (
           <motion.div
             key="camera-full"
@@ -442,7 +478,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
           </motion.div>
         )}
 
-        {/* ── TEXT phases (intro / error) — centered, constrained ── */}
+        {/* â”€â”€ TEXT phases (intro / error) â€” centered, constrained â”€â”€ */}
         {(phase === 'intro' || phase === 'error') && (
           <div className="flex-1 overflow-y-auto">
             <div className="max-w-sm mx-auto w-full">
@@ -463,7 +499,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
                         animate={{ scale: [1, 1.06, 1] }}
                         transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
                       >
-                        <span className="text-6xl select-none">{hand === 'left' ? '🤚' : '✋'}</span>
+                        <span className="text-6xl select-none">{hand === 'left' ? 'ðŸ¤š' : 'âœ‹'}</span>
                       </motion.div>
                       {[1, 2].map((i) => (
                         <motion.div
@@ -491,7 +527,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
                         <span className="text-xs font-semibold text-amber-400">Tips for best results</span>
                       </div>
                       {[
-                        'Good lighting — natural light works best',
+                        'Good lighting â€” natural light works best',
                         'Spread fingers slightly, palm facing camera',
                         'Keep background plain (table or floor)',
                         'Fill the frame with your full hand',
@@ -559,11 +595,11 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
           </div>
         )}
 
-        {/* ── IMAGE phases (scanning / drawing / results) — full-width ── */}
+        {/* â”€â”€ IMAGE phases (scanning / drawing / results) â€” full-width â”€â”€ */}
         {isImagePhase && imageUrl && (
           <div className="flex-1 flex flex-col min-h-0">
 
-            {/* Full-width image + canvas overlay — no forced aspect ratio */}
+            {/* Full-width image + canvas overlay â€” no forced aspect ratio */}
             <div className="relative flex-1 min-h-0 bg-black overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -578,7 +614,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
                 style={{ background: phase === 'scanning' ? 'rgba(6,13,27,0.45)' : 'rgba(6,13,27,0.2)' }}
               />
 
-              {/* Canvas — mounted during scanning, persists through drawing + results */}
+              {/* Canvas â€” mounted during scanning, persists through drawing + results */}
               <canvas
                 ref={overlayRef}
                 className="absolute inset-0 w-full h-full pointer-events-none"
@@ -616,7 +652,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
                       animate={{ opacity: [1, 0.5, 1] }}
                       transition={{ duration: 1, repeat: Infinity }}
                     >
-                      Analyzing palm lines with AI…
+                      Analyzing palm lines with AIâ€¦
                     </motion.span>
                   </div>
                 </>
@@ -651,7 +687,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
                     className="text-[11px] px-3 py-1 rounded-full font-mono"
                     style={{ background: 'rgba(0,0,0,0.8)', color: LINE_META[currentLine]?.color }}
                   >
-                    Tracing {LINE_META[currentLine]?.label}…
+                    Tracing {LINE_META[currentLine]?.label}â€¦
                   </span>
                 </motion.div>
               )}
@@ -675,7 +711,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
               )}
             </div>
 
-            {/* Results panel — scrollable below the image */}
+            {/* Results panel â€” scrollable below the image */}
             {phase === 'results' && (
               <div className="overflow-y-auto px-4 py-4 space-y-3" style={{ maxHeight: '45%' }}>
                 <p className="text-xs font-semibold text-slate-400">Your Palm Analysis</p>
@@ -725,3 +761,4 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     </div>
   )
 }
+
