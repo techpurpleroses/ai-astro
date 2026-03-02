@@ -404,6 +404,64 @@ function drawLine(
   }
 }
 
+// ── Astroline-style hand guide overlay ───────────────────────────────────────
+// Large solid-white hand silhouette that fills the camera frame so the user
+// can easily align their palm. Mirrors for left-hand mode.
+
+function HandGuideOverlay({ hand }: { hand: 'left' | 'right' }) {
+  // Single unified closed path tracing the entire hand boundary — exactly like Astroline.
+  // Right-hand design (thumb exits RIGHT). Left hand uses CSS scaleX(-1).
+  //
+  // Path traces clockwise from wrist-left:
+  //   up left palm → pinky → ring → middle (tallest) → index → down right palm →
+  //   thumb bulge → back down → wrist curve → close.
+  //
+  // viewBox 0 0 300 540:
+  //   fingers span x 18–260, palm x 18–260, thumb extends to x≈292
+  //   finger peaks: pinky y=187, ring/index y=125, middle y=83 (tallest)
+  //   wrist bottom: y≈510
+  const d =
+    'M 22 496 ' +
+    'C 20 440 18 360 18 268 ' +   // left palm edge (slight curve from wrist)
+    'L 18 213 ' +                  // pinky left side
+    'A 26 26 0 0 1 70 213 ' +      // pinky tip arc (radius 26, chord 52 = 2r ✓)
+    'L 70 258 ' +                  // pinky right side down
+    'C 72 286 80 286 82 258 ' +    // valley: pinky → ring
+    'L 82 150 ' +                  // ring left side up
+    'A 25 25 0 0 1 132 150 ' +     // ring tip arc
+    'L 132 258 ' +                 // ring right down
+    'C 134 286 142 286 144 258 ' + // valley: ring → middle
+    'L 144 110 ' +                 // middle left up (tallest)
+    'A 27 27 0 0 1 198 110 ' +     // middle tip arc
+    'L 198 258 ' +                 // middle right down
+    'C 200 286 208 286 210 258 ' + // valley: middle → index
+    'L 210 150 ' +                 // index left up
+    'A 25 25 0 0 1 260 150 ' +     // index tip arc
+    'L 260 272 ' +                 // index right side to palm
+    'C 260 340 262 358 264 368 ' + // right palm curving to thumb junction
+    'C 280 350 294 316 294 288 ' + // thumb outer boundary (up-right)
+    'C 292 264 275 250 257 256 ' + // around thumb tip
+    'C 246 262 242 305 244 372 ' + // thumb inner back down
+    'L 244 494 ' +                 // right palm straight down
+    'C 196 510 88 510 22 496 Z'    // wrist bottom curve, close
+
+  return (
+    <motion.svg
+      viewBox="0 0 300 540"
+      preserveAspectRatio="xMidYMid meet"
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ transform: hand === 'left' ? 'scaleX(-1)' : undefined }}
+      animate={{ opacity: [0.88, 1, 0.88] }}
+      transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+    >
+      {/* Outer glow ring */}
+      <path d={d} fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="16" strokeLinejoin="round" />
+      {/* Dark filled silhouette with solid white outline */}
+      <path d={d} fill="rgba(0,0,0,0.52)" stroke="white" strokeWidth="5.5" strokeLinejoin="round" />
+    </motion.svg>
+  )
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 interface Props { hand: 'left' | 'right'; onClose: () => void }
@@ -433,11 +491,19 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     try {
       const { FilesetResolver, HandLandmarker } = await import('@mediapipe/tasks-vision')
       const vision = await FilesetResolver.forVisionTasks(WASM_PATH)
-      landmarkerRef.current = await HandLandmarker.createFromOptions(vision, {
-        baseOptions: { modelAssetPath: MODEL_URL, delegate: 'GPU' },
-        runningMode: 'IMAGE',
-        numHands: 1,
-      })
+      const buildLandmarker = (delegate: 'GPU' | 'CPU') =>
+        HandLandmarker.createFromOptions(vision, {
+          baseOptions: { modelAssetPath: MODEL_URL, delegate },
+          runningMode: 'IMAGE',
+          numHands: 1,
+        })
+      // Try GPU first; fall back to CPU if the device doesn't support WebGL/GPU delegate
+      try {
+        landmarkerRef.current = await buildLandmarker('GPU')
+      } catch {
+        console.warn('GPU delegate unavailable, falling back to CPU')
+        landmarkerRef.current = await buildLandmarker('CPU')
+      }
       return true
     } catch (err) {
       console.error('MediaPipe load error:', err)
@@ -454,6 +520,19 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
   }, [])
 
   useEffect(() => () => { stopStream(); if (imageUrl) URL.revokeObjectURL(imageUrl) }, [])
+
+  // ── Attach stream to <video> after camera phase renders it into the DOM ──
+  // startCamera() obtains the stream while phase='loading-model' (before the <video> tag
+  // exists). We store the stream in streamRef and then setPhase('camera') which renders
+  // the video element. This effect runs after that render and sets srcObject.
+  useEffect(() => {
+    if (phase !== 'camera') return
+    const video = videoRef.current
+    const stream = streamRef.current
+    if (!video || !stream) return
+    video.srcObject = stream
+    video.play().catch(() => {})
+  }, [phase])
 
   // ── Run detection on an HTMLImageElement or HTMLCanvasElement ──
   const runDetection = useCallback(async (src: HTMLImageElement | HTMLCanvasElement) => {
@@ -494,17 +573,33 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
   const startCamera = useCallback(async () => {
     setPhase('loading-model')
     if (!await loadModel()) return
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
-      })
-      streamRef.current = stream
-      if (videoRef.current) { videoRef.current.srcObject = stream; await videoRef.current.play() }
-      setPhase('camera')
-    } catch {
+
+    // Most permissive first so desktop browsers always get a camera.
+    // On mobile, facingMode hints are tried after the generic fallback succeeds elsewhere.
+    const videoConstraints: MediaTrackConstraints[] = [
+      { width: { ideal: 1280 }, height: { ideal: 720 } },          // any camera (desktop safe)
+      { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },   // front
+      { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }, // back
+    ]
+
+    let stream: MediaStream | null = null
+    for (const video of videoConstraints) {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video })
+        break
+      } catch { /* try next constraint */ }
+    }
+
+    if (!stream) {
       setErrorMsg('Camera access denied. Please grant permission or upload a photo instead.')
       setPhase('error')
+      return
     }
+
+    streamRef.current = stream
+    // NOTE: the <video> element is only rendered in 'camera' phase.
+    // We set srcObject via a useEffect that fires after the video mounts.
+    setPhase('camera')
   }, [loadModel])
 
   // ── Upload photo ──
@@ -535,7 +630,9 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     canvas.height = video.videoHeight
     const ctx = canvas.getContext('2d')!
     ctx.save()
-    if (hand === 'right') { ctx.translate(canvas.width, 0); ctx.scale(-1, 1) }
+    // Always mirror the captured frame to match the selfie-mirror display (scaleX(-1))
+    ctx.translate(canvas.width, 0)
+    ctx.scale(-1, 1)
     ctx.drawImage(video, 0, 0)
     ctx.restore()
 
@@ -545,7 +642,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     setImageUrl(url)
     setImgSize({ w: canvas.width, h: canvas.height })
     await runDetection(canvas)
-  }, [hand, stopStream, runDetection])
+  }, [stopStream, runDetection])
 
   // ── Animate palm lines onto canvas when phase = drawing ──
   // The canvas is already mounted (inside the persistent image container that renders
@@ -643,8 +740,11 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
+    // Full-screen backdrop
+    <div className="fixed inset-0 z-50 flex justify-center" style={{ background: 'rgba(0,0,0,0.6)' }}>
+    {/* Mobile-width scanner panel — matches the app's mobile frame width */}
     <div
-      className="fixed inset-0 z-50 flex flex-col"
+      className="w-full max-w-[430px] h-full flex flex-col"
       style={{ background: 'rgba(6,13,27,0.97)', backdropFilter: 'blur(20px)' }}
     >
       {/* Header */}
@@ -665,7 +765,64 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
         </button>
       </div>
 
-      {/* Content — centered, max-width constrained so it looks right on desktop too */}
+      {/* ── CAMERA PHASE: full-screen, no scroll, no max-width constraint ── */}
+      {phase === 'camera' && (
+        <motion.div
+          key="camera-full"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex-1 relative overflow-hidden bg-black"
+        >
+          {/* Full-bleed video */}
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ transform: 'scaleX(-1)' }}
+          />
+          {/* Hidden capture canvas */}
+          <canvas ref={captureCanvas} className="hidden" />
+
+          {/* Large Astroline-style hand silhouette */}
+          <HandGuideOverlay hand={hand} />
+
+          {/* Upload shortcut (top-right, near close button area) */}
+          <button
+            onClick={openFilePicker}
+            className="absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-white/80"
+            style={{ background: 'rgba(0,0,0,0.55)' }}
+          >
+            <Upload size={13} />
+            Upload
+          </button>
+
+          {/* Bottom: instruction label + capture button */}
+          <div className="absolute bottom-10 inset-x-0 flex flex-col items-center gap-5">
+            <p
+              className="text-sm text-white font-medium px-5 py-2 rounded-2xl text-center max-w-[260px] leading-snug"
+              style={{ background: 'rgba(0,0,0,0.62)' }}
+            >
+              Place your palm inside the outline and take a photo.
+            </p>
+            <motion.button
+              onClick={captureFrame}
+              whileTap={{ scale: 0.93 }}
+              className="w-[72px] h-[72px] rounded-full flex items-center justify-center"
+              style={{
+                background: 'linear-gradient(135deg, #F43F5E, #E11D48)',
+                boxShadow: '0 0 32px rgba(244,63,94,0.5)',
+              }}
+            >
+              <Camera size={28} className="text-white" />
+            </motion.button>
+          </div>
+        </motion.div>
+      )}
+
+      {/* ── ALL OTHER PHASES: scrollable, max-width constrained ── */}
+      {phase !== 'camera' && (
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-sm mx-auto w-full">
           <AnimatePresence mode="wait">
@@ -764,53 +921,6 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
                 />
                 <p className="text-white font-semibold">Loading AI Model…</p>
                 <p className="text-slate-500 text-xs">First-time download ~8 MB, cached after</p>
-              </motion.div>
-            )}
-
-            {/* ── CAMERA ── */}
-            {phase === 'camera' && (
-              <motion.div
-                key="camera"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex flex-col items-center gap-5 px-4 py-5"
-              >
-                <div className="relative w-full rounded-2xl overflow-hidden bg-black">
-                  <video
-                    ref={videoRef}
-                    className="w-full"
-                    style={{ transform: hand === 'left' ? 'scaleX(-1)' : undefined, aspectRatio: '4/3', objectFit: 'cover' }}
-                    playsInline
-                    muted
-                  />
-                  {/* hidden capture canvas */}
-                  <canvas ref={captureCanvas} className="hidden" />
-
-                  {/* Viewfinder brackets */}
-                  {[
-                    { top: 10, left: 10, borderTop: '2px solid', borderLeft: '2px solid' },
-                    { top: 10, right: 10, borderTop: '2px solid', borderRight: '2px solid' },
-                    { bottom: 10, left: 10, borderBottom: '2px solid', borderLeft: '2px solid' },
-                    { bottom: 10, right: 10, borderBottom: '2px solid', borderRight: '2px solid' },
-                  ].map((s, i) => (
-                    <div key={i} className="absolute w-8 h-8" style={{ ...s, borderColor: 'rgba(244,63,94,0.7)' }} />
-                  ))}
-                  <div className="absolute bottom-3 inset-x-0 flex justify-center">
-                    <span className="text-xs text-white px-3 py-1 rounded-full" style={{ background: 'rgba(0,0,0,0.6)' }}>
-                      Position palm in frame, fingers spread
-                    </span>
-                  </div>
-                </div>
-
-                <motion.button
-                  onClick={captureFrame}
-                  whileTap={{ scale: 0.93 }}
-                  className="w-20 h-20 rounded-full flex items-center justify-center"
-                  style={{ background: 'linear-gradient(135deg, #F43F5E, #E11D48)', boxShadow: '0 0 32px rgba(244,63,94,0.45)' }}
-                >
-                  <Camera size={28} className="text-white" />
-                </motion.button>
-                <p className="text-slate-500 text-xs">Tap to capture your palm</p>
               </motion.div>
             )}
 
@@ -1014,6 +1124,8 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
           )}
         </div>
       </div>
+      )}
+    </div>
     </div>
   )
 }

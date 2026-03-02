@@ -315,7 +315,7 @@ export function PalmScanDemo() {
 
             {/* Drop zone */}
             <div
-              className={`relative w-full max-w-md aspect-[3/4] rounded-2xl border-2 border-dashed transition-all duration-200 flex flex-col items-center justify-center gap-5 cursor-pointer ${
+              className={`relative w-full max-w-md aspect-3/4ounded-2xl border-2 border-dashed transition-all duration-200 flex flex-col items-center justify-center gap-5 cursor-pointer ${
                 isDragging
                   ? 'border-cyan-400 bg-cyan-400/8 scale-[1.01]'
                   : 'border-white/12 bg-midnight-800/30 hover:border-cyan-400/40 hover:bg-midnight-800/50'
