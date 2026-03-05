@@ -2,7 +2,26 @@ import { promises as fs } from 'fs'
 import path from 'path'
 import { type PalmScanRecord, PalmScanRecordSchema } from '@/lib/palm/contracts'
 
-const PALM_DATA_ROOT = path.join(process.cwd(), 'data', 'palm-readings')
+function resolvePalmDataRoot() {
+  const configured = process.env.PALM_DATA_DIR?.trim()
+  if (configured) {
+    return path.isAbsolute(configured) ? configured : path.join(process.cwd(), configured)
+  }
+
+  const isServerless =
+    process.env.VERCEL === '1' ||
+    Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME) ||
+    Boolean(process.env.LAMBDA_TASK_ROOT)
+
+  if (isServerless) {
+    const tempRoot = process.env.TMPDIR || process.env.TEMP || '/tmp'
+    return path.join(tempRoot, 'astro-ai', 'palm-readings')
+  }
+
+  return path.join(process.cwd(), 'data', 'palm-readings')
+}
+
+const PALM_DATA_ROOT = resolvePalmDataRoot()
 
 function sanitizeClientId(clientId?: string) {
   const value = (clientId ?? 'anonymous').trim()

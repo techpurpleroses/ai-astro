@@ -61,8 +61,17 @@ export async function POST(req: NextRequest) {
     })
 
     const saveStart = Date.now()
-    await savePalmScanRecord(record)
-    debugLog('store.done', { ms: Date.now() - saveStart, scanId: record.scanId })
+    try {
+      await savePalmScanRecord(record)
+      debugLog('store.done', { ms: Date.now() - saveStart, scanId: record.scanId })
+    } catch (error) {
+      console.error('palm.scan store error:', error)
+      debugLog('store.fail', {
+        ms: Date.now() - saveStart,
+        scanId: record.scanId,
+        reason: error instanceof Error ? error.message : String(error),
+      })
+    }
     debugLog('response.success', { totalMs: Date.now() - startedAt })
     return NextResponse.json(record)
   } catch (error) {
