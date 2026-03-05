@@ -50,6 +50,14 @@ const LINE_COLORS: Record<'heart' | 'head' | 'life' | 'fate', string> = {
   heart: '#F43F5E', head: '#06B6D4', life: '#84CC16', fate: '#F59E0B',
 }
 const PALM_DEBUG = process.env.NEXT_PUBLIC_PALM_DEBUG !== '0'
+const UPLOAD_MAX_DIMENSION = 1600
+const UPLOAD_TARGET_BYTES = 1_400_000
+const UPLOAD_MIN_QUALITY = 0.62
+
+type PalmScanApiPayload = Partial<PalmScanRecord> & {
+  error?: string
+  details?: { reason?: string }
+}
 
 function logScan(step: string, data?: Record<string, unknown>) {
   if (!PALM_DEBUG) return
@@ -83,6 +91,102 @@ function fileToDataUrl(file: File): Promise<string> {
     }
     reader.readAsDataURL(file)
   })
+}
+
+function estimateDataUrlBytes(dataUrl: string) {
+  const comma = dataUrl.indexOf(',')
+  if (comma < 0) return dataUrl.length
+  const base64Length = dataUrl.length - comma - 1
+  return Math.floor((base64Length * 3) / 4)
+}
+
+function parseJsonSafe(text: string): unknown {
+  try {
+    return JSON.parse(text)
+  } catch {
+    return null
+  }
+}
+
+function loadImageFromDataUrl(dataUrl: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new window.Image()
+    img.onload = () => resolve(img)
+    img.onerror = () => reject(new Error('image_decode_failed'))
+    img.src = dataUrl
+  })
+}
+
+async function optimizeImageDataUrl(
+  dataUrl: string,
+  options?: { maxDimension?: number; targetBytes?: number; minQuality?: number; initialQuality?: number },
+) {
+  const maxDimension = options?.maxDimension ?? UPLOAD_MAX_DIMENSION
+  const targetBytes = options?.targetBytes ?? UPLOAD_TARGET_BYTES
+  const minQuality = options?.minQuality ?? UPLOAD_MIN_QUALITY
+  let quality = options?.initialQuality ?? 0.88
+
+  const img = await loadImageFromDataUrl(dataUrl)
+  const ratio = Math.min(1, maxDimension / Math.max(img.naturalWidth, img.naturalHeight))
+  const width = Math.max(1, Math.round(img.naturalWidth * ratio))
+  const height = Math.max(1, Math.round(img.naturalHeight * ratio))
+
+  const canvas = document.createElement('canvas')
+  canvas.width = width
+  canvas.height = height
+  const ctx = canvas.getContext('2d')
+  if (!ctx) throw new Error('canvas_unavailable')
+  ctx.drawImage(img, 0, 0, width, height)
+
+  let best = canvas.toDataURL('image/jpeg', quality)
+  let bestBytes = estimateDataUrlBytes(best)
+  while (bestBytes > targetBytes && quality > minQuality) {
+    quality = Math.max(minQuality, quality - 0.08)
+    const candidate = canvas.toDataURL('image/jpeg', quality)
+    best = candidate
+    bestBytes = estimateDataUrlBytes(candidate)
+  }
+
+  return {
+    dataUrl: best,
+    width,
+    height,
+    quality,
+    bytes: bestBytes,
+  }
+}
+
+function errorMessageForScanFailure(
+  status: number,
+  apiError?: string,
+  reason?: string,
+  rawBody?: string,
+) {
+  if (status === 413 || rawBody?.includes('FUNCTION_PAYLOAD_TOO_LARGE')) {
+    return 'Photo is too large for server upload. Move closer and try again.'
+  }
+
+  if (apiError === 'no_palm') {
+    const suffix = reason ? ` (${reason})` : ''
+    return `No palm detected${suffix}. Point the camera at your open palm and try again.`
+  }
+
+  if (reason === 'roboflow_api_key_missing') {
+    return 'Palm scanner is not configured on server. Add ROBOFLOW_API_KEY in Vercel.'
+  }
+  if (reason === 'roboflow_auth_failed') {
+    return 'Palm detection auth failed on server. Check Roboflow API key.'
+  }
+  if (reason === 'roboflow_rate_limited') {
+    return 'Palm detection service is rate-limited. Try again in a moment.'
+  }
+  if (reason === 'detector_timeout') {
+    return 'Palm detection timed out. Try a clearer photo with better lighting.'
+  }
+  if (status >= 500) {
+    return 'Server error during palm scan. Check Vercel function logs.'
+  }
+  return 'Analysis failed. Check your connection and try again.'
 }
 
 // â”€â”€ Canvas drawing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -154,10 +258,10 @@ function drawLine(
   ctx.save()
   drawPartialPath()
   ctx.strokeStyle = color
-  ctx.lineWidth = 8
-  ctx.globalAlpha = 0.15 * progress
+  ctx.lineWidth = 12
+  ctx.globalAlpha = 0.22 * progress
   ctx.shadowColor = color
-  ctx.shadowBlur = 24
+  ctx.shadowBlur = 30
   ctx.lineCap = 'round'
   ctx.stroke()
   ctx.restore()
@@ -166,10 +270,10 @@ function drawLine(
   ctx.save()
   drawPartialPath()
   ctx.strokeStyle = color
-  ctx.lineWidth = 3
+  ctx.lineWidth = 5
   ctx.globalAlpha = 0.92 * progress
   ctx.shadowColor = color
-  ctx.shadowBlur = 10
+  ctx.shadowBlur = 14
   ctx.lineCap = 'round'
   ctx.stroke()
   ctx.restore()
@@ -179,7 +283,7 @@ function drawLine(
     const [ex, ey] = tipPoint()
     ctx.save()
     ctx.beginPath()
-    ctx.arc(ex, ey, 5, 0, Math.PI * 2)
+    ctx.arc(ex, ey, 6, 0, Math.PI * 2)
     ctx.fillStyle = color
     ctx.globalAlpha = (progress - 0.85) / 0.15
     ctx.shadowColor = color
@@ -278,25 +382,27 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
           imageHeight: h,
         }),
       })
-      const data = await res.json() as (PalmScanRecord & { error?: string; details?: { reason?: string } })
+      const bodyText = await res.text()
+      const parsed = parseJsonSafe(bodyText)
+      const data = (parsed && typeof parsed === 'object' ? parsed : {}) as PalmScanApiPayload
+      const apiError = typeof data.error === 'string' ? data.error : undefined
+      const reason = typeof data.details?.reason === 'string' ? data.details.reason : undefined
       logScan('analyze.response', {
         status: res.status,
         ok: res.ok,
         ms: Math.round(performance.now() - startedAt),
-        error: data.error,
-        reason: data.details?.reason,
+        error: apiError ?? 'none',
+        reason: reason ?? 'none',
+        bodyChars: bodyText.length,
       })
 
-      if (!res.ok || data.error || !data.detect?.lines || !data.interpret?.core) {
-        const reasonText = data.error === 'no_palm' && data.details?.reason
-          ? ` (${data.details.reason})`
-          : ''
-        setErrorMsg(
-          data.error === 'no_palm'
-            ? `No palm detected${reasonText}. Point the camera at your open palm and try again.`
-            : 'Analysis failed. Check your connection and try again.'
-        )
-        logScan('analyze.no_palm_or_error', { reason: data.details?.reason || data.error || 'unknown' })
+      if (!res.ok || apiError || !data.detect?.lines || !data.interpret?.core) {
+        setErrorMsg(errorMessageForScanFailure(res.status, apiError, reason, bodyText))
+        logScan('analyze.no_palm_or_error', {
+          status: res.status,
+          reason: reason || apiError || 'unknown',
+          preview: bodyText.slice(0, 160),
+        })
         setPhase('error')
         return
       }
@@ -316,8 +422,8 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
 
       setPalmLines(LINE_META.map((line) => ({
         ...line,
-        score: data.interpret.core.lineScore[line.id],
-        trait: data.interpret.core.lineSuggestion[line.id],
+        score: data.interpret!.core.lineScore[line.id],
+        trait: data.interpret!.core.lineSuggestion[line.id],
       })))
 
       setCurrentLine(0)
@@ -325,13 +431,14 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
       setPhase('drawing')
       logScan('analyze.success', {
         ms: Math.round(performance.now() - startedAt),
-        model: data.detect.model,
-        scores: data.interpret.core.lineScore,
+        model: data.detect!.model,
+        scores: data.interpret!.core.lineScore,
       })
-    } catch {
-      setErrorMsg('Analysis failed. Check your connection and try again.')
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
+      setErrorMsg('Request failed before server response. Please try again.')
       setPhase('error')
-      logScan('analyze.exception')
+      logScan('analyze.exception', { message })
     }
   }, [hand])
 
@@ -366,15 +473,25 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
   // â”€â”€ Upload photo â”€â”€
   const handleFile = useCallback(async (file: File) => {
     if (!file.type.startsWith('image/')) return
-    const dataUrl = await fileToDataUrl(file)
-    const url = URL.createObjectURL(file)
-    setImageUrl(url)
-    const img = new window.Image()
-    img.onload = () => {
-      setImgSize({ w: img.naturalWidth, h: img.naturalHeight })
-      analyzeImage(dataUrl, img.naturalWidth, img.naturalHeight)
+    try {
+      const sourceDataUrl = await fileToDataUrl(file)
+      const optimized = await optimizeImageDataUrl(sourceDataUrl)
+      logScan('image.optimized', {
+        source: 'upload',
+        width: optimized.width,
+        height: optimized.height,
+        bytes: optimized.bytes,
+        quality: optimized.quality,
+      })
+      setImageUrl(optimized.dataUrl)
+      setImgSize({ w: optimized.width, h: optimized.height })
+      await analyzeImage(optimized.dataUrl, optimized.width, optimized.height)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
+      setErrorMsg('Failed to process selected image.')
+      setPhase('error')
+      logScan('upload.process.fail', { message })
     }
-    img.src = url
   }, [analyzeImage])
 
   // â”€â”€ Capture from camera â”€â”€
@@ -396,10 +513,29 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
 
     stopStream()
 
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.92)
-    setImageUrl(dataUrl)
-    setImgSize({ w: canvas.width, h: canvas.height })
-    await analyzeImage(dataUrl, canvas.width, canvas.height)
+    try {
+      const captured = canvas.toDataURL('image/jpeg', 0.92)
+      const optimized = await optimizeImageDataUrl(captured, {
+        maxDimension: 1440,
+        targetBytes: 1_200_000,
+        initialQuality: 0.86,
+      })
+      logScan('image.optimized', {
+        source: 'camera',
+        width: optimized.width,
+        height: optimized.height,
+        bytes: optimized.bytes,
+        quality: optimized.quality,
+      })
+      setImageUrl(optimized.dataUrl)
+      setImgSize({ w: optimized.width, h: optimized.height })
+      await analyzeImage(optimized.dataUrl, optimized.width, optimized.height)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
+      setErrorMsg('Failed to process captured image.')
+      setPhase('error')
+      logScan('capture.process.fail', { message })
+    }
   }, [stopStream, analyzeImage])
 
   // â”€â”€ Animate lines onto canvas when phase = drawing â”€â”€
@@ -497,7 +633,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-rose-500" />
             <span className="text-sm font-semibold text-white">Palm Scanner</span>
-            <span className="text-xs text-slate-500 capitalize">Â· {hand} hand</span>
+            <span className="text-xs text-slate-500 capitalize">| {hand} hand</span>
           </div>
           <button
             onClick={onClose}
@@ -734,7 +870,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
                       animate={{ opacity: [1, 0.5, 1] }}
                       transition={{ duration: 1, repeat: Infinity }}
                     >
-                      Analyzing palm lines with AIâ€¦
+                      Analyzing palm lines with AI...
                     </motion.span>
                   </div>
                 </>
@@ -770,7 +906,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
                     className="text-[11px] px-3 py-1 rounded-full font-mono"
                     style={{ background: 'rgba(0,0,0,0.8)', color: LINE_META[currentLine]?.color }}
                   >
-                    Tracing {LINE_META[currentLine]?.label}â€¦
+                    Tracing {LINE_META[currentLine]?.label}...
                   </span>
                 </motion.div>
               )}

@@ -1,0 +1,208 @@
+{
+  "scanId": "6597151e-ad18-4f02-b167-2996617fef44",
+  "clientId": "641a64d4-f5b8-48f3-85a6-f6af339877c3",
+  "side": "left",
+  "createdAt": "2026-03-05T07:24:35.534Z",
+  "detect": {
+    "hasPalm": true,
+    "lines": {
+      "heart": [
+        [
+          0.4583,
+          0.4582
+        ],
+        [
+          0.4716,
+          0.4837
+        ],
+        [
+          0.487,
+          0.5089
+        ],
+        [
+          0.5077,
+          0.5322
+        ],
+        [
+          0.5329,
+          0.5514
+        ],
+        [
+          0.5581,
+          0.5665
+        ],
+        [
+          0.5856,
+          0.578
+        ],
+        [
+          0.6147,
+          0.5868
+        ],
+        [
+          0.6422,
+          0.5931
+        ],
+        [
+          0.6681,
+          0.5987
+        ]
+      ],
+      "head": [
+        [
+          0.379,
+          0.5107
+        ],
+        [
+          0.4009,
+          0.5198
+        ],
+        [
+          0.4242,
+          0.5292
+        ],
+        [
+          0.448,
+          0.5425
+        ],
+        [
+          0.4716,
+          0.5591
+        ],
+        [
+          0.4939,
+          0.5777
+        ],
+        [
+          0.5159,
+          0.5994
+        ],
+        [
+          0.5378,
+          0.6223
+        ],
+        [
+          0.5583,
+          0.6461
+        ],
+        [
+          0.579,
+          0.6695
+        ]
+      ],
+      "life": [
+        [
+          0.3789,
+          0.5173
+        ],
+        [
+          0.4037,
+          0.5292
+        ],
+        [
+          0.4296,
+          0.5476
+        ],
+        [
+          0.4513,
+          0.5733
+        ],
+        [
+          0.4685,
+          0.6022
+        ],
+        [
+          0.4809,
+          0.6314
+        ],
+        [
+          0.4898,
+          0.6615
+        ],
+        [
+          0.4947,
+          0.6919
+        ],
+        [
+          0.4956,
+          0.722
+        ],
+        [
+          0.4921,
+          0.7526
+        ]
+      ],
+      "fate": []
+    },
+    "confidence": {
+      "heart": 0.862,
+      "head": 0.818,
+      "life": 0.798,
+      "fate": 0.25
+    },
+    "model": {
+      "provider": "roboflow",
+      "name": "palm-lines-recognition-wemy5/1"
+    }
+  },
+  "interpret": {
+    "core": {
+      "lineScore": {
+        "heart": 75,
+        "head": 75,
+        "life": 74,
+        "fate": 63
+      },
+      "lineSuggestion": {
+        "heart": "Your heart line indicates strong emotional depth and sensitivity.",
+        "head": "Your head line suggests clear thinking and practical decision-making.",
+        "life": "Your life line shows good vitality and a balanced lifestyle.",
+        "fate": "Your fate line is faint, implying a flexible career path influenced by personal choices."
+      }
+    },
+    "insights": {
+      "emotionalType": "Emotionally expressive and empathetic.",
+      "cognitiveStyle": "Analytical and pragmatic thinker.",
+      "vitality": "Energetic with steady health.",
+      "careerFocus": "Adaptable with a focus on self-directed growth."
+    },
+    "lines": {
+      "heart": {
+        "score": 75,
+        "summary": "Your heart line indicates strong emotional depth and sensitivity.",
+        "metrics": {
+          "length": 2.65,
+          "depth": 0.86,
+          "curvature": 0.34
+        }
+      },
+      "head": {
+        "score": 75,
+        "summary": "Your head line suggests clear thinking and practical decision-making.",
+        "metrics": {
+          "length": 2.59,
+          "depth": 0.82,
+          "curvature": 0.19
+        }
+      },
+      "life": {
+        "score": 74,
+        "summary": "Your life line shows good vitality and a balanced lifestyle.",
+        "metrics": {
+          "length": 2.81,
+          "depth": 0.8,
+          "curvature": 0.42
+        }
+      },
+      "fate": {
+        "score": 63,
+        "summary": "Your fate line is faint, implying a flexible career path influenced by personal choices.",
+        "metrics": {
+          "length": 0,
+          "depth": 0.25,
+          "curvature": 0
+        }
+      }
+    }
+  }
+}

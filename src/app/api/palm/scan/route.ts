@@ -7,6 +7,7 @@ import { normalizeClientId, savePalmScanRecord } from '@/lib/palm/store'
 import { PalmScanRecordSchema, PalmScanRequestSchema } from '@/lib/palm/contracts'
 
 export const runtime = 'nodejs'
+export const maxDuration = 60
 const PALM_DEBUG = process.env.PALM_DEBUG !== '0'
 
 function debugLog(step: string, data?: Record<string, unknown>) {
@@ -69,11 +70,12 @@ export async function POST(req: NextRequest) {
       debugLog('response.invalid_request', { totalMs: Date.now() - startedAt })
       return NextResponse.json({ error: 'invalid_request', details: error.flatten() }, { status: 400 })
     }
+    const reason = error instanceof Error ? error.message : String(error)
     console.error('palm.scan error:', error)
     debugLog('response.server_error', {
       totalMs: Date.now() - startedAt,
-      reason: error instanceof Error ? error.message : String(error),
+      reason,
     })
-    return NextResponse.json({ error: 'server_error' }, { status: 500 })
+    return NextResponse.json({ error: 'server_error', details: { reason } }, { status: 500 })
   }
 }
