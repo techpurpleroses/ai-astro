@@ -49,6 +49,13 @@ const LINE_ORDER: Array<'heart' | 'head' | 'life' | 'fate'> = ['heart', 'head', 
 const LINE_COLORS: Record<'heart' | 'head' | 'life' | 'fate', string> = {
   heart: '#F43F5E', head: '#06B6D4', life: '#84CC16', fate: '#F59E0B',
 }
+type LineId = (typeof LINE_ORDER)[number]
+const LINE_META_BY_ID: Record<LineId, PalmLine> = {
+  heart: LINE_META[0],
+  head: LINE_META[1],
+  life: LINE_META[2],
+  fate: LINE_META[3],
+}
 const PALM_DEBUG = process.env.NEXT_PUBLIC_PALM_DEBUG !== '0'
 const UPLOAD_MAX_DIMENSION = 1600
 const UPLOAD_TARGET_BYTES = 1_400_000
@@ -212,6 +219,11 @@ function errorMessageForScanFailure(
   return 'Analysis failed. Check your connection and try again.'
 }
 
+function detectedLineOrder(lines: DetectedLines): LineId[] {
+  const order = LINE_ORDER.filter((id) => lines[id].length >= 2)
+  return order.length ? order : ['heart', 'head', 'life']
+}
+
 // â”€â”€ Canvas drawing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function drawLine(
@@ -340,7 +352,7 @@ function HandGuideOverlay({ hand }: { hand: 'left' | 'right' }) {
         color="white"
         style={{
           width: 'auto',
-          height: '62%',
+          height: '76%',
           // Lucide Hand icon is a left hand by default; flip for right
           transform: hand === 'right' ? 'scaleX(-1)' : undefined,
           filter: 'drop-shadow(0 0 18px rgba(255,255,255,0.4))',
@@ -371,6 +383,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
   const [drawnCount, setDrawnCount]   = useState(0)
   const [palmLines, setPalmLines]     = useState<PalmLine[]>(LINE_META)
   const [currentLine, setCurrentLine] = useState(-1)
+  const [lineOrder, setLineOrder] = useState<LineId[]>(LINE_ORDER)
   const [detectedLines, setDetectedLines] = useState<DetectedLines | null>(null)
   const [isBackCam, setIsBackCam]     = useState(false)
   const [torchSupported, setTorchSupported] = useState(false)
@@ -475,6 +488,8 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
           fate: detected.fate as LinePts,
         }
         setDetectedLines(lines)
+        const order = detectedLineOrder(lines)
+        setLineOrder(order)
 
         setPalmLines(LINE_META.map((line) => ({
           ...line,
@@ -490,6 +505,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
           model: data.detect!.model,
           scores: data.interpret!.core.lineScore,
           enhancedRetried,
+          detectedCount: order.length,
         })
         return
       }
@@ -645,6 +661,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     canvas.style.height = `${viewportH}px`
     const ctx = canvas.getContext('2d')!
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    const activeOrder = lineOrder.length ? lineOrder : LINE_ORDER
 
     let lineIdx = 0
     let startTs: number | null = null
@@ -673,11 +690,11 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
       }
 
       for (let i = 0; i < lineIdx; i++) {
-        const id = LINE_ORDER[i]
+        const id = activeOrder[i]
         drawLine(ctx, mappedLines[id], LINE_COLORS[id], 1)
       }
 
-      const currentId = LINE_ORDER[lineIdx]
+      const currentId = activeOrder[lineIdx]
       drawLine(ctx, mappedLines[currentId], LINE_COLORS[currentId], progress)
 
       if (progress < 1) {
@@ -685,7 +702,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
       } else {
         const nextIdx = lineIdx + 1
         setDrawnCount(nextIdx)
-        if (nextIdx < LINE_ORDER.length) {
+        if (nextIdx < activeOrder.length) {
           lineIdx = nextIdx
           setCurrentLine(nextIdx)
           startTs = null
@@ -699,7 +716,59 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
 
     rafRef.current = requestAnimationFrame(animate)
     return () => { cancelAnimationFrame(rafRef.current) }
-  }, [phase, detectedLines, imgSize])
+  }, [phase, detectedLines, imgSize, lineOrder])
+
+  // Keep overlay aligned after layout changes in results phase.
+  useEffect(() => {
+    if (phase !== 'results' || !detectedLines || !imgSize) return
+    const canvas = overlayRef.current
+    const viewport = imageViewportRef.current
+    if (!canvas || !viewport) return
+
+    const activeOrder = lineOrder.length ? lineOrder : LINE_ORDER
+
+    const drawAll = () => {
+      const viewportW = Math.max(1, viewport.clientWidth)
+      const viewportH = Math.max(1, viewport.clientHeight)
+      const dpr = window.devicePixelRatio || 1
+      canvas.width = Math.floor(viewportW * dpr)
+      canvas.height = Math.floor(viewportH * dpr)
+      canvas.style.width = `${viewportW}px`
+      canvas.style.height = `${viewportH}px`
+
+      const ctx = canvas.getContext('2d')
+      if (!ctx) return
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      ctx.clearRect(0, 0, viewportW, viewportH)
+
+      const scale = Math.min(viewportW / imgSize.w, viewportH / imgSize.h)
+      const drawW = imgSize.w * scale
+      const drawH = imgSize.h * scale
+      const offsetX = (viewportW - drawW) / 2
+      const offsetY = (viewportH - drawH) / 2
+      const map = (pts: LinePts): LinePts => pts.map(([x, y]) => [offsetX + x * drawW, offsetY + y * drawH] as Pt)
+
+      const mapped: DetectedLines = {
+        heart: map(detectedLines.heart),
+        head: map(detectedLines.head),
+        life: map(detectedLines.life),
+        fate: map(detectedLines.fate),
+      }
+
+      for (const id of activeOrder) {
+        drawLine(ctx, mapped[id], LINE_COLORS[id], 1)
+      }
+    }
+
+    drawAll()
+    const observer = new ResizeObserver(() => drawAll())
+    observer.observe(viewport)
+    window.addEventListener('resize', drawAll)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', drawAll)
+    }
+  }, [phase, detectedLines, imgSize, lineOrder])
 
   // â”€â”€ Reset â”€â”€
   const reset = useCallback(() => {
@@ -712,6 +781,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     setErrorMsg('')
     setDrawnCount(0)
     setCurrentLine(-1)
+    setLineOrder(LINE_ORDER)
     setDetectedLines(null)
     setPalmLines(LINE_META)
   }, [stopStream, imageUrl])
@@ -730,6 +800,10 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
   const isImagePhase = phase === 'scanning' || phase === 'drawing' || phase === 'results'
   const safeBottomOffset = 'calc(env(safe-area-inset-bottom, 0px) + 1rem)'
   const cameraControlsBottom = 'calc(env(safe-area-inset-bottom, 0px) + 1.5rem)'
+  const activeLineOrder = lineOrder.length ? lineOrder : LINE_ORDER
+  const currentLineId = currentLine >= 0 ? activeLineOrder[currentLine] : null
+  const detectedCount = activeLineOrder.length
+  const visibleLineIds = new Set<LineId>(activeLineOrder)
 
   // â”€â”€ Render â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
@@ -1006,9 +1080,11 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
               {/* Drawing + Results: completed line tags */}
               {(phase === 'drawing' || phase === 'results') && (
                 <div className="absolute top-3 right-3 flex flex-col gap-1.5">
-                  {LINE_META.slice(0, drawnCount).map((l) => (
+                  {activeLineOrder.slice(0, drawnCount).map((id) => {
+                    const l = LINE_META_BY_ID[id]
+                    return (
                     <motion.div
-                      key={l.id}
+                      key={id}
                       initial={{ x: 24, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold"
@@ -1017,7 +1093,8 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
                       <div className="w-1.5 h-1.5 rounded-full" style={{ background: l.color }} />
                       {l.label}
                     </motion.div>
-                  ))}
+                    )
+                  })}
                 </div>
               )}
 
@@ -1031,9 +1108,9 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
                 >
                   <span
                     className="text-[11px] px-3 py-1 rounded-full font-mono"
-                    style={{ background: 'rgba(0,0,0,0.8)', color: LINE_META[currentLine]?.color }}
+                    style={{ background: 'rgba(0,0,0,0.8)', color: currentLineId ? LINE_META_BY_ID[currentLineId].color : '#fff' }}
                   >
-                    Tracing {LINE_META[currentLine]?.label}...
+                    Tracing {currentLineId ? LINE_META_BY_ID[currentLineId].label : 'Line'}...
                   </span>
                 </motion.div>
               )}
@@ -1051,7 +1128,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
                     style={{ background: 'rgba(52,211,153,0.15)', border: '1px solid rgba(52,211,153,0.4)', color: '#34D399' }}
                   >
                     <CheckCircle size={11} />
-                    4 Lines Detected
+                    {detectedCount} Lines Detected
                   </div>
                 </motion.div>
               )}
@@ -1064,7 +1141,10 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
                 style={{ maxHeight: '45%', paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 1rem)' }}
               >
                 <p className="text-xs font-semibold text-slate-400">Your Palm Analysis</p>
-                {palmLines.map((line, i) => (
+                {palmLines.map((line, i) => {
+                  const visible = visibleLineIds.has(line.id)
+                  const displayScore = visible ? line.score : 0
+                  return (
                   <motion.div
                     key={line.id}
                     initial={{ opacity: 0, x: -12 }}
@@ -1078,20 +1158,25 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
                         <div className="w-2 h-2 rounded-full" style={{ background: line.color }} />
                         <span className="text-sm font-semibold text-white">{line.label}</span>
                       </div>
-                      <span className="text-sm font-bold" style={{ color: line.color }}>{line.score}%</span>
+                      <span className="text-sm font-bold" style={{ color: line.color }}>
+                        {visible ? `${line.score}%` : '--'}
+                      </span>
                     </div>
                     <div className="h-1.5 rounded-full bg-white/6 overflow-hidden mb-2">
                       <motion.div
                         className="h-full rounded-full"
                         initial={{ width: 0 }}
-                        animate={{ width: `${line.score}%` }}
+                        animate={{ width: `${displayScore}%` }}
                         transition={{ duration: 0.9, delay: 0.2 + i * 0.1, ease: 'easeOut' }}
                         style={{ background: `linear-gradient(90deg, ${line.color}70, ${line.color})`, boxShadow: `0 0 6px ${line.color}40` }}
                       />
                     </div>
-                    <p className="text-xs text-slate-500">{line.trait}</p>
+                    <p className="text-xs text-slate-500">
+                      {visible ? line.trait : 'Line not clearly visible in this scan. Use better lighting and retake for this line.'}
+                    </p>
                   </motion.div>
-                ))}
+                  )
+                })}
                 <div className="pb-2">
                   <button
                     onClick={reset}

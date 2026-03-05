@@ -12,6 +12,7 @@ import { z } from 'zod'
 
 type Pt = [number, number]
 const PALM_DEBUG = process.env.PALM_DEBUG !== '0'
+const PALM_INTERPRET_USE_MOCK = process.env.PALM_INTERPRET_USE_MOCK === '1'
 
 const IDEAL_CURVATURE: Record<PalmLineId, number> = {
   heart: 0.32,
@@ -252,6 +253,35 @@ function mergeNarrative(
   })
 }
 
+function mockNarrative(base: PalmInterpretResponse): PalmInterpretResponse {
+  const lineSuggestion = {
+    heart: 'Mock: heart line interpretation for UI testing.',
+    head: 'Mock: head line interpretation for UI testing.',
+    life: 'Mock: life line interpretation for UI testing.',
+    fate: 'Mock: fate line interpretation for UI testing.',
+  }
+
+  return PalmInterpretResponseSchema.parse({
+    ...base,
+    core: {
+      ...base.core,
+      lineSuggestion,
+    },
+    insights: {
+      emotionalType: 'Mock: emotional insight',
+      cognitiveStyle: 'Mock: cognitive insight',
+      vitality: 'Mock: vitality insight',
+      careerFocus: 'Mock: career insight',
+    },
+    lines: {
+      heart: { ...base.lines.heart, summary: lineSuggestion.heart },
+      head: { ...base.lines.head, summary: lineSuggestion.head },
+      life: { ...base.lines.life, summary: lineSuggestion.life },
+      fate: { ...base.lines.fate, summary: lineSuggestion.fate },
+    },
+  })
+}
+
 export function interpretPalmScanDeterministic(input: PalmInterpretRequest): PalmInterpretResponse {
   const scoreByLine = {} as Record<PalmLineId, number>
   const suggestionByLine = {} as Record<PalmLineId, string>
@@ -325,6 +355,11 @@ export async function interpretPalmScan(input: PalmInterpretRequest): Promise<Pa
   debugLog('pipeline.start', { side: input.side, confidence: input.confidence })
   const base = interpretPalmScanDeterministic(input)
   debugLog('deterministic.ready', { score: base.core.lineScore })
+  if (PALM_INTERPRET_USE_MOCK) {
+    const mocked = mockNarrative(base)
+    debugLog('pipeline.done.mock', { ms: Date.now() - startedAt })
+    return mocked
+  }
   const narrative = await generateOpenAiNarrative(input, base)
   if (!narrative) {
     debugLog('pipeline.done.fallback', { ms: Date.now() - startedAt })
