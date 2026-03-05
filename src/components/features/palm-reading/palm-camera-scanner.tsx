@@ -11,7 +11,7 @@
 
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Camera, Upload, RotateCcw, X, Lightbulb, CheckCircle, AlertCircle, Hand } from 'lucide-react'
+import { Camera, Upload, RotateCcw, X, Lightbulb, CheckCircle, AlertCircle, Hand, Flashlight, FlashlightOff } from 'lucide-react'
 import type { PalmScanRecord } from '@/lib/palm/contracts'
 
 // â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -57,6 +57,12 @@ const UPLOAD_MIN_QUALITY = 0.62
 type PalmScanApiPayload = Partial<PalmScanRecord> & {
   error?: string
   details?: { reason?: string }
+}
+
+interface ProcessedImage {
+  dataUrl: string
+  width: number
+  height: number
 }
 
 function logScan(step: string, data?: Record<string, unknown>) {
@@ -156,6 +162,23 @@ async function optimizeImageDataUrl(
   }
 }
 
+async function enhancePalmImageDataUrl(input: ProcessedImage): Promise<ProcessedImage> {
+  const img = await loadImageFromDataUrl(input.dataUrl)
+  const canvas = document.createElement('canvas')
+  canvas.width = input.width
+  canvas.height = input.height
+  const ctx = canvas.getContext('2d')
+  if (!ctx) throw new Error('canvas_unavailable')
+  ctx.filter = 'brightness(1.24) contrast(1.2) saturate(1.08)'
+  ctx.drawImage(img, 0, 0, input.width, input.height)
+
+  return {
+    dataUrl: canvas.toDataURL('image/jpeg', 0.9),
+    width: input.width,
+    height: input.height,
+  }
+}
+
 function errorMessageForScanFailure(
   status: number,
   apiError?: string,
@@ -168,7 +191,7 @@ function errorMessageForScanFailure(
 
   if (apiError === 'no_palm') {
     const suffix = reason ? ` (${reason})` : ''
-    return `No palm detected${suffix}. Point the camera at your open palm and try again.`
+    return `No palm detected${suffix}. Improve lighting, turn on flash, and keep full palm in frame.`
   }
 
   if (reason === 'roboflow_api_key_missing') {
@@ -258,10 +281,20 @@ function drawLine(
   ctx.save()
   drawPartialPath()
   ctx.strokeStyle = color
-  ctx.lineWidth = 12
-  ctx.globalAlpha = 0.22 * progress
+  ctx.lineWidth = 9
+  ctx.globalAlpha = 0.12 * progress
   ctx.shadowColor = color
-  ctx.shadowBlur = 30
+  ctx.shadowBlur = 12
+  ctx.lineCap = 'round'
+  ctx.stroke()
+  ctx.restore()
+
+  // Dark under-stroke keeps colored line crisp on bright skin/glare
+  ctx.save()
+  drawPartialPath()
+  ctx.strokeStyle = 'rgba(3, 8, 18, 0.5)'
+  ctx.lineWidth = 6.5
+  ctx.globalAlpha = 0.9 * progress
   ctx.lineCap = 'round'
   ctx.stroke()
   ctx.restore()
@@ -270,10 +303,10 @@ function drawLine(
   ctx.save()
   drawPartialPath()
   ctx.strokeStyle = color
-  ctx.lineWidth = 5
-  ctx.globalAlpha = 0.92 * progress
+  ctx.lineWidth = 4.2
+  ctx.globalAlpha = 0.95 * progress
   ctx.shadowColor = color
-  ctx.shadowBlur = 14
+  ctx.shadowBlur = 5
   ctx.lineCap = 'round'
   ctx.stroke()
   ctx.restore()
@@ -283,7 +316,7 @@ function drawLine(
     const [ex, ey] = tipPoint()
     ctx.save()
     ctx.beginPath()
-    ctx.arc(ex, ey, 6, 0, Math.PI * 2)
+    ctx.arc(ex, ey, 5, 0, Math.PI * 2)
     ctx.fillStyle = color
     ctx.globalAlpha = (progress - 0.85) / 0.15
     ctx.shadowColor = color
@@ -325,6 +358,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
   const videoRef      = useRef<HTMLVideoElement>(null)
   const captureCanvas = useRef<HTMLCanvasElement>(null)
   const overlayRef    = useRef<HTMLCanvasElement>(null)
+  const imageViewportRef = useRef<HTMLDivElement>(null)
   const rafRef        = useRef<number>(0)
   const streamRef     = useRef<MediaStream | null>(null)
   const isBackCamRef  = useRef(false)
@@ -339,10 +373,16 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
   const [currentLine, setCurrentLine] = useState(-1)
   const [detectedLines, setDetectedLines] = useState<DetectedLines | null>(null)
   const [isBackCam, setIsBackCam]     = useState(false)
+  const [torchSupported, setTorchSupported] = useState(false)
+  const [torchOn, setTorchOn] = useState(false)
+  const [torchBusy, setTorchBusy] = useState(false)
 
   const stopStream = useCallback(() => {
     streamRef.current?.getTracks().forEach((t) => t.stop())
     streamRef.current = null
+    setTorchSupported(false)
+    setTorchOn(false)
+    setTorchBusy(false)
     cancelAnimationFrame(rafRef.current)
   }, [])
 
@@ -370,70 +410,89 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     setPhase('scanning')
     const startedAt = performance.now()
     logScan('analyze.start', { hand, width: w, height: h, imageChars: dataUrl.length })
-    try {
-      const res = await fetch('/api/palm/scan', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          image: dataUrl,
-          side: hand,
-          clientId: clientIdRef.current || getOrCreatePalmClientId(),
-          imageWidth: w,
-          imageHeight: h,
-        }),
-      })
-      const bodyText = await res.text()
-      const parsed = parseJsonSafe(bodyText)
-      const data = (parsed && typeof parsed === 'object' ? parsed : {}) as PalmScanApiPayload
-      const apiError = typeof data.error === 'string' ? data.error : undefined
-      const reason = typeof data.details?.reason === 'string' ? data.details.reason : undefined
-      logScan('analyze.response', {
-        status: res.status,
-        ok: res.ok,
-        ms: Math.round(performance.now() - startedAt),
-        error: apiError ?? 'none',
-        reason: reason ?? 'none',
-        bodyChars: bodyText.length,
-      })
 
-      if (!res.ok || apiError || !data.detect?.lines || !data.interpret?.core) {
-        setErrorMsg(errorMessageForScanFailure(res.status, apiError, reason, bodyText))
-        logScan('analyze.no_palm_or_error', {
-          status: res.status,
-          reason: reason || apiError || 'unknown',
-          preview: bodyText.slice(0, 160),
+    let payload: ProcessedImage = { dataUrl, width: w, height: h }
+    let enhancedRetried = false
+
+    try {
+      for (;;) {
+        const res = await fetch('/api/palm/scan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            image: payload.dataUrl,
+            side: hand,
+            clientId: clientIdRef.current || getOrCreatePalmClientId(),
+            imageWidth: payload.width,
+            imageHeight: payload.height,
+          }),
         })
-        setPhase('error')
+
+        const bodyText = await res.text()
+        const parsed = parseJsonSafe(bodyText)
+        const data = (parsed && typeof parsed === 'object' ? parsed : {}) as PalmScanApiPayload
+        const apiError = typeof data.error === 'string' ? data.error : undefined
+        const reason = typeof data.details?.reason === 'string' ? data.details.reason : undefined
+        logScan('analyze.response', {
+          status: res.status,
+          ok: res.ok,
+          ms: Math.round(performance.now() - startedAt),
+          error: apiError ?? 'none',
+          reason: reason ?? 'none',
+          bodyChars: bodyText.length,
+          enhancedRetried,
+        })
+
+        const canRetryEnhanced =
+          !enhancedRetried &&
+          apiError === 'no_palm' &&
+          (reason === 'no_predictions' || reason === 'major_lines_missing')
+
+        if (canRetryEnhanced) {
+          logScan('analyze.retry_enhanced.start', { reason, imageChars: payload.dataUrl.length })
+          payload = await enhancePalmImageDataUrl(payload)
+          enhancedRetried = true
+          logScan('analyze.retry_enhanced.ready', { imageChars: payload.dataUrl.length })
+          continue
+        }
+
+        if (!res.ok || apiError || !data.detect?.lines || !data.interpret?.core) {
+          setErrorMsg(errorMessageForScanFailure(res.status, apiError, reason, bodyText))
+          logScan('analyze.no_palm_or_error', {
+            status: res.status,
+            reason: reason || apiError || 'unknown',
+            preview: bodyText.slice(0, 160),
+          })
+          setPhase('error')
+          return
+        }
+
+        const detected = data.detect.lines
+        const lines: DetectedLines = {
+          heart: detected.heart as LinePts,
+          head: detected.head as LinePts,
+          life: detected.life as LinePts,
+          fate: detected.fate as LinePts,
+        }
+        setDetectedLines(lines)
+
+        setPalmLines(LINE_META.map((line) => ({
+          ...line,
+          score: data.interpret!.core.lineScore[line.id],
+          trait: data.interpret!.core.lineSuggestion[line.id],
+        })))
+
+        setCurrentLine(0)
+        setDrawnCount(0)
+        setPhase('drawing')
+        logScan('analyze.success', {
+          ms: Math.round(performance.now() - startedAt),
+          model: data.detect!.model,
+          scores: data.interpret!.core.lineScore,
+          enhancedRetried,
+        })
         return
       }
-
-      // Scale normalized [0-1] coords to canvas pixel space
-      const scale = (pts: LinePts): LinePts =>
-        pts.map(([x, y]) => [x * w, y * h]) as LinePts
-
-      const detected = data.detect.lines
-      const lines: DetectedLines = {
-        heart: scale(detected.heart),
-        head: scale(detected.head),
-        life: scale(detected.life),
-        fate: scale(detected.fate),
-      }
-      setDetectedLines(lines)
-
-      setPalmLines(LINE_META.map((line) => ({
-        ...line,
-        score: data.interpret!.core.lineScore[line.id],
-        trait: data.interpret!.core.lineSuggestion[line.id],
-      })))
-
-      setCurrentLine(0)
-      setDrawnCount(0)
-      setPhase('drawing')
-      logScan('analyze.success', {
-        ms: Math.round(performance.now() - startedAt),
-        model: data.detect!.model,
-        scores: data.interpret!.core.lineScore,
-      })
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)
       setErrorMsg('Request failed before server response. Please try again.')
@@ -467,8 +526,39 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     isBackCamRef.current = isBack
     setIsBackCam(isBack)
     streamRef.current = stream
+    const track = stream.getVideoTracks()[0]
+    if (track && isBack) {
+      const caps = track.getCapabilities() as MediaTrackCapabilities & { torch?: boolean }
+      const supportsTorch = Boolean(caps?.torch)
+      setTorchSupported(supportsTorch)
+      setTorchOn(false)
+    } else {
+      setTorchSupported(false)
+      setTorchOn(false)
+    }
     setPhase('camera')
   }, [])
+
+  const toggleTorch = useCallback(async () => {
+    if (torchBusy) return
+    const track = streamRef.current?.getVideoTracks?.()[0]
+    if (!track) return
+    const next = !torchOn
+
+    setTorchBusy(true)
+    try {
+      await track.applyConstraints({
+        advanced: [{ torch: next } as MediaTrackConstraintSet & { torch?: boolean }],
+      })
+      setTorchOn(next)
+      logScan('torch.toggle', { on: next })
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
+      logScan('torch.toggle.fail', { message })
+    } finally {
+      setTorchBusy(false)
+    }
+  }, [torchBusy, torchOn])
 
   // â”€â”€ Upload photo â”€â”€
   const handleFile = useCallback(async (file: File) => {
@@ -542,29 +632,53 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
   useEffect(() => {
     if (phase !== 'drawing' || !detectedLines || !imgSize) return
     const canvas = overlayRef.current
+    const viewport = imageViewportRef.current
     if (!canvas) return
+    if (!viewport) return
 
-    canvas.width  = imgSize.w
-    canvas.height = imgSize.h
+    const viewportW = Math.max(1, viewport.clientWidth)
+    const viewportH = Math.max(1, viewport.clientHeight)
+    const dpr = window.devicePixelRatio || 1
+    canvas.width = Math.floor(viewportW * dpr)
+    canvas.height = Math.floor(viewportH * dpr)
+    canvas.style.width = `${viewportW}px`
+    canvas.style.height = `${viewportH}px`
     const ctx = canvas.getContext('2d')!
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
     let lineIdx = 0
     let startTs: number | null = null
     const DURATION = 1400
 
+    const mapToViewport = (pts: LinePts): LinePts => {
+      const scale = Math.min(viewportW / imgSize.w, viewportH / imgSize.h)
+      const drawW = imgSize.w * scale
+      const drawH = imgSize.h * scale
+      const offsetX = (viewportW - drawW) / 2
+      const offsetY = (viewportH - drawH) / 2
+      return pts.map(([x, y]) => [offsetX + x * drawW, offsetY + y * drawH] as Pt)
+    }
+
     const animate = (ts: number) => {
       if (!startTs) startTs = ts
       const progress = Math.min((ts - startTs) / DURATION, 1)
 
-      ctx.clearRect(0, 0, imgSize.w, imgSize.h)
+      ctx.clearRect(0, 0, viewportW, viewportH)
+
+      const mappedLines: DetectedLines = {
+        heart: mapToViewport(detectedLines.heart),
+        head: mapToViewport(detectedLines.head),
+        life: mapToViewport(detectedLines.life),
+        fate: mapToViewport(detectedLines.fate),
+      }
 
       for (let i = 0; i < lineIdx; i++) {
         const id = LINE_ORDER[i]
-        drawLine(ctx, detectedLines[id], LINE_COLORS[id], 1)
+        drawLine(ctx, mappedLines[id], LINE_COLORS[id], 1)
       }
 
       const currentId = LINE_ORDER[lineIdx]
-      drawLine(ctx, detectedLines[currentId], LINE_COLORS[currentId], progress)
+      drawLine(ctx, mappedLines[currentId], LINE_COLORS[currentId], progress)
 
       if (progress < 1) {
         rafRef.current = requestAnimationFrame(animate)
@@ -662,6 +776,18 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
             <canvas ref={captureCanvas} className="hidden" />
             <HandGuideOverlay hand={hand} />
 
+            {torchSupported && (
+              <button
+                onClick={toggleTorch}
+                disabled={torchBusy}
+                className="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-white/85 disabled:opacity-60"
+                style={{ background: torchOn ? 'rgba(245,158,11,0.85)' : 'rgba(0,0,0,0.55)' }}
+              >
+                {torchOn ? <FlashlightOff size={13} /> : <Flashlight size={13} />}
+                {torchOn ? 'Flash On' : 'Flash Off'}
+              </button>
+            )}
+
             <button
               onClick={openFilePicker}
               className="absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-white/80"
@@ -680,6 +806,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
                 style={{ background: 'rgba(0,0,0,0.62)' }}
               >
                 Place your palm inside the outline and take a photo.
+                {torchSupported && !torchOn ? ' Use flash if lighting is low.' : ''}
               </p>
               <motion.button
                 onClick={captureFrame}
@@ -818,7 +945,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
           <div className="flex-1 flex flex-col min-h-0">
 
             {/* Full-width image + canvas overlay â€” no forced aspect ratio */}
-            <div className="relative flex-1 min-h-0 bg-black overflow-hidden">
+            <div ref={imageViewportRef} className="relative flex-1 min-h-0 bg-black overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={imageUrl}
