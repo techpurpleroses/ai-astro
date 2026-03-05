@@ -1,5 +1,3 @@
-import { spawn } from 'child_process'
-import path from 'path'
 import {
   type PalmConfidenceMap,
   type PalmDetectNoPalm,
@@ -15,7 +13,27 @@ const MODEL = {
   provider: 'roboflow',
   name: process.env.ROBOFLOW_MODEL_ID?.trim() || 'palm-lines-recognition-wemy5/1',
 } as const
+const ROBOFLOW_API_URL = (process.env.ROBOFLOW_API_URL?.trim() || 'https://serverless.roboflow.com').replace(/\/+$/, '')
 const DETECTOR_TIMEOUT_MS = 20000
+
+const LINE_IDS = ['heart', 'head', 'life', 'fate'] as const
+
+type LineId = (typeof LINE_IDS)[number]
+type Point = [number, number]
+
+type RawPrediction = Record<string, unknown>
+
+interface Candidate {
+  label: string
+  points: Point[]
+  confidence: number
+  avgX: number
+  avgY: number
+  spanX: number
+  spanY: number
+  verticality: number
+  curvature: number
+}
 
 function debugLog(step: string, data?: Record<string, unknown>) {
   if (!PALM_DEBUG) return
@@ -29,6 +47,11 @@ function debugLog(step: string, data?: Record<string, unknown>) {
 function clamp01(value: number) {
   if (!Number.isFinite(value)) return 0
   return Math.min(1, Math.max(0, value))
+}
+
+function round(value: number, digits: number) {
+  const factor = 10 ** digits
+  return Math.round(value * factor) / factor
 }
 
 function parseJsonFromText(text: string): unknown {
@@ -67,24 +90,369 @@ function detectorErrorReason(message: string) {
   if (message.includes('roboflow_api_key_missing')) return 'roboflow_api_key_missing'
   if (message.includes('invalid_json')) return 'invalid_detector_output'
   if (message.includes('palm_detector_timeout')) return 'detector_timeout'
-  if (message.includes('ENOENT')) return 'python_not_found'
-  if (message.includes('401')) return 'roboflow_auth_failed'
-  if (message.includes('429')) return 'roboflow_rate_limited'
+  if (message.includes('roboflow_http_401')) return 'roboflow_auth_failed'
+  if (message.includes('roboflow_http_429')) return 'roboflow_rate_limited'
+  if (message.includes('invalid_image_dimensions')) return 'invalid_image_dimensions'
+  if (message.includes('no_predictions')) return 'no_predictions'
   return 'detector_runtime_error'
 }
 
-function pythonInvocation() {
-  const envCmd = process.env.PALM_PYTHON_CMD?.trim()
-  if (envCmd) {
-    return { command: envCmd, args: [] as string[] }
+function parseModelId(modelId: string) {
+  const chunks = modelId.split('/').map((part) => part.trim()).filter(Boolean)
+  if (chunks.length !== 2) return null
+  return { project: chunks[0], version: chunks[1] }
+}
+
+function sanitizeLabel(label: string) {
+  return label.trim().toLowerCase().replace(/[^a-z0-9]+/g, '')
+}
+
+function mapLabel(label: string): LineId | null {
+  const s = sanitizeLabel(label)
+  if (!s) return null
+  if (s.includes('heart')) return 'heart'
+  if (s.includes('head') || s.includes('mind')) return 'head'
+  if (s.includes('life') || s.includes('longevity')) return 'life'
+  if (s.includes('fate') || s.includes('career') || s.includes('destiny')) return 'fate'
+  return null
+}
+
+function samplePolyline(points: Point[], target = 12): Point[] {
+  if (points.length <= target) return points
+  const step = (points.length - 1) / Math.max(1, target - 1)
+  const out: Point[] = []
+  for (let i = 0; i < target; i++) {
+    const idx = Math.round(i * step)
+    out.push(points[idx])
+  }
+  return out
+}
+
+function interpolate(a: Point, b: Point, n: number): Point[] {
+  if (n <= 1) return [a]
+  const out: Point[] = []
+  for (let i = 0; i < n; i++) {
+    const t = i / (n - 1)
+    out.push([a[0] * (1 - t) + b[0] * t, a[1] * (1 - t) + b[1] * t])
+  }
+  return out
+}
+
+function extractPoints(prediction: RawPrediction): Point[] {
+  const keypoints = prediction.keypoints
+  const points: Point[] = []
+
+  if (Array.isArray(keypoints)) {
+    for (const keypoint of keypoints) {
+      if (Array.isArray(keypoint) && keypoint.length >= 2) {
+        const x = keypoint[0]
+        const y = keypoint[1]
+        if (typeof x === 'number' && typeof y === 'number') {
+          points.push([x, y])
+        }
+        continue
+      }
+
+      if (!keypoint || typeof keypoint !== 'object') continue
+      const x = (keypoint as Record<string, unknown>).x
+      const y = (keypoint as Record<string, unknown>).y
+      if (typeof x === 'number' && typeof y === 'number') {
+        points.push([x, y])
+      }
+    }
   }
 
-  if (process.platform === 'win32') {
-    const preferred = process.env.PALM_PYTHON_VERSION?.trim() || '3.11'
-    return { command: 'py', args: [`-${preferred}`, '-u'] }
+  if (points.length >= 2) return points
+
+  const x = prediction.x
+  const y = prediction.y
+  const w = prediction.width
+  const h = prediction.height
+  if (
+    typeof x === 'number' &&
+    typeof y === 'number' &&
+    typeof w === 'number' &&
+    typeof h === 'number'
+  ) {
+    const left = x - w / 2
+    const right = x + w / 2
+    const top = y - h / 2
+    const bottom = y + h / 2
+    if (h >= w) {
+      return interpolate([x, bottom], [x, top], 8)
+    }
+    return interpolate([left, y], [right, y], 8)
   }
 
-  return { command: 'python3', args: ['-u'] }
+  return []
+}
+
+function curvature(points: Point[]): number {
+  if (points.length < 3) return 0
+  const start = points[0]
+  const mid = points[Math.floor(points.length / 2)]
+  const end = points[points.length - 1]
+
+  const vx = end[0] - start[0]
+  const vy = end[1] - start[1]
+  const denom = Math.hypot(vx, vy)
+  if (denom <= 1e-6) return 0
+
+  const numer = Math.abs(vy * mid[0] - vx * mid[1] + end[0] * start[1] - end[1] * start[0])
+  return numer / denom
+}
+
+function orientPoints(points: Point[], lineId: LineId): Point[] {
+  if (points.length < 2) return points
+  const first = points[0]
+  const last = points[points.length - 1]
+
+  if (lineId === 'fate') {
+    return first[1] >= last[1] ? points : [...points].reverse()
+  }
+
+  if (lineId === 'life') {
+    return first[1] <= last[1] ? points : [...points].reverse()
+  }
+
+  return first[0] <= last[0] ? points : [...points].reverse()
+}
+
+function buildCandidate(prediction: RawPrediction, width: number, height: number): Candidate | null {
+  const rawPoints = extractPoints(prediction)
+  if (rawPoints.length < 2 || width <= 0 || height <= 0) return null
+
+  const normalized = samplePolyline(
+    rawPoints.map(([x, y]) => [clamp01(x / width), clamp01(y / height)] as Point),
+    12,
+  )
+  const xs = normalized.map((point) => point[0])
+  const ys = normalized.map((point) => point[1])
+  const spanX = Math.max(...xs) - Math.min(...xs)
+  const spanY = Math.max(...ys) - Math.min(...ys)
+  const confidence = typeof prediction.confidence === 'number' ? clamp01(prediction.confidence) : 0.5
+  const label = typeof prediction.class === 'string' ? prediction.class : ''
+
+  return {
+    label,
+    points: normalized,
+    confidence,
+    avgX: xs.reduce((sum, value) => sum + value, 0) / xs.length,
+    avgY: ys.reduce((sum, value) => sum + value, 0) / ys.length,
+    spanX,
+    spanY,
+    verticality: spanY / (spanX + 1e-6),
+    curvature: curvature(normalized),
+  }
+}
+
+function assignByGeometry(candidates: Candidate[], sideHint?: 'left' | 'right') {
+  if (!candidates.length) return {} as Partial<Record<LineId, Candidate>>
+  let remaining = [...candidates]
+
+  let fate = remaining[0]
+  let fateScore = -Infinity
+  for (const candidate of remaining) {
+    const score = candidate.verticality * 1.2 + candidate.spanY - candidate.spanX * 0.25
+    if (score > fateScore) {
+      fate = candidate
+      fateScore = score
+    }
+  }
+  remaining = remaining.filter((candidate) => candidate !== fate)
+
+  const thumbTarget = sideHint === 'left' ? 0.68 : sideHint === 'right' ? 0.32 : 0.5
+  let life = fate
+  if (remaining.length) {
+    let lifeScore = -Infinity
+    life = remaining[0]
+    for (const candidate of remaining) {
+      const score =
+        (1 - Math.abs(candidate.avgX - thumbTarget)) * 0.9 +
+        candidate.curvature * 1.5 +
+        candidate.spanY * 0.35 -
+        candidate.verticality * 0.1
+      if (score > lifeScore) {
+        life = candidate
+        lifeScore = score
+      }
+    }
+    remaining = remaining.filter((candidate) => candidate !== life)
+  }
+
+  let heart: Candidate | undefined
+  let head: Candidate | undefined
+  if (remaining.length >= 2) {
+    const sortedByY = [...remaining].sort((a, b) => a.avgY - b.avgY)
+    ;[heart, head] = sortedByY
+  } else if (remaining.length === 1) {
+    const only = remaining[0]
+    if (only.avgY < 0.43) {
+      heart = only
+    } else {
+      head = only
+    }
+  }
+
+  const assigned: Partial<Record<LineId, Candidate>> = { fate, life }
+  if (heart) assigned.heart = heart
+  if (head) assigned.head = head
+  return assigned
+}
+
+function mapPredictionsToLines(
+  predictions: RawPrediction[],
+  width: number,
+  height: number,
+  sideHint?: 'left' | 'right',
+): Record<string, unknown> {
+  const byLabel: Partial<Record<LineId, Candidate>> = {}
+  const unlabeled: Candidate[] = []
+
+  for (const prediction of predictions) {
+    const candidate = buildCandidate(prediction, width, height)
+    if (!candidate) continue
+
+    const lineId = mapLabel(candidate.label)
+    if (!lineId) {
+      unlabeled.push(candidate)
+      continue
+    }
+
+    const current = byLabel[lineId]
+    if (!current || candidate.confidence > current.confidence) {
+      byLabel[lineId] = candidate
+    }
+  }
+
+  if (Object.keys(byLabel).length < 3 && unlabeled.length) {
+    const geometryAssignments = assignByGeometry([...unlabeled, ...Object.values(byLabel).filter(Boolean) as Candidate[]], sideHint)
+    for (const lineId of LINE_IDS) {
+      if (!byLabel[lineId] && geometryAssignments[lineId]) {
+        byLabel[lineId] = geometryAssignments[lineId]
+      }
+    }
+  }
+
+  const linesOut: PalmLineMap = {
+    heart: [],
+    head: [],
+    life: [],
+    fate: [],
+  }
+  const confidenceOut: PalmConfidenceMap = {
+    heart: 0.25,
+    head: 0.25,
+    life: 0.25,
+    fate: 0.25,
+  }
+
+  for (const lineId of LINE_IDS) {
+    const candidate = byLabel[lineId]
+    if (!candidate) continue
+
+    const oriented = orientPoints(candidate.points, lineId)
+    const sampled = samplePolyline(oriented, 12)
+    linesOut[lineId] = sampled.map(([x, y]) => [round(clamp01(x), 4), round(clamp01(y), 4)] as Point)
+    confidenceOut[lineId] = round(clamp01(candidate.confidence), 3)
+  }
+
+  const majorCount = (['heart', 'head', 'life'] as const).filter((lineId) => linesOut[lineId].length >= 4).length
+  if (majorCount < 2) {
+    return { hasPalm: false, reason: 'major_lines_missing' }
+  }
+
+  return { hasPalm: true, lines: linesOut, confidence: confidenceOut }
+}
+
+function extractBase64Data(imageDataUrl: string) {
+  const commaIndex = imageDataUrl.indexOf(',')
+  if (commaIndex < 0) {
+    throw new Error('invalid_image_data_url')
+  }
+  return imageDataUrl.slice(commaIndex + 1)
+}
+
+function inferImageSizeFromBytes(bytes: Buffer): { width: number; height: number } | null {
+  if (bytes.length < 24) return null
+
+  const isPng = bytes.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))
+  if (isPng) {
+    const width = bytes.readUInt32BE(16)
+    const height = bytes.readUInt32BE(20)
+    if (width > 0 && height > 0) return { width, height }
+  }
+
+  const isJpeg = bytes[0] === 0xff && bytes[1] === 0xd8
+  if (isJpeg) {
+    let index = 2
+    while (index + 9 < bytes.length) {
+      if (bytes[index] !== 0xff) {
+        index += 1
+        continue
+      }
+
+      const marker = bytes[index + 1]
+      const isSof = marker >= 0xc0 && marker <= 0xcf && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc
+      if (isSof) {
+        const height = bytes.readUInt16BE(index + 5)
+        const width = bytes.readUInt16BE(index + 7)
+        if (width > 0 && height > 0) {
+          return { width, height }
+        }
+        return null
+      }
+
+      const segmentLength = bytes.readUInt16BE(index + 2)
+      if (segmentLength < 2) break
+      index += 2 + segmentLength
+    }
+  }
+
+  return null
+}
+
+async function callRoboflow(modelId: string, apiKey: string, encodedImage: string): Promise<Record<string, unknown>> {
+  const model = parseModelId(modelId)
+  if (!model) {
+    throw new Error('invalid_model_id')
+  }
+
+  const url = new URL(`${ROBOFLOW_API_URL}/${encodeURIComponent(model.project)}/${encodeURIComponent(model.version)}`)
+  url.searchParams.set('api_key', apiKey)
+
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), DETECTOR_TIMEOUT_MS)
+
+  let response: Response
+  try {
+    response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: encodedImage,
+      signal: controller.signal,
+      cache: 'no-store',
+    })
+  } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error('palm_detector_timeout')
+    }
+    throw error
+  } finally {
+    clearTimeout(timer)
+  }
+
+  const responseText = await response.text()
+  if (!response.ok) {
+    throw new Error(`roboflow_http_${response.status}:${responseText.slice(0, 300)}`)
+  }
+
+  const parsed = parseJsonFromText(responseText)
+  if (!parsed || typeof parsed !== 'object') {
+    throw new Error('invalid_json')
+  }
+
+  return parsed as Record<string, unknown>
 }
 
 async function runRoboflowDetector(input: {
@@ -93,65 +461,37 @@ async function runRoboflowDetector(input: {
   imageWidth?: number
   imageHeight?: number
 }): Promise<Record<string, unknown>> {
-  const { command, args } = pythonInvocation()
-  const scriptPath = path.join(process.cwd(), 'scripts', 'palm_detect_roboflow.py')
+  const apiKey = process.env.ROBOFLOW_API_KEY?.trim()
+  if (!apiKey) {
+    return { hasPalm: false, reason: 'roboflow_api_key_missing' }
+  }
 
-  return await new Promise<Record<string, unknown>>((resolve, reject) => {
-    const child = spawn(command, [...args, scriptPath], {
-      cwd: process.cwd(),
-      stdio: ['pipe', 'pipe', 'pipe'],
-      windowsHide: true,
-      env: process.env,
-    })
+  const encodedImage = extractBase64Data(input.image)
+  const imageBytes = Buffer.from(encodedImage, 'base64')
+  const inferredSize = inferImageSizeFromBytes(imageBytes)
 
-    let stdout = ''
-    let stderr = ''
-    const timer = setTimeout(() => {
-      child.kill('SIGKILL')
-      reject(new Error('palm_detector_timeout'))
-    }, DETECTOR_TIMEOUT_MS)
+  const width = Number.isFinite(input.imageWidth) && Number(input.imageWidth) > 0
+    ? Number(input.imageWidth)
+    : (inferredSize?.width ?? 0)
+  const height = Number.isFinite(input.imageHeight) && Number(input.imageHeight) > 0
+    ? Number(input.imageHeight)
+    : (inferredSize?.height ?? 0)
 
-    child.stdout.on('data', (chunk) => {
-      stdout += chunk.toString()
-    })
+  if (width <= 0 || height <= 0) {
+    return { hasPalm: false, reason: 'invalid_image_dimensions' }
+  }
 
-    child.stderr.on('data', (chunk) => {
-      stderr += chunk.toString()
-    })
+  const inferResponse = await callRoboflow(MODEL.name, apiKey, encodedImage)
+  const predictionsRaw = inferResponse.predictions
+  const predictions = Array.isArray(predictionsRaw)
+    ? predictionsRaw.filter((prediction): prediction is RawPrediction => !!prediction && typeof prediction === 'object')
+    : []
 
-    child.stdin.on('error', () => {
-      // Child may exit before reading stdin.
-    })
+  if (!predictions.length) {
+    return { hasPalm: false, reason: 'no_predictions' }
+  }
 
-    child.on('error', (error) => {
-      clearTimeout(timer)
-      reject(error)
-    })
-
-    child.on('close', (code) => {
-      clearTimeout(timer)
-      if (!stdout.trim()) {
-        reject(new Error(`palm_detector_empty_output:${code ?? 'unknown'}:${stderr.trim()}`))
-        return
-      }
-      try {
-        const parsed = parseJsonFromText(stdout.trim())
-        if (!parsed || typeof parsed !== 'object') {
-          reject(new Error('palm_detector_invalid_json_shape'))
-          return
-        }
-        resolve(parsed as Record<string, unknown>)
-      } catch (error) {
-        reject(error)
-      }
-    })
-
-    try {
-      child.stdin.end(JSON.stringify(input))
-    } catch {
-      // Handled by close event.
-    }
-  })
+  return mapPredictionsToLines(predictions, width, height, input.side)
 }
 
 export async function detectPalmLines(

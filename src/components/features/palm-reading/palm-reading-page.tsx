@@ -289,7 +289,7 @@ export function PalmReadingClient() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: '100%' }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="fixed inset-0 z-50"
+            className="fixed inset-0 z-[80]"
           >
             <PalmCameraScanner hand={hand} onClose={() => setScannerOpen(false)} />
           </motion.div>

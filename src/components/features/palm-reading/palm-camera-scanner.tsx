@@ -478,13 +478,15 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
   }, [handleFile])
 
   const isImagePhase = phase === 'scanning' || phase === 'drawing' || phase === 'results'
+  const safeBottomOffset = 'calc(env(safe-area-inset-bottom, 0px) + 1rem)'
+  const cameraControlsBottom = 'calc(env(safe-area-inset-bottom, 0px) + 1.5rem)'
 
   // â”€â”€ Render â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-center" style={{ background: 'rgba(0,0,0,0.7)' }}>
+    <div className="fixed inset-0 z-[80] flex justify-center" style={{ background: 'rgba(0,0,0,0.7)' }}>
       <div
-        className="w-full max-w-107.5 h-full flex flex-col"
+        className="w-full max-w-107.5 h-dvh flex flex-col"
         style={{ background: 'rgba(6,13,27,0.97)', backdropFilter: 'blur(20px)' }}
       >
         {/* â”€â”€ Header â”€â”€ */}
@@ -533,7 +535,10 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
               Upload
             </button>
 
-            <div className="absolute bottom-10 inset-x-0 flex flex-col items-center gap-5">
+            <div
+              className="absolute inset-x-0 flex flex-col items-center gap-5 px-4"
+              style={{ bottom: cameraControlsBottom }}
+            >
               <p
                 className="text-sm text-white font-medium px-5 py-2 rounded-2xl text-center max-w-65 leading-snug"
                 style={{ background: 'rgba(0,0,0,0.62)' }}
@@ -722,7 +727,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
                       initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.1 }}
                     />
                   ))}
-                  <div className="absolute bottom-3 inset-x-0 flex justify-center">
+                  <div className="absolute inset-x-0 flex justify-center" style={{ bottom: safeBottomOffset }}>
                     <motion.span
                       className="text-xs text-rose-300 px-3 py-1.5 rounded-full font-medium"
                       style={{ background: 'rgba(0,0,0,0.75)' }}
@@ -756,7 +761,8 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
               {/* Drawing: current line label */}
               {phase === 'drawing' && currentLine >= 0 && (
                 <motion.div
-                  className="absolute bottom-3 inset-x-0 flex justify-center"
+                  className="absolute inset-x-0 flex justify-center"
+                  style={{ bottom: safeBottomOffset }}
                   animate={{ opacity: [1, 0.5, 1] }}
                   transition={{ duration: 0.7, repeat: Infinity }}
                 >
@@ -790,7 +796,10 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
 
             {/* Results panel â€” scrollable below the image */}
             {phase === 'results' && (
-              <div className="overflow-y-auto px-4 py-4 space-y-3" style={{ maxHeight: '45%' }}>
+              <div
+                className="overflow-y-auto px-4 pt-4 space-y-3"
+                style={{ maxHeight: '45%', paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 1rem)' }}
+              >
                 <p className="text-xs font-semibold text-slate-400">Your Palm Analysis</p>
                 {palmLines.map((line, i) => (
                   <motion.div
