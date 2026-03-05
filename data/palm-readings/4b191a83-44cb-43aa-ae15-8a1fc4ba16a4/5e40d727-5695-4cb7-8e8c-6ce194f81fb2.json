@@ -1,0 +1,208 @@
+{
+  "scanId": "5e40d727-5695-4cb7-8e8c-6ce194f81fb2",
+  "clientId": "4b191a83-44cb-43aa-ae15-8a1fc4ba16a4",
+  "side": "left",
+  "createdAt": "2026-03-03T18:10:19.262Z",
+  "detect": {
+    "hasPalm": true,
+    "lines": {
+      "heart": [
+        [
+          0.435,
+          0.4994
+        ],
+        [
+          0.4608,
+          0.5256
+        ],
+        [
+          0.4892,
+          0.5506
+        ],
+        [
+          0.5242,
+          0.5725
+        ],
+        [
+          0.5617,
+          0.5919
+        ],
+        [
+          0.5975,
+          0.6075
+        ],
+        [
+          0.635,
+          0.6194
+        ],
+        [
+          0.6733,
+          0.6294
+        ],
+        [
+          0.7092,
+          0.6381
+        ],
+        [
+          0.7442,
+          0.6456
+        ]
+      ],
+      "head": [
+        [
+          0.3158,
+          0.5656
+        ],
+        [
+          0.3475,
+          0.5737
+        ],
+        [
+          0.3833,
+          0.5794
+        ],
+        [
+          0.4192,
+          0.5881
+        ],
+        [
+          0.455,
+          0.5981
+        ],
+        [
+          0.4883,
+          0.61
+        ],
+        [
+          0.5225,
+          0.6238
+        ],
+        [
+          0.5567,
+          0.6381
+        ],
+        [
+          0.5883,
+          0.6525
+        ],
+        [
+          0.62,
+          0.6663
+        ]
+      ],
+      "life": [
+        [
+          0.2892,
+          0.5619
+        ],
+        [
+          0.3233,
+          0.5731
+        ],
+        [
+          0.3592,
+          0.5875
+        ],
+        [
+          0.3933,
+          0.61
+        ],
+        [
+          0.4242,
+          0.6362
+        ],
+        [
+          0.4492,
+          0.6637
+        ],
+        [
+          0.4725,
+          0.6931
+        ],
+        [
+          0.4917,
+          0.7225
+        ],
+        [
+          0.5067,
+          0.7512
+        ],
+        [
+          0.5183,
+          0.78
+        ]
+      ],
+      "fate": []
+    },
+    "confidence": {
+      "heart": 0.592,
+      "head": 0.587,
+      "life": 0.797,
+      "fate": 0.25
+    },
+    "model": {
+      "provider": "roboflow",
+      "name": "palm-lines-recognition-wemy5/1"
+    }
+  },
+  "interpret": {
+    "core": {
+      "lineScore": {
+        "heart": 72,
+        "head": 72,
+        "life": 74,
+        "fate": 63
+      },
+      "lineSuggestion": {
+        "heart": "Your heart line suggests strong emotional connections and empathy.",
+        "head": "Your head line indicates clear thinking and balanced decision-making.",
+        "life": "Your life line shows robust vitality and a stable life path.",
+        "fate": "The faint fate line suggests a flexible career path with personal choices influencing your journey."
+      }
+    },
+    "insights": {
+      "emotionalType": "Empathetic and emotionally connected",
+      "cognitiveStyle": "Balanced and clear thinker",
+      "vitality": "Strong and stable",
+      "careerFocus": "Flexible and self-directed"
+    },
+    "lines": {
+      "heart": {
+        "score": 72,
+        "summary": "Your heart line suggests strong emotional connections and empathy.",
+        "metrics": {
+          "length": 3.49,
+          "depth": 0.59,
+          "curvature": 0.28
+        }
+      },
+      "head": {
+        "score": 72,
+        "summary": "Your head line indicates clear thinking and balanced decision-making.",
+        "metrics": {
+          "length": 3.22,
+          "depth": 0.59,
+          "curvature": 0.12
+        }
+      },
+      "life": {
+        "score": 74,
+        "summary": "Your life line shows robust vitality and a stable life path.",
+        "metrics": {
+          "length": 3.29,
+          "depth": 0.8,
+          "curvature": 0.37
+        }
+      },
+      "fate": {
+        "score": 63,
+        "summary": "The faint fate line suggests a flexible career path with personal choices influencing your journey.",
+        "metrics": {
+          "length": 0,
+          "depth": 0.25,
+          "curvature": 0
+        }
+      }
+    }
+  }
+}

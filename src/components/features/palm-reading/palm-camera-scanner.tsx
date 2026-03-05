@@ -19,7 +19,7 @@ import type { PalmScanRecord } from '@/lib/palm/contracts'
 type Phase = 'intro' | 'camera' | 'scanning' | 'drawing' | 'results' | 'error'
 
 type Pt = [number, number]
-type LinePts = [Pt, Pt, Pt]
+type LinePts = Pt[]
 
 interface DetectedLines {
   heart: LinePts
@@ -48,6 +48,16 @@ const LINE_META: PalmLine[] = [
 const LINE_ORDER: Array<'heart' | 'head' | 'life' | 'fate'> = ['heart', 'head', 'life', 'fate']
 const LINE_COLORS: Record<'heart' | 'head' | 'life' | 'fate', string> = {
   heart: '#F43F5E', head: '#06B6D4', life: '#84CC16', fate: '#F59E0B',
+}
+const PALM_DEBUG = process.env.NEXT_PUBLIC_PALM_DEBUG !== '0'
+
+function logScan(step: string, data?: Record<string, unknown>) {
+  if (!PALM_DEBUG) return
+  if (data) {
+    console.log(`[PalmCameraScanner] ${step}`, data)
+    return
+  }
+  console.log(`[PalmCameraScanner] ${step}`)
 }
 
 function getOrCreatePalmClientId() {
@@ -83,13 +93,66 @@ function drawLine(
   color: string,
   progress: number,
 ) {
-  const [start, ctrl, end] = pts
+  if (pts.length < 2) return
+
+  const segmentLengths: number[] = []
+  let totalLength = 0
+  for (let i = 0; i < pts.length - 1; i++) {
+    const dx = pts[i + 1][0] - pts[i][0]
+    const dy = pts[i + 1][1] - pts[i][1]
+    const length = Math.sqrt(dx * dx + dy * dy)
+    segmentLengths.push(length)
+    totalLength += length
+  }
+  if (totalLength <= 0) return
+
+  const targetLength = totalLength * progress
+
+  const drawPartialPath = () => {
+    ctx.beginPath()
+    ctx.moveTo(pts[0][0], pts[0][1])
+    let travelled = 0
+
+    for (let i = 0; i < pts.length - 1; i++) {
+      const a = pts[i]
+      const b = pts[i + 1]
+      const segLen = segmentLengths[i]
+      const nextTravelled = travelled + segLen
+
+      if (targetLength >= nextTravelled) {
+        ctx.lineTo(b[0], b[1])
+      } else {
+        const remain = Math.max(0, targetLength - travelled)
+        const t = segLen > 0 ? remain / segLen : 0
+        const x = a[0] + (b[0] - a[0]) * t
+        const y = a[1] + (b[1] - a[1]) * t
+        ctx.lineTo(x, y)
+        break
+      }
+      travelled = nextTravelled
+    }
+  }
+
+  const tipPoint = () => {
+    let travelled = 0
+    for (let i = 0; i < pts.length - 1; i++) {
+      const a = pts[i]
+      const b = pts[i + 1]
+      const segLen = segmentLengths[i]
+      const nextTravelled = travelled + segLen
+      if (targetLength <= nextTravelled) {
+        const remain = Math.max(0, targetLength - travelled)
+        const t = segLen > 0 ? remain / segLen : 0
+        return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t] as Pt
+      }
+      travelled = nextTravelled
+    }
+    return pts[pts.length - 1]
+  }
 
   // Glow layer
   ctx.save()
-  ctx.beginPath()
-  ctx.moveTo(start[0], start[1])
-  ctx.quadraticCurveTo(ctrl[0], ctrl[1], end[0], end[1])
+  drawPartialPath()
   ctx.strokeStyle = color
   ctx.lineWidth = 8
   ctx.globalAlpha = 0.15 * progress
@@ -99,16 +162,9 @@ function drawLine(
   ctx.stroke()
   ctx.restore()
 
-  // Main line â€” partial bezier via t-steps
+  // Main line
   ctx.save()
-  ctx.beginPath()
-  const steps = 80
-  for (let i = 0; i <= steps; i++) {
-    const t = (i / steps) * progress
-    const x = (1-t)*(1-t)*start[0] + 2*(1-t)*t*ctrl[0] + t*t*end[0]
-    const y = (1-t)*(1-t)*start[1] + 2*(1-t)*t*ctrl[1] + t*t*end[1]
-    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y)
-  }
+  drawPartialPath()
   ctx.strokeStyle = color
   ctx.lineWidth = 3
   ctx.globalAlpha = 0.92 * progress
@@ -120,7 +176,7 @@ function drawLine(
 
   // Tip dot when nearly complete
   if (progress > 0.85) {
-    const ex = end[0], ey = end[1]
+    const [ex, ey] = tipPoint()
     ctx.save()
     ctx.beginPath()
     ctx.arc(ex, ey, 5, 0, Math.PI * 2)
@@ -208,6 +264,8 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
   // Call server palm scan pipeline
   const analyzeImage = useCallback(async (dataUrl: string, w: number, h: number) => {
     setPhase('scanning')
+    const startedAt = performance.now()
+    logScan('analyze.start', { hand, width: w, height: h, imageChars: dataUrl.length })
     try {
       const res = await fetch('/api/palm/scan', {
         method: 'POST',
@@ -216,16 +274,29 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
           image: dataUrl,
           side: hand,
           clientId: clientIdRef.current || getOrCreatePalmClientId(),
+          imageWidth: w,
+          imageHeight: h,
         }),
       })
-      const data = await res.json() as (PalmScanRecord & { error?: string })
+      const data = await res.json() as (PalmScanRecord & { error?: string; details?: { reason?: string } })
+      logScan('analyze.response', {
+        status: res.status,
+        ok: res.ok,
+        ms: Math.round(performance.now() - startedAt),
+        error: data.error,
+        reason: data.details?.reason,
+      })
 
       if (!res.ok || data.error || !data.detect?.lines || !data.interpret?.core) {
+        const reasonText = data.error === 'no_palm' && data.details?.reason
+          ? ` (${data.details.reason})`
+          : ''
         setErrorMsg(
           data.error === 'no_palm'
-            ? 'No palm detected. Point the camera at your open palm and try again.'
+            ? `No palm detected${reasonText}. Point the camera at your open palm and try again.`
             : 'Analysis failed. Check your connection and try again.'
         )
+        logScan('analyze.no_palm_or_error', { reason: data.details?.reason || data.error || 'unknown' })
         setPhase('error')
         return
       }
@@ -252,9 +323,15 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
       setCurrentLine(0)
       setDrawnCount(0)
       setPhase('drawing')
+      logScan('analyze.success', {
+        ms: Math.round(performance.now() - startedAt),
+        model: data.detect.model,
+        scores: data.interpret.core.lineScore,
+      })
     } catch {
       setErrorMsg('Analysis failed. Check your connection and try again.')
       setPhase('error')
+      logScan('analyze.exception')
     }
   }, [hand])
 

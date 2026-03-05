@@ -11,7 +11,7 @@ export const PalmImageDataUrlSchema = z
   )
 
 const PalmPointSchema = z.tuple([z.number().min(0).max(1), z.number().min(0).max(1)])
-const PalmLinePointsSchema = z.tuple([PalmPointSchema, PalmPointSchema, PalmPointSchema])
+const PalmLinePointsSchema = z.array(PalmPointSchema).max(40)
 const PalmLineScoreSchema = z.number().int().min(0).max(100)
 const PalmLineTextSchema = z.string().trim().min(1)
 
@@ -51,6 +51,8 @@ export const PalmConfidenceMapSchema = z.object(PalmConfidenceMapShape)
 export const PalmDetectRequestSchema = z.object({
   image: PalmImageDataUrlSchema,
   side: PalmSideSchema.optional(),
+  imageWidth: z.number().int().positive().max(10000).optional(),
+  imageHeight: z.number().int().positive().max(10000).optional(),
 })
 
 const PalmModelSchema = z.object({
@@ -112,6 +114,8 @@ export const PalmScanRequestSchema = z.object({
   clientId: z.string().trim().min(1).max(128).optional(),
   side: PalmSideSchema,
   image: PalmImageDataUrlSchema,
+  imageWidth: z.number().int().positive().max(10000).optional(),
+  imageHeight: z.number().int().positive().max(10000).optional(),
 })
 
 export const PalmScanRecordSchema = z.object({

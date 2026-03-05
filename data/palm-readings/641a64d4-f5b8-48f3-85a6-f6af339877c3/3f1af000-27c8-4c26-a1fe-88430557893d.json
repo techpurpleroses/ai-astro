@@ -1,0 +1,137 @@
+{
+  "scanId": "3f1af000-27c8-4c26-a1fe-88430557893d",
+  "clientId": "641a64d4-f5b8-48f3-85a6-f6af339877c3",
+  "side": "left",
+  "createdAt": "2026-03-02T11:06:49.438Z",
+  "detect": {
+    "hasPalm": true,
+    "lines": {
+      "heart": [
+        [
+          0.1808,
+          0.3869
+        ],
+        [
+          0.5152,
+          0.354
+        ],
+        [
+          0.804,
+          0.3737
+        ]
+      ],
+      "head": [
+        [
+          0.196,
+          0.5118
+        ],
+        [
+          0.5152,
+          0.4855
+        ],
+        [
+          0.8192,
+          0.4986
+        ]
+      ],
+      "life": [
+        [
+          0.5267,
+          0.3669
+        ],
+        [
+          0.47,
+          0.5644
+        ],
+        [
+          0.7767,
+          0.7744
+        ]
+      ],
+      "fate": [
+        [
+          0.5152,
+          0.8142
+        ],
+        [
+          0.5076,
+          0.5973
+        ],
+        [
+          0.5,
+          0.3408
+        ]
+      ]
+    },
+    "confidence": {
+      "heart": 0.47,
+      "head": 0.46,
+      "life": 0.73,
+      "fate": 0.44
+    },
+    "model": {
+      "provider": "opencv",
+      "name": "opencv-canny-hough-v1"
+    }
+  },
+  "interpret": {
+    "core": {
+      "lineScore": {
+        "heart": 78,
+        "head": 79,
+        "life": 80,
+        "fate": 76
+      },
+      "lineSuggestion": {
+        "heart": "Balanced emotional awareness, affectionate but pragmatic in attachment.",
+        "head": "Practical thinker with stable decision-making under pressure.",
+        "life": "Consistent energy profile with good long-term balance.",
+        "fate": "Steady ambition profile with gradual and reliable progress."
+      }
+    },
+    "insights": {
+      "emotionalType": "Balanced Empath",
+      "cognitiveStyle": "Practical Analyst",
+      "vitality": "Stable Energy",
+      "careerFocus": "Steady Climber"
+    },
+    "lines": {
+      "heart": {
+        "score": 78,
+        "summary": "Balanced emotional awareness, affectionate but pragmatic in attachment.",
+        "metrics": {
+          "length": 6.23,
+          "depth": 0.47,
+          "curvature": 0.26
+        }
+      },
+      "head": {
+        "score": 79,
+        "summary": "Practical thinker with stable decision-making under pressure.",
+        "metrics": {
+          "length": 6.23,
+          "depth": 0.46,
+          "curvature": 0.2
+        }
+      },
+      "life": {
+        "score": 80,
+        "summary": "Consistent energy profile with good long-term balance.",
+        "metrics": {
+          "length": 4.78,
+          "depth": 0.73,
+          "curvature": 1.52
+        }
+      },
+      "fate": {
+        "score": 76,
+        "summary": "Steady ambition profile with gradual and reliable progress.",
+        "metrics": {
+          "length": 4.74,
+          "depth": 0.44,
+          "curvature": 0.01
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "scanId": "dc0a7ebc-b6c0-4247-b5a1-cac31c5e7bdd",
+  "clientId": "641a64d4-f5b8-48f3-85a6-f6af339877c3",
+  "side": "left",
+  "createdAt": "2026-03-03T11:42:15.009Z",
+  "detect": {
+    "hasPalm": true,
+    "lines": {
+      "heart": [
+        [
+          0.2604166666666667,
+          0.244140625
+        ],
+        [
+          0.29296875,
+          0.25634765625
+        ],
+        [
+          0.3255208333333333,
+          0.2685546875
+        ],
+        [
+          0.3580729166666667,
+          0.2734375
+        ],
+        [
+          0.390625,
+          0.28076171875
+        ],
+        [
+          0.4231770833333333,
+          0.28564453125
+        ],
+        [
+          0.4557291666666667,
+          0.2880859375
+        ],
+        [
+          0.48828125,
+          0.29052734375
+        ]
+      ],
+      "head": [
+        [
+          0.22786458333333334,
+          0.3662109375
+        ],
+        [
+          0.2604166666666667,
+          0.37841796875
+        ],
+        [
+          0.29296875,
+          0.390625
+        ],
+        [
+          0.3255208333333333,
+          0.40283203125
+        ],
+        [
+          0.3580729166666667,
+          0.4150390625
+        ],
+        [
+          0.390625,
+          0.419921875
+        ],
+        [
+          0.4231770833333333,
+          0.42724609375
+        ],
+        [
+          0.4557291666666667,
+          0.43212890625
+        ]
+      ],
+      "life": [
+        [
+          0.1953125,
+          0.439453125
+        ],
+        [
+          0.21158854166666666,
+          0.45166015625
+        ],
+        [
+          0.22786458333333334,
+          0.4638671875
+        ],
+        [
+          0.244140625,
+          0.47607421875
+        ],
+        [
+          0.2604166666666667,
+          0.48828125
+        ],
+        [
+          0.2766927083333333,
+          0.50048828125
+        ],
+        [
+          0.29296875,
+          0.5126953125
+        ],
+        [
+          0.3092447916666667,
+          0.52490234375
+        ]
+      ],
+      "fate": [
+        [
+          0.390625,
+          0.537109375
+        ],
+        [
+          0.3971354166666667,
+          0.5126953125
+        ],
+        [
+          0.4036458333333333,
+          0.48828125
+        ],
+        [
+          0.41015625,
+          0.4638671875
+        ],
+        [
+          0.4166666666666667,
+          0.439453125
+        ],
+        [
+          0.4231770833333333,
+          0.4150390625
+        ],
+        [
+          0.4296875,
+          0.390625
+        ],
+        [
+          0.4361979166666667,
+          0.3662109375
+        ]
+      ]
+    },
+    "confidence": {
+      "heart": 0.9,
+      "head": 0.85,
+      "life": 0.9,
+      "fate": 0.7
+    },
+    "model": {
+      "provider": "openai",
+      "name": "gpt-4o"
+    }
+  },
+  "interpret": {
+    "core": {
+      "lineScore": {
+        "heart": 75,
+        "head": 75,
+        "life": 73,
+        "fate": 72
+      },
+      "lineSuggestion": {
+        "heart": "Your heart line is strong and clear, indicating emotional stability.",
+        "head": "Your head line shows balanced intellect and thoughtful decision-making.",
+        "life": "Your life line suggests good vitality and a healthy lifestyle.",
+        "fate": "Your fate line is present but less pronounced, indicating moderate career influence."
+      }
+    },
+    "insights": {
+      "emotionalType": "Stable and emotionally balanced.",
+      "cognitiveStyle": "Logical and thoughtful thinker.",
+      "vitality": "Good physical health and energy.",
+      "careerFocus": "Moderate focus on career with some external influences."
+    },
+    "lines": {
+      "heart": {
+        "score": 75,
+        "summary": "Your heart line is strong and clear, indicating emotional stability.",
+        "metrics": {
+          "length": 2.34,
+          "depth": 0.9,
+          "curvature": 0.1
+        }
+      },
+      "head": {
+        "score": 75,
+        "summary": "Your head line shows balanced intellect and thoughtful decision-making.",
+        "metrics": {
+          "length": 2.38,
+          "depth": 0.85,
+          "curvature": 0.11
+        }
+      },
+      "life": {
+        "score": 73,
+        "summary": "Your life line suggests good vitality and a healthy lifestyle.",
+        "metrics": {
+          "length": 1.42,
+          "depth": 0.9,
+          "curvature": 0
+        }
+      },
+      "fate": {
+        "score": 72,
+        "summary": "Your fate line is present but less pronounced, indicating moderate career influence.",
+        "metrics": {
+          "length": 1.77,
+          "depth": 0.7,
+          "curvature": 0
+        }
+      }
+    }
+  }
+}

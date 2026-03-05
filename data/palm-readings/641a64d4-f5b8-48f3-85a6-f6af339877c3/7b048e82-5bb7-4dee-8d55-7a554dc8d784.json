@@ -1,0 +1,137 @@
+{
+  "scanId": "7b048e82-5bb7-4dee-8d55-7a554dc8d784",
+  "clientId": "641a64d4-f5b8-48f3-85a6-f6af339877c3",
+  "side": "left",
+  "createdAt": "2026-03-03T11:13:03.635Z",
+  "detect": {
+    "hasPalm": true,
+    "lines": {
+      "heart": [
+        [
+          0.7041,
+          0.5828
+        ],
+        [
+          0.5923,
+          0.5285
+        ],
+        [
+          0.4691,
+          0.5559
+        ]
+      ],
+      "head": [
+        [
+          0.2712,
+          0.6504
+        ],
+        [
+          0.5236,
+          0.7015
+        ],
+        [
+          0.758,
+          0.7493
+        ]
+      ],
+      "life": [
+        [
+          0.2855,
+          0.6362
+        ],
+        [
+          0.3079,
+          0.8356
+        ],
+        [
+          0.4556,
+          0.9955
+        ]
+      ],
+      "fate": [
+        [
+          0.5863,
+          0.9772
+        ],
+        [
+          0.5755,
+          0.7763
+        ],
+        [
+          0.5863,
+          0.5753
+        ]
+      ]
+    },
+    "confidence": {
+      "heart": 0.8946666666666666,
+      "head": 0.9566666666666667,
+      "life": 0.9766666666666666,
+      "fate": 0.9
+    },
+    "model": {
+      "provider": "mediapipe",
+      "name": "mediapipe-hands-landmarks-v1"
+    }
+  },
+  "interpret": {
+    "core": {
+      "lineScore": {
+        "heart": 77,
+        "head": 84,
+        "life": 81,
+        "fate": 82
+      },
+      "lineSuggestion": {
+        "heart": "Your heart line suggests strong emotional clarity and warmth.",
+        "head": "Your head line indicates excellent intellectual capacity and focus.",
+        "life": "Your life line reflects robust vitality and resilience.",
+        "fate": "Your fate line shows a steady and determined career path."
+      }
+    },
+    "insights": {
+      "emotionalType": "Emotionally balanced and expressive.",
+      "cognitiveStyle": "Analytical and clear-headed thinker.",
+      "vitality": "High energy with strong endurance.",
+      "careerFocus": "Focused and consistent in professional pursuits."
+    },
+    "lines": {
+      "heart": {
+        "score": 77,
+        "summary": "Your heart line suggests strong emotional clarity and warmth.",
+        "metrics": {
+          "length": 2.37,
+          "depth": 0.89,
+          "curvature": 0.41
+        }
+      },
+      "head": {
+        "score": 84,
+        "summary": "Your head line indicates excellent intellectual capacity and focus.",
+        "metrics": {
+          "length": 4.97,
+          "depth": 0.96,
+          "curvature": 0
+        }
+      },
+      "life": {
+        "score": 81,
+        "summary": "Your life line reflects robust vitality and resilience.",
+        "metrics": {
+          "length": 3.98,
+          "depth": 0.98,
+          "curvature": 0.65
+        }
+      },
+      "fate": {
+        "score": 82,
+        "summary": "Your fate line shows a steady and determined career path.",
+        "metrics": {
+          "length": 4.02,
+          "depth": 0.9,
+          "curvature": 0.11
+        }
+      }
+    }
+  }
+}

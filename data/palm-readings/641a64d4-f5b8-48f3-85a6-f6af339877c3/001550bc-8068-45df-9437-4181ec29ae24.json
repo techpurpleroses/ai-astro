@@ -1,0 +1,137 @@
+{
+  "scanId": "001550bc-8068-45df-9437-4181ec29ae24",
+  "clientId": "641a64d4-f5b8-48f3-85a6-f6af339877c3",
+  "side": "left",
+  "createdAt": "2026-03-03T10:59:06.036Z",
+  "detect": {
+    "hasPalm": true,
+    "lines": {
+      "heart": [
+        [
+          0.4784,
+          0.4691
+        ],
+        [
+          0.5865,
+          0.4607
+        ],
+        [
+          0.6946,
+          0.5309
+        ]
+      ],
+      "head": [
+        [
+          0.2857,
+          0.6464
+        ],
+        [
+          0.5032,
+          0.681
+        ],
+        [
+          0.7063,
+          0.7156
+        ]
+      ],
+      "life": [
+        [
+          0.2564,
+          0.6439
+        ],
+        [
+          0.4282,
+          0.8367
+        ],
+        [
+          0.4422,
+          0.9804
+        ]
+      ],
+      "fate": [
+        [
+          0.5843,
+          0.9537
+        ],
+        [
+          0.588,
+          0.7403
+        ],
+        [
+          0.5828,
+          0.517
+        ]
+      ]
+    },
+    "confidence": {
+      "heart": 0.863,
+      "head": 0.93,
+      "life": 0.945,
+      "fate": 0.9
+    },
+    "model": {
+      "provider": "mediapipe",
+      "name": "mediapipe-hands-landmarks-v1"
+    }
+  },
+  "interpret": {
+    "core": {
+      "lineScore": {
+        "heart": 76,
+        "head": 82,
+        "life": 80,
+        "fate": 82
+      },
+      "lineSuggestion": {
+        "heart": "The heart line is strong and moderately curved, indicating balanced emotional expression.",
+        "head": "The head line is long and straight, suggesting clear and logical thinking.",
+        "life": "The life line is deep and curved, reflecting robust vitality and resilience.",
+        "fate": "The fate line is well-defined and straight, showing a focused and determined career path."
+      }
+    },
+    "insights": {
+      "emotionalType": "Balanced and expressive emotions",
+      "cognitiveStyle": "Logical and clear thinker",
+      "vitality": "High energy and strong resilience",
+      "careerFocus": "Determined and goal-oriented"
+    },
+    "lines": {
+      "heart": {
+        "score": 76,
+        "summary": "The heart line is strong and moderately curved, indicating balanced emotional expression.",
+        "metrics": {
+          "length": 2.25,
+          "depth": 0.86,
+          "curvature": 0.38
+        }
+      },
+      "head": {
+        "score": 82,
+        "summary": "The head line is long and straight, suggesting clear and logical thinking.",
+        "metrics": {
+          "length": 4.26,
+          "depth": 0.93,
+          "curvature": 0.01
+        }
+      },
+      "life": {
+        "score": 80,
+        "summary": "The life line is deep and curved, reflecting robust vitality and resilience.",
+        "metrics": {
+          "length": 3.84,
+          "depth": 0.95,
+          "curvature": 0.57
+        }
+      },
+      "fate": {
+        "score": 82,
+        "summary": "The fate line is well-defined and straight, showing a focused and determined career path.",
+        "metrics": {
+          "length": 4.37,
+          "depth": 0.9,
+          "curvature": 0.04
+        }
+      }
+    }
+  }
+}

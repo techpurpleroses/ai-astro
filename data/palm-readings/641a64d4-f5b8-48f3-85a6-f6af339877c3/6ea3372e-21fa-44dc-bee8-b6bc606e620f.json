@@ -1,0 +1,137 @@
+{
+  "scanId": "6ea3372e-21fa-44dc-bee8-b6bc606e620f",
+  "clientId": "641a64d4-f5b8-48f3-85a6-f6af339877c3",
+  "side": "left",
+  "createdAt": "2026-03-03T11:20:07.808Z",
+  "detect": {
+    "hasPalm": true,
+    "lines": {
+      "heart": [
+        [
+          0.3,
+          0.7
+        ],
+        [
+          0.4,
+          0.6
+        ],
+        [
+          0.5,
+          0.5
+        ]
+      ],
+      "head": [
+        [
+          0.3,
+          0.5
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.5,
+          0.3
+        ]
+      ],
+      "life": [
+        [
+          0.2,
+          0.8
+        ],
+        [
+          0.3,
+          0.7
+        ],
+        [
+          0.4,
+          0.6
+        ]
+      ],
+      "fate": [
+        [
+          0.5,
+          0.8
+        ],
+        [
+          0.5,
+          0.6
+        ],
+        [
+          0.5,
+          0.4
+        ]
+      ]
+    },
+    "confidence": {
+      "heart": 0.8,
+      "head": 0.7,
+      "life": 0.9,
+      "fate": 0.6
+    },
+    "model": {
+      "provider": "openai",
+      "name": "gpt-4o-mini"
+    }
+  },
+  "interpret": {
+    "core": {
+      "lineScore": {
+        "heart": 76,
+        "head": 75,
+        "life": 77,
+        "fate": 77
+      },
+      "lineSuggestion": {
+        "heart": "Heart line is strong and clear, indicating emotional stability.",
+        "head": "Head line suggests balanced and focused thinking.",
+        "life": "Life line is deep and well-defined, showing good vitality.",
+        "fate": "Fate line is long but less deep, suggesting a steady career path with some challenges."
+      }
+    },
+    "insights": {
+      "emotionalType": "Stable and consistent in emotions.",
+      "cognitiveStyle": "Logical and focused thinker.",
+      "vitality": "Strong physical health and energy.",
+      "careerFocus": "Steady career with occasional obstacles but overall persistence."
+    },
+    "lines": {
+      "heart": {
+        "score": 76,
+        "summary": "Heart line is strong and clear, indicating emotional stability.",
+        "metrics": {
+          "length": 2.83,
+          "depth": 0.8,
+          "curvature": 0
+        }
+      },
+      "head": {
+        "score": 75,
+        "summary": "Head line suggests balanced and focused thinking.",
+        "metrics": {
+          "length": 2.83,
+          "depth": 0.7,
+          "curvature": 0
+        }
+      },
+      "life": {
+        "score": 77,
+        "summary": "Life line is deep and well-defined, showing good vitality.",
+        "metrics": {
+          "length": 2.83,
+          "depth": 0.9,
+          "curvature": 0
+        }
+      },
+      "fate": {
+        "score": 77,
+        "summary": "Fate line is long but less deep, suggesting a steady career path with some challenges.",
+        "metrics": {
+          "length": 4,
+          "depth": 0.6,
+          "curvature": 0
+        }
+      }
+    }
+  }
+}

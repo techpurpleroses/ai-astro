@@ -7,22 +7,48 @@ import { normalizeClientId, savePalmScanRecord } from '@/lib/palm/store'
 import { PalmScanRecordSchema, PalmScanRequestSchema } from '@/lib/palm/contracts'
 
 export const runtime = 'nodejs'
+const PALM_DEBUG = process.env.PALM_DEBUG !== '0'
+
+function debugLog(step: string, data?: Record<string, unknown>) {
+  if (!PALM_DEBUG) return
+  if (data) {
+    console.log(`[api/palm/scan] ${step}`, data)
+    return
+  }
+  console.log(`[api/palm/scan] ${step}`)
+}
 
 export async function POST(req: NextRequest) {
+  const startedAt = Date.now()
   try {
     const body = await req.json()
     const input = PalmScanRequestSchema.parse(body)
+    debugLog('request.received', {
+      side: input.side,
+      clientId: input.clientId ?? 'generated',
+      imageChars: input.image.length,
+      imageWidth: input.imageWidth ?? null,
+      imageHeight: input.imageHeight ?? null,
+    })
 
-    const detect = await detectPalmLines(input.image)
+    const detectStart = Date.now()
+    const detect = await detectPalmLines(input.image, input.side, {
+      imageWidth: input.imageWidth,
+      imageHeight: input.imageHeight,
+    })
+    debugLog('detect.done', { ms: Date.now() - detectStart, hasPalm: detect.hasPalm, model: detect.model })
     if (!detect.hasPalm) {
+      debugLog('response.no_palm', { reason: detect.reason, totalMs: Date.now() - startedAt })
       return NextResponse.json({ error: 'no_palm', details: detect }, { status: 422 })
     }
 
-    const interpret = interpretPalmScan({
+    const interpretStart = Date.now()
+    const interpret = await interpretPalmScan({
       side: input.side,
       lines: detect.lines,
       confidence: detect.confidence,
     })
+    debugLog('interpret.done', { ms: Date.now() - interpretStart, score: interpret.core.lineScore })
 
     const record = PalmScanRecordSchema.parse({
       scanId: randomUUID(),
@@ -33,13 +59,21 @@ export async function POST(req: NextRequest) {
       interpret,
     })
 
+    const saveStart = Date.now()
     await savePalmScanRecord(record)
+    debugLog('store.done', { ms: Date.now() - saveStart, scanId: record.scanId })
+    debugLog('response.success', { totalMs: Date.now() - startedAt })
     return NextResponse.json(record)
   } catch (error) {
     if (error instanceof ZodError) {
+      debugLog('response.invalid_request', { totalMs: Date.now() - startedAt })
       return NextResponse.json({ error: 'invalid_request', details: error.flatten() }, { status: 400 })
     }
     console.error('palm.scan error:', error)
+    debugLog('response.server_error', {
+      totalMs: Date.now() - startedAt,
+      reason: error instanceof Error ? error.message : String(error),
+    })
     return NextResponse.json({ error: 'server_error' }, { status: 500 })
   }
 }

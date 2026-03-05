@@ -1,0 +1,185 @@
+{
+  "scanId": "6fc7936f-49e5-492d-99c9-18372c9c3c6e",
+  "clientId": "641a64d4-f5b8-48f3-85a6-f6af339877c3",
+  "side": "left",
+  "createdAt": "2026-03-03T12:07:27.678Z",
+  "detect": {
+    "hasPalm": true,
+    "lines": {
+      "heart": [
+        [
+          0.2604166666666667,
+          0.2685546875
+        ],
+        [
+          0.3255208333333333,
+          0.28076171875
+        ],
+        [
+          0.390625,
+          0.29296875
+        ],
+        [
+          0.4557291666666667,
+          0.30517578125
+        ],
+        [
+          0.5208333333333334,
+          0.3173828125
+        ],
+        [
+          0.5859375,
+          0.32958984375
+        ],
+        [
+          0.6510416666666666,
+          0.341796875
+        ]
+      ],
+      "head": [
+        [
+          0.22786458333333334,
+          0.3662109375
+        ],
+        [
+          0.29296875,
+          0.37841796875
+        ],
+        [
+          0.3580729166666667,
+          0.390625
+        ],
+        [
+          0.4231770833333333,
+          0.40283203125
+        ],
+        [
+          0.48828125,
+          0.4150390625
+        ],
+        [
+          0.5533854166666666,
+          0.42724609375
+        ],
+        [
+          0.6184895833333334,
+          0.439453125
+        ]
+      ],
+      "life": [
+        [
+          0.1953125,
+          0.390625
+        ],
+        [
+          0.22786458333333334,
+          0.439453125
+        ],
+        [
+          0.2604166666666667,
+          0.48828125
+        ],
+        [
+          0.29296875,
+          0.537109375
+        ],
+        [
+          0.3255208333333333,
+          0.5859375
+        ],
+        [
+          0.3580729166666667,
+          0.634765625
+        ]
+      ],
+      "fate": [
+        [
+          0.537109375,
+          0.634765625
+        ],
+        [
+          0.5208333333333334,
+          0.5859375
+        ],
+        [
+          0.5045572916666666,
+          0.537109375
+        ],
+        [
+          0.48828125,
+          0.48828125
+        ]
+      ]
+    },
+    "confidence": {
+      "heart": 0.9,
+      "head": 0.9,
+      "life": 0.9,
+      "fate": 0.7
+    },
+    "model": {
+      "provider": "openai",
+      "name": "gpt-4o"
+    }
+  },
+  "interpret": {
+    "core": {
+      "lineScore": {
+        "heart": 77,
+        "head": 78,
+        "life": 75,
+        "fate": 72
+      },
+      "lineSuggestion": {
+        "heart": "The heart line is strong and straight, indicating emotional stability.",
+        "head": "The head line is clear and balanced, suggesting logical thinking.",
+        "life": "The life line is deep and well-defined, reflecting good vitality.",
+        "fate": "The fate line is lighter but present, showing moderate career influence."
+      }
+    },
+    "insights": {
+      "emotionalType": "Stable and controlled emotions",
+      "cognitiveStyle": "Logical and analytical",
+      "vitality": "Good physical energy and health",
+      "careerFocus": "Moderate focus on career progression"
+    },
+    "lines": {
+      "heart": {
+        "score": 77,
+        "summary": "The heart line is strong and straight, indicating emotional stability.",
+        "metrics": {
+          "length": 3.97,
+          "depth": 0.9,
+          "curvature": 0
+        }
+      },
+      "head": {
+        "score": 78,
+        "summary": "The head line is clear and balanced, suggesting logical thinking.",
+        "metrics": {
+          "length": 3.97,
+          "depth": 0.9,
+          "curvature": 0
+        }
+      },
+      "life": {
+        "score": 75,
+        "summary": "The life line is deep and well-defined, reflecting good vitality.",
+        "metrics": {
+          "length": 2.93,
+          "depth": 0.9,
+          "curvature": 0
+        }
+      },
+      "fate": {
+        "score": 72,
+        "summary": "The fate line is lighter but present, showing moderate career influence.",
+        "metrics": {
+          "length": 1.54,
+          "depth": 0.7,
+          "curvature": 0
+        }
+      }
+    }
+  }
+}

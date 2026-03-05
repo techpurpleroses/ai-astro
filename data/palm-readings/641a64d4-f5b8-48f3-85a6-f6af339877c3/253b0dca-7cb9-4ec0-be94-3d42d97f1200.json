@@ -1,0 +1,185 @@
+{
+  "scanId": "253b0dca-7cb9-4ec0-be94-3d42d97f1200",
+  "clientId": "641a64d4-f5b8-48f3-85a6-f6af339877c3",
+  "side": "left",
+  "createdAt": "2026-03-03T11:33:45.604Z",
+  "detect": {
+    "hasPalm": true,
+    "lines": {
+      "heart": [
+        [
+          0.1,
+          0.3
+        ],
+        [
+          0.2,
+          0.3
+        ],
+        [
+          0.3,
+          0.3
+        ],
+        [
+          0.4,
+          0.3
+        ],
+        [
+          0.5,
+          0.3
+        ],
+        [
+          0.6,
+          0.3
+        ]
+      ],
+      "head": [
+        [
+          0.2,
+          0.5
+        ],
+        [
+          0.3,
+          0.5
+        ],
+        [
+          0.4,
+          0.5
+        ],
+        [
+          0.5,
+          0.5
+        ],
+        [
+          0.6,
+          0.5
+        ],
+        [
+          0.7,
+          0.5
+        ]
+      ],
+      "life": [
+        [
+          0.1,
+          0.6
+        ],
+        [
+          0.15,
+          0.65
+        ],
+        [
+          0.2,
+          0.7
+        ],
+        [
+          0.25,
+          0.75
+        ],
+        [
+          0.3,
+          0.8
+        ],
+        [
+          0.35,
+          0.85
+        ]
+      ],
+      "fate": [
+        [
+          0.5,
+          0.7
+        ],
+        [
+          0.5,
+          0.6
+        ],
+        [
+          0.5,
+          0.5
+        ],
+        [
+          0.5,
+          0.4
+        ],
+        [
+          0.5,
+          0.3
+        ],
+        [
+          0.5,
+          0.2
+        ]
+      ]
+    },
+    "confidence": {
+      "heart": 0.85,
+      "head": 0.8,
+      "life": 0.9,
+      "fate": 0.75
+    },
+    "model": {
+      "provider": "openai",
+      "name": "gpt-4o"
+    }
+  },
+  "interpret": {
+    "core": {
+      "lineScore": {
+        "heart": 78,
+        "head": 78,
+        "life": 76,
+        "fate": 78
+      },
+      "lineSuggestion": {
+        "heart": "Heart line is long and deep, indicating strong emotional capacity.",
+        "head": "Head line is long and deep, suggesting clear and focused thinking.",
+        "life": "Life line is shorter but very deep, reflecting strong vitality despite a compact life path.",
+        "fate": "Fate line is long and moderately deep, showing a steady career path."
+      }
+    },
+    "insights": {
+      "emotionalType": "Balanced and deeply emotional individual.",
+      "cognitiveStyle": "Analytical and focused thinker.",
+      "vitality": "High vitality with robust health.",
+      "careerFocus": "Consistent and steady career orientation."
+    },
+    "lines": {
+      "heart": {
+        "score": 78,
+        "summary": "Heart line is long and deep, indicating strong emotional capacity.",
+        "metrics": {
+          "length": 5,
+          "depth": 0.85,
+          "curvature": 0
+        }
+      },
+      "head": {
+        "score": 78,
+        "summary": "Head line is long and deep, suggesting clear and focused thinking.",
+        "metrics": {
+          "length": 5,
+          "depth": 0.8,
+          "curvature": 0
+        }
+      },
+      "life": {
+        "score": 76,
+        "summary": "Life line is shorter but very deep, reflecting strong vitality despite a compact life path.",
+        "metrics": {
+          "length": 3.54,
+          "depth": 0.9,
+          "curvature": 0
+        }
+      },
+      "fate": {
+        "score": 78,
+        "summary": "Fate line is long and moderately deep, showing a steady career path.",
+        "metrics": {
+          "length": 5,
+          "depth": 0.75,
+          "curvature": 0
+        }
+      }
+    }
+  }
+}

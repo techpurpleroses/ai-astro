@@ -5,9 +5,13 @@ import {
   type PalmInterpretRequest,
   type PalmInterpretResponse,
   PalmInterpretResponseSchema,
+  PalmLineTextMapSchema,
 } from '@/lib/palm/contracts'
+import OpenAI from 'openai'
+import { z } from 'zod'
 
 type Pt = [number, number]
+const PALM_DEBUG = process.env.PALM_DEBUG !== '0'
 
 const IDEAL_CURVATURE: Record<PalmLineId, number> = {
   heart: 0.32,
@@ -41,8 +45,33 @@ function midpointDeviation(start: Pt, mid: Pt, end: Pt) {
 }
 
 function lineMetrics(points: PalmLineMap[PalmLineId], depth: number) {
-  const [start, mid, end] = points
-  const lengthRaw = distance(start, end)
+  if (!points.length) {
+    return {
+      lengthRaw: 0,
+      curvatureRaw: 0,
+      length: 0,
+      depth: round(depth, 2),
+      curvature: 0,
+    }
+  }
+  if (points.length === 1) {
+    return {
+      lengthRaw: 0,
+      curvatureRaw: 0,
+      length: 0,
+      depth: round(depth, 2),
+      curvature: 0,
+    }
+  }
+  const start = points[0]
+  const end = points[points.length - 1]
+  const mid = points[Math.floor(points.length / 2)]
+
+  let polylineLength = 0
+  for (let i = 0; i < points.length - 1; i++) {
+    polylineLength += distance(points[i], points[i + 1])
+  }
+  const lengthRaw = polylineLength
   const curvatureRaw = midpointDeviation(start, mid, end)
 
   return {
@@ -55,7 +84,7 @@ function lineMetrics(points: PalmLineMap[PalmLineId], depth: number) {
 }
 
 function scoreLine(line: PalmLineId, lengthRaw: number, curvatureRaw: number, depth: number) {
-  const lengthComponent = clamp(lengthRaw / 0.85, 0, 1)
+  const lengthComponent = clamp(lengthRaw / 1.25, 0, 1)
   const depthComponent = clamp(depth, 0, 1)
 
   const ideal = IDEAL_CURVATURE[line]
@@ -101,7 +130,129 @@ function inferInsights(scores: Record<PalmLineId, number>) {
   }
 }
 
-export function interpretPalmScan(input: PalmInterpretRequest): PalmInterpretResponse {
+const OpenAiPalmNarrativeSchema = z.object({
+  lineSuggestion: PalmLineTextMapSchema,
+  insights: PalmInterpretResponseSchema.shape.insights,
+})
+
+type OpenAiPalmNarrative = z.infer<typeof OpenAiPalmNarrativeSchema>
+
+let cachedOpenAi: OpenAI | null | undefined
+
+function debugLog(step: string, data?: Record<string, unknown>) {
+  if (!PALM_DEBUG) return
+  if (data) {
+    console.log(`[palm.interpret] ${step}`, data)
+    return
+  }
+  console.log(`[palm.interpret] ${step}`)
+}
+
+function getOpenAiClient() {
+  if (cachedOpenAi !== undefined) return cachedOpenAi
+  const key = process.env.OPENAI_API_KEY?.trim()
+  if (!key) {
+    cachedOpenAi = null
+    return cachedOpenAi
+  }
+  cachedOpenAi = new OpenAI({ apiKey: key })
+  return cachedOpenAi
+}
+
+function buildPromptPayload(input: PalmInterpretRequest, base: PalmInterpretResponse) {
+  return {
+    side: input.side,
+    lineScore: base.core.lineScore,
+    confidence: input.confidence,
+    metrics: {
+      heart: base.lines.heart.metrics,
+      head: base.lines.head.metrics,
+      life: base.lines.life.metrics,
+      fate: base.lines.fate.metrics,
+    },
+  }
+}
+
+async function generateOpenAiNarrative(
+  input: PalmInterpretRequest,
+  base: PalmInterpretResponse
+): Promise<OpenAiPalmNarrative | null> {
+  if (process.env.PALM_INTERPRET_USE_OPENAI === '0') return null
+
+  const client = getOpenAiClient()
+  if (!client) return null
+
+  const model = process.env.PALM_OPENAI_MODEL?.trim() || 'gpt-4.1-mini'
+  const payload = buildPromptPayload(input, base)
+  debugLog('openai.request.start', {
+    model,
+    side: input.side,
+    score: base.core.lineScore,
+  })
+  const startedAt = Date.now()
+
+  try {
+    const completion = await client.chat.completions.create({
+      model,
+      temperature: 0.55,
+      response_format: { type: 'json_object' },
+      messages: [
+        {
+          role: 'system',
+          content:
+            'You are a palmistry assistant. Return valid JSON only, no markdown. ' +
+            'Use this exact shape: {"lineSuggestion":{"heart":"...","head":"...","life":"...","fate":"..."},"insights":{"emotionalType":"...","cognitiveStyle":"...","vitality":"...","careerFocus":"..."}}. ' +
+            'Each lineSuggestion should be one short sentence grounded in the numeric data.',
+        },
+        {
+          role: 'user',
+          content: `Interpret this palm scan:\n${JSON.stringify(payload)}`,
+        },
+      ],
+    })
+    debugLog('openai.request.end', { ms: Date.now() - startedAt })
+
+    const raw = completion.choices[0]?.message?.content
+    if (!raw) return null
+
+    const parsed = JSON.parse(raw)
+    const validated = OpenAiPalmNarrativeSchema.safeParse(parsed)
+    if (!validated.success) return null
+    debugLog('openai.response.valid', {
+      chars: raw.length,
+      insights: validated.data.insights,
+    })
+    return validated.data
+  } catch (error) {
+    console.warn('palm.interpret openai fallback:', error)
+    debugLog('openai.response.fail', {
+      reason: error instanceof Error ? error.message : String(error),
+    })
+    return null
+  }
+}
+
+function mergeNarrative(
+  base: PalmInterpretResponse,
+  narrative: OpenAiPalmNarrative
+): PalmInterpretResponse {
+  return PalmInterpretResponseSchema.parse({
+    ...base,
+    core: {
+      ...base.core,
+      lineSuggestion: narrative.lineSuggestion,
+    },
+    insights: narrative.insights,
+    lines: {
+      heart: { ...base.lines.heart, summary: narrative.lineSuggestion.heart },
+      head: { ...base.lines.head, summary: narrative.lineSuggestion.head },
+      life: { ...base.lines.life, summary: narrative.lineSuggestion.life },
+      fate: { ...base.lines.fate, summary: narrative.lineSuggestion.fate },
+    },
+  })
+}
+
+export function interpretPalmScanDeterministic(input: PalmInterpretRequest): PalmInterpretResponse {
   const scoreByLine = {} as Record<PalmLineId, number>
   const suggestionByLine = {} as Record<PalmLineId, string>
   const lines = {
@@ -167,4 +318,19 @@ export function interpretPalmScan(input: PalmInterpretRequest): PalmInterpretRes
   }
 
   return PalmInterpretResponseSchema.parse(response)
+}
+
+export async function interpretPalmScan(input: PalmInterpretRequest): Promise<PalmInterpretResponse> {
+  const startedAt = Date.now()
+  debugLog('pipeline.start', { side: input.side, confidence: input.confidence })
+  const base = interpretPalmScanDeterministic(input)
+  debugLog('deterministic.ready', { score: base.core.lineScore })
+  const narrative = await generateOpenAiNarrative(input, base)
+  if (!narrative) {
+    debugLog('pipeline.done.fallback', { ms: Date.now() - startedAt })
+    return base
+  }
+  const merged = mergeNarrative(base, narrative)
+  debugLog('pipeline.done.openai', { ms: Date.now() - startedAt })
+  return merged
 }

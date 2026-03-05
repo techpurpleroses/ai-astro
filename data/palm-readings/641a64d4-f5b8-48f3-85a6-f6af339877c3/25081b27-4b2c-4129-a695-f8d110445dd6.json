@@ -1,0 +1,197 @@
+{
+  "scanId": "25081b27-4b2c-4129-a695-f8d110445dd6",
+  "clientId": "641a64d4-f5b8-48f3-85a6-f6af339877c3",
+  "side": "left",
+  "createdAt": "2026-03-03T12:00:26.533Z",
+  "detect": {
+    "hasPalm": true,
+    "lines": {
+      "heart": [
+        [
+          0.22786458333333334,
+          0.244140625
+        ],
+        [
+          0.29296875,
+          0.2685546875
+        ],
+        [
+          0.3580729166666667,
+          0.28076171875
+        ],
+        [
+          0.4231770833333333,
+          0.29296875
+        ],
+        [
+          0.48828125,
+          0.30517578125
+        ],
+        [
+          0.5533854166666666,
+          0.3173828125
+        ],
+        [
+          0.6184895833333334,
+          0.32958984375
+        ],
+        [
+          0.68359375,
+          0.341796875
+        ]
+      ],
+      "head": [
+        [
+          0.2604166666666667,
+          0.3662109375
+        ],
+        [
+          0.3255208333333333,
+          0.37841796875
+        ],
+        [
+          0.390625,
+          0.390625
+        ],
+        [
+          0.4557291666666667,
+          0.40283203125
+        ],
+        [
+          0.5208333333333334,
+          0.4150390625
+        ],
+        [
+          0.5859375,
+          0.42724609375
+        ],
+        [
+          0.6510416666666666,
+          0.439453125
+        ]
+      ],
+      "life": [
+        [
+          0.22786458333333334,
+          0.439453125
+        ],
+        [
+          0.2604166666666667,
+          0.4638671875
+        ],
+        [
+          0.29296875,
+          0.48828125
+        ],
+        [
+          0.3255208333333333,
+          0.5126953125
+        ],
+        [
+          0.3580729166666667,
+          0.537109375
+        ],
+        [
+          0.390625,
+          0.5615234375
+        ],
+        [
+          0.4231770833333333,
+          0.5859375
+        ]
+      ],
+      "fate": [
+        [
+          0.48828125,
+          0.7080078125
+        ],
+        [
+          0.48828125,
+          0.68359375
+        ],
+        [
+          0.48828125,
+          0.6591796875
+        ],
+        [
+          0.48828125,
+          0.634765625
+        ],
+        [
+          0.48828125,
+          0.6103515625
+        ]
+      ]
+    },
+    "confidence": {
+      "heart": 0.9,
+      "head": 0.85,
+      "life": 0.9,
+      "fate": 0.7
+    },
+    "model": {
+      "provider": "openai",
+      "name": "gpt-4o"
+    }
+  },
+  "interpret": {
+    "core": {
+      "lineScore": {
+        "heart": 78,
+        "head": 77,
+        "life": 74,
+        "fate": 71
+      },
+      "lineSuggestion": {
+        "heart": "The heart line is long and deep, indicating strong emotional capacity.",
+        "head": "The head line is moderately long and straight, suggesting clear and logical thinking.",
+        "life": "The life line is moderately long and deep, reflecting good vitality and stability.",
+        "fate": "The fate line is shorter and less deep, implying a less defined career path."
+      }
+    },
+    "insights": {
+      "emotionalType": "Emotionally expressive and empathetic.",
+      "cognitiveStyle": "Pragmatic and rational thinker.",
+      "vitality": "Healthy and resilient energy levels.",
+      "careerFocus": "Flexible with career direction, open to change."
+    },
+    "lines": {
+      "heart": {
+        "score": 78,
+        "summary": "The heart line is long and deep, indicating strong emotional capacity.",
+        "metrics": {
+          "length": 4.67,
+          "depth": 0.9,
+          "curvature": 0.05
+        }
+      },
+      "head": {
+        "score": 77,
+        "summary": "The head line is moderately long and straight, suggesting clear and logical thinking.",
+        "metrics": {
+          "length": 3.97,
+          "depth": 0.85,
+          "curvature": 0
+        }
+      },
+      "life": {
+        "score": 74,
+        "summary": "The life line is moderately long and deep, reflecting good vitality and stability.",
+        "metrics": {
+          "length": 2.44,
+          "depth": 0.9,
+          "curvature": 0
+        }
+      },
+      "fate": {
+        "score": 71,
+        "summary": "The fate line is shorter and less deep, implying a less defined career path.",
+        "metrics": {
+          "length": 0.98,
+          "depth": 0.7,
+          "curvature": 0
+        }
+      }
+    }
+  }
+}

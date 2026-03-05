@@ -1,0 +1,137 @@
+{
+  "scanId": "96588bb9-3792-42c3-8768-7c76236b7e4f",
+  "clientId": "641a64d4-f5b8-48f3-85a6-f6af339877c3",
+  "side": "left",
+  "createdAt": "2026-03-03T11:25:26.782Z",
+  "detect": {
+    "hasPalm": true,
+    "lines": {
+      "heart": [
+        [
+          0.2,
+          0.35
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.6,
+          0.35
+        ]
+      ],
+      "head": [
+        [
+          0.1,
+          0.5
+        ],
+        [
+          0.3,
+          0.6
+        ],
+        [
+          0.4,
+          0.7
+        ]
+      ],
+      "life": [
+        [
+          0.2,
+          0.2
+        ],
+        [
+          0.6,
+          0.2
+        ],
+        [
+          0.4,
+          0.25
+        ]
+      ],
+      "fate": [
+        [
+          0.5,
+          0.5
+        ],
+        [
+          0.5,
+          0.3
+        ],
+        [
+          0.5,
+          0.1
+        ]
+      ]
+    },
+    "confidence": {
+      "heart": 0.7,
+      "head": 0.9,
+      "life": 0.8,
+      "fate": 0.6
+    },
+    "model": {
+      "provider": "openai",
+      "name": "gpt-4o-mini"
+    }
+  },
+  "interpret": {
+    "core": {
+      "lineScore": {
+        "heart": 77,
+        "head": 80,
+        "life": 75,
+        "fate": 77
+      },
+      "lineSuggestion": {
+        "heart": "Your heart line is long and moderately deep, indicating strong emotional capacity.",
+        "head": "The head line is well-defined and deep, suggesting clear thinking and intelligence.",
+        "life": "A life line with high curvature and depth shows vitality and a dynamic life path.",
+        "fate": "A straight fate line with moderate depth reflects steady career progress and determination."
+      }
+    },
+    "insights": {
+      "emotionalType": "Balanced and emotionally expressive.",
+      "cognitiveStyle": "Analytical and focused thinker.",
+      "vitality": "Energetic with a robust constitution.",
+      "careerFocus": "Consistent and goal-oriented professional path."
+    },
+    "lines": {
+      "heart": {
+        "score": 77,
+        "summary": "Your heart line is long and moderately deep, indicating strong emotional capacity.",
+        "metrics": {
+          "length": 4,
+          "depth": 0.7,
+          "curvature": 0.5
+        }
+      },
+      "head": {
+        "score": 80,
+        "summary": "The head line is well-defined and deep, suggesting clear thinking and intelligence.",
+        "metrics": {
+          "length": 3.61,
+          "depth": 0.9,
+          "curvature": 0.28
+        }
+      },
+      "life": {
+        "score": 75,
+        "summary": "A life line with high curvature and depth shows vitality and a dynamic life path.",
+        "metrics": {
+          "length": 2.06,
+          "depth": 0.8,
+          "curvature": 0.97
+        }
+      },
+      "fate": {
+        "score": 77,
+        "summary": "A straight fate line with moderate depth reflects steady career progress and determination.",
+        "metrics": {
+          "length": 4,
+          "depth": 0.6,
+          "curvature": 0
+        }
+      }
+    }
+  }
+}

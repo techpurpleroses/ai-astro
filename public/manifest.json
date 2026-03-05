@@ -1,0 +1,9 @@
+{
+  "name": "Astro AI",
+  "short_name": "AstroAI",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "description": "Astrology and palm reading app."
+}

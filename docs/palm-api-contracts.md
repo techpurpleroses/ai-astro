@@ -40,8 +40,8 @@ Response (success):
     "fate": 0.74
   },
   "model": {
-    "provider": "openai",
-    "name": "gpt-4o"
+    "provider": "opencv",
+    "name": "opencv-canny-hough-v1"
   }
 }
 ```
@@ -53,8 +53,8 @@ Response (no palm, HTTP `422`):
   "hasPalm": false,
   "reason": "no_palm",
   "model": {
-    "provider": "openai",
-    "name": "gpt-4o"
+    "provider": "opencv",
+    "name": "opencv-canny-hough-v1"
   }
 }
 ```
@@ -178,3 +178,11 @@ Response:
 - Existing `POST /api/palm-detect` is preserved and now returns legacy shape:
   - success: `{ heart, head, life, fate }`
   - no palm: `{ error: "no_palm", details: {...} }`
+
+## Runtime requirement
+
+- Local OpenCV detector script runs through Python.
+- Install detector dependencies:
+  - `py -3 -m pip install -r scripts/requirements-palm.txt`
+- Optional environment override:
+  - `PALM_PYTHON_CMD` can point to a custom Python executable.

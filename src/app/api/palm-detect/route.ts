@@ -9,7 +9,10 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
     const input = PalmDetectRequestSchema.parse(body)
-    const result = await detectPalmLines(input.image)
+    const result = await detectPalmLines(input.image, input.side, {
+      imageWidth: input.imageWidth,
+      imageHeight: input.imageHeight,
+    })
 
     if (!result.hasPalm) {
       return NextResponse.json({ error: 'no_palm', details: result }, { status: 422 })
