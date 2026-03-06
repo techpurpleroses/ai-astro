@@ -1,0 +1,249 @@
+{
+  "scanId": "581d775b-db2c-4fdd-a312-7d81b0798f9a",
+  "clientId": "641a64d4-f5b8-48f3-85a6-f6af339877c3",
+  "side": "left",
+  "createdAt": "2026-03-05T08:29:44.147Z",
+  "detect": {
+    "hasPalm": true,
+    "lines": {
+      "heart": [
+        [
+          0.4581,
+          0.4567
+        ],
+        [
+          0.4713,
+          0.4825
+        ],
+        [
+          0.4863,
+          0.5083
+        ],
+        [
+          0.5063,
+          0.5317
+        ],
+        [
+          0.5319,
+          0.5508
+        ],
+        [
+          0.5569,
+          0.5667
+        ],
+        [
+          0.5844,
+          0.5783
+        ],
+        [
+          0.6138,
+          0.5867
+        ],
+        [
+          0.6413,
+          0.5933
+        ],
+        [
+          0.6675,
+          0.5983
+        ]
+      ],
+      "head": [
+        [
+          0.3762,
+          0.5108
+        ],
+        [
+          0.3969,
+          0.5208
+        ],
+        [
+          0.4206,
+          0.53
+        ],
+        [
+          0.4444,
+          0.5425
+        ],
+        [
+          0.4688,
+          0.5575
+        ],
+        [
+          0.49,
+          0.575
+        ],
+        [
+          0.5125,
+          0.595
+        ],
+        [
+          0.5344,
+          0.6167
+        ],
+        [
+          0.5556,
+          0.6392
+        ],
+        [
+          0.575,
+          0.6608
+        ]
+      ],
+      "life": [
+        [
+          0.3787,
+          0.5167
+        ],
+        [
+          0.4044,
+          0.5292
+        ],
+        [
+          0.4306,
+          0.5483
+        ],
+        [
+          0.4525,
+          0.575
+        ],
+        [
+          0.47,
+          0.6058
+        ],
+        [
+          0.4825,
+          0.6358
+        ],
+        [
+          0.4913,
+          0.6675
+        ],
+        [
+          0.4963,
+          0.6992
+        ],
+        [
+          0.4969,
+          0.7308
+        ],
+        [
+          0.4931,
+          0.7633
+        ]
+      ],
+      "fate": [
+        [
+          0.5288,
+          0.7025
+        ],
+        [
+          0.5256,
+          0.6825
+        ],
+        [
+          0.5219,
+          0.6633
+        ],
+        [
+          0.5194,
+          0.645
+        ],
+        [
+          0.5163,
+          0.6275
+        ],
+        [
+          0.5131,
+          0.6092
+        ],
+        [
+          0.5106,
+          0.5908
+        ],
+        [
+          0.5081,
+          0.5733
+        ],
+        [
+          0.5056,
+          0.5558
+        ],
+        [
+          0.5031,
+          0.5375
+        ]
+      ]
+    },
+    "confidence": {
+      "heart": 0.863,
+      "head": 0.82,
+      "life": 0.793,
+      "fate": 0.406
+    },
+    "model": {
+      "provider": "roboflow",
+      "name": "palm-lines-recognition-wemy5/1"
+    }
+  },
+  "interpret": {
+    "core": {
+      "lineScore": {
+        "heart": 75,
+        "head": 75,
+        "life": 74,
+        "fate": 68
+      },
+      "lineSuggestion": {
+        "heart": "Your heart line is strong and clear, indicating emotional stability.",
+        "head": "Your head line suggests balanced and logical thinking.",
+        "life": "Your life line is long and deep, showing good vitality and resilience.",
+        "fate": "Your fate line is faint, implying a flexible career path."
+      }
+    },
+    "insights": {
+      "emotionalType": "Emotionally stable and expressive.",
+      "cognitiveStyle": "Balanced and logical thinker.",
+      "vitality": "Strong vitality with resilience.",
+      "careerFocus": "Flexible and adaptable career approach."
+    },
+    "lines": {
+      "heart": {
+        "score": 75,
+        "summary": "Your heart line is strong and clear, indicating emotional stability.",
+        "metrics": {
+          "length": 2.67,
+          "depth": 0.86,
+          "curvature": 0.36
+        }
+      },
+      "head": {
+        "score": 75,
+        "summary": "Your head line suggests balanced and logical thinking.",
+        "metrics": {
+          "length": 2.52,
+          "depth": 0.82,
+          "curvature": 0.17
+        }
+      },
+      "life": {
+        "score": 74,
+        "summary": "Your life line is long and deep, showing good vitality and resilience.",
+        "metrics": {
+          "length": 2.93,
+          "depth": 0.79,
+          "curvature": 0.44
+        }
+      },
+      "fate": {
+        "score": 68,
+        "summary": "Your fate line is faint, implying a flexible career path.",
+        "metrics": {
+          "length": 1.67,
+          "depth": 0.41,
+          "curvature": 0.01
+        }
+      }
+    }
+  }
+}

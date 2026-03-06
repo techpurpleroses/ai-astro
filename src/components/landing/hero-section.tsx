@@ -207,7 +207,7 @@ export function HeroSection() {
                 }}
               >
                 <Image
-                  src={`/zodiac/${sign}.png`}
+                  src={`/assets/zodiac/${sign}.png`}
                   alt={sign}
                   width={38}
                   height={38}
@@ -224,7 +224,7 @@ export function HeroSection() {
             style={{ width: 172, height: 172, boxShadow: '0 0 60px 20px rgba(6,182,212,0.18), 0 0 120px 40px rgba(6,182,212,0.06)' }}
           >
             <Image
-              src="/moon/moon-color.png"
+              src="/assets/moon/moon-color.png"
               alt="Moon"
               fill
               className="object-cover"
@@ -351,3 +351,4 @@ export function HeroSection() {
     </section>
   )
 }
+

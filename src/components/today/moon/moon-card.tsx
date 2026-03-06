@@ -30,7 +30,7 @@ export function MoonCard({ phase }: MoonCardProps) {
         {/* Background starfield image */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl">
           <Image
-            src="/decorative/stars.png"
+            src="/assets/decorative/stars.png"
             alt=""
             fill
             className="object-cover opacity-20"
@@ -128,3 +128,4 @@ export function MoonCard({ phase }: MoonCardProps) {
     </>
   )
 }
+

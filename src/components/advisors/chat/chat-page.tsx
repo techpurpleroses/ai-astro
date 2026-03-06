@@ -1,22 +1,21 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ArrowLeft, Star, Send, Mic, Lock } from 'lucide-react'
-import { useAdvisor, useChatMessages, useSuggestedQuestions } from '@/hooks/use-advisors'
-import { SkeletonCard } from '@/components/ui/skeleton'
 import { format } from 'date-fns'
+import { BottomSheet } from '@/components/ui/bottom-sheet'
+import { SkeletonCard } from '@/components/ui/skeleton'
+import { useAdvisor, useChatMessages, useSuggestedQuestions } from '@/hooks/use-advisors'
 import type { ChatMessage, TarotCard } from '@/types'
-
-// ── Session timer ─────────────────────────────────────────────────────────────
 
 function SessionTimer({ isOnline }: { isOnline: boolean }) {
   const [seconds, setSeconds] = useState(0)
 
   useEffect(() => {
     if (!isOnline) return
-    const id = setInterval(() => setSeconds((s) => s + 1), 1000)
+    const id = setInterval(() => setSeconds((value) => value + 1), 1000)
     return () => clearInterval(id)
   }, [isOnline])
 
@@ -26,14 +25,10 @@ function SessionTimer({ isOnline }: { isOnline: boolean }) {
   return (
     <div className="flex items-center gap-1.5 bg-gold-accent/10 border border-gold-accent/25 px-3 py-1 rounded-full">
       <div className="h-1.5 w-1.5 rounded-full bg-gold-accent animate-pulse" />
-      <span className="text-[10px] font-display font-bold text-gold-accent tabular-nums">
-        {mm}:{ss}
-      </span>
+      <span className="text-[10px] font-display font-bold text-gold-accent tabular-nums">{mm}:{ss}</span>
     </div>
   )
 }
-
-// ── Inline tarot card in chat ─────────────────────────────────────────────────
 
 function InlineTarotCard({ card }: { card: TarotCard }) {
   return (
@@ -42,7 +37,7 @@ function InlineTarotCard({ card }: { card: TarotCard }) {
       style={{ border: '1px solid rgba(167,139,250,0.3)', background: 'rgba(167,139,250,0.08)' }}
     >
       <div className="flex items-center gap-2 px-3 py-2 border-b border-violet-400/20">
-        <span className="text-violet-400 text-sm">✦</span>
+        <span className="text-violet-400 text-sm">*</span>
         <span className="text-[10px] font-display font-semibold text-violet-400 uppercase tracking-widest">
           Tarot Reading
         </span>
@@ -55,8 +50,6 @@ function InlineTarotCard({ card }: { card: TarotCard }) {
     </div>
   )
 }
-
-// ── Message bubble ────────────────────────────────────────────────────────────
 
 function MessageBubble({ message, advisorName }: { message: ChatMessage; advisorName: string }) {
   const isAdvisor = message.role === 'advisor'
@@ -74,11 +67,11 @@ function MessageBubble({ message, advisorName }: { message: ChatMessage; advisor
           className="h-8 w-8 rounded-xl shrink-0 flex items-center justify-center text-xs font-display font-bold"
           style={{ background: 'linear-gradient(135deg, rgba(6,182,212,0.25), rgba(167,139,250,0.15))' }}
         >
-          {advisorName.split(' ').map((n) => n[0]).join('')}
+          {advisorName.split(' ').map((part) => part[0]).join('')}
         </div>
       )}
 
-      <div className={`max-w-[78%] ${isAdvisor ? '' : ''}`}>
+      <div className="max-w-[78%]">
         <div
           className="px-3 py-2.5 rounded-2xl text-sm leading-relaxed"
           style={isAdvisor ? {
@@ -96,44 +89,43 @@ function MessageBubble({ message, advisorName }: { message: ChatMessage; advisor
           {message.content}
           {message.tarotCard && <InlineTarotCard card={message.tarotCard} />}
         </div>
-        <p className={`text-[9px] text-text-muted mt-1 ${isAdvisor ? '' : 'text-right'}`}>
-          {time}
-        </p>
+        <p className={`text-[9px] text-text-muted mt-1 ${isAdvisor ? '' : 'text-right'}`}>{time}</p>
       </div>
     </motion.div>
   )
 }
-
-// ── Main chat page ────────────────────────────────────────────────────────────
 
 export function ChatPageClient({ advisorId }: { advisorId: string }) {
   const router = useRouter()
   const advisor = useAdvisor(advisorId)
   const { data: messages, isLoading } = useChatMessages(advisorId)
   const { data: suggested } = useSuggestedQuestions()
+
   const [input, setInput] = useState('')
-  const [localMessages, setLocalMessages] = useState<ChatMessage[]>([])
+  const [pendingMessages, setPendingMessages] = useState<ChatMessage[]>([])
+  const [refillOpen, setRefillOpen] = useState(false)
+  const [billingIssueOpen, setBillingIssueOpen] = useState(false)
+
   const bottomRef = useRef<HTMLDivElement>(null)
+  const mergedMessages = useMemo(
+    () => [...(messages ?? []), ...pendingMessages],
+    [messages, pendingMessages],
+  )
 
-  useEffect(() => {
-    if (messages) setLocalMessages(messages)
-  }, [messages])
-
-  // Auto-scroll to bottom
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [localMessages])
+  }, [mergedMessages])
 
   const handleSend = useCallback((text: string) => {
     if (!text.trim()) return
-    const newMsg: ChatMessage = {
+    const newMessage: ChatMessage = {
       id: `local-${Date.now()}`,
       advisorId,
       role: 'user',
       content: text,
       timestamp: new Date().toISOString(),
     }
-    setLocalMessages((prev) => [...prev, newMsg])
+    setPendingMessages((prev) => [...prev, newMessage])
     setInput('')
   }, [advisorId])
 
@@ -147,7 +139,6 @@ export function ChatPageClient({ advisorId }: { advisorId: string }) {
 
   return (
     <div className="flex flex-col h-full">
-      {/* ── Header ── */}
       <div
         className="shrink-0 px-4 py-3 flex items-center gap-3 border-b border-white/5"
         style={{ background: 'rgba(10,22,40,0.97)', backdropFilter: 'blur(16px)' }}
@@ -159,56 +150,72 @@ export function ChatPageClient({ advisorId }: { advisorId: string }) {
           <ArrowLeft size={15} className="text-text-secondary" />
         </button>
 
-        {/* Advisor info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
             <p className="font-display text-sm font-bold text-text-primary">{advisor.name}</p>
-            {advisor.isOnline && (
-              <div className="h-1.5 w-1.5 rounded-full bg-lime-accent" />
-            )}
+            {advisor.isOnline && <div className="h-1.5 w-1.5 rounded-full bg-lime-accent" />}
           </div>
           <div className="flex items-center gap-1.5">
             <Star size={9} className="text-gold-accent fill-gold-accent" />
-            <span className="text-[9px] text-text-muted">{advisor.rating} · {advisor.specialty}</span>
+            <span className="text-[9px] text-text-muted">{advisor.rating} - {advisor.specialty}</span>
           </div>
         </div>
 
         {advisor.isOnline && <SessionTimer isOnline={advisor.isOnline} />}
       </div>
 
-      {/* ── Confidentiality notice ── */}
       <div
         className="shrink-0 flex items-center gap-2 px-4 py-2 text-center justify-center"
         style={{ background: 'rgba(6,182,212,0.05)', borderBottom: '1px solid rgba(6,182,212,0.08)' }}
       >
         <Lock size={9} className="text-text-muted" />
-        <p className="text-[9px] text-text-muted">All sessions are private & confidential</p>
+        <p className="text-[9px] text-text-muted">All sessions are private and confidential</p>
       </div>
 
-      {/* ── Message thread ── */}
+      <div className="px-2 pt-2">
+        <div
+          className="rounded-2xl px-3 py-2.5 flex items-center gap-2"
+          style={{ background: 'rgba(244,239,220,0.95)', border: '1px solid rgba(255,255,255,0.16)' }}
+        >
+          <div className="h-6 w-6 rounded-full bg-midnight-800/80 text-white flex items-center justify-center text-[10px] font-bold">
+            !
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-[12px] font-display font-bold text-midnight-950">You are running out of minutes</p>
+            <p className="text-[11px] text-midnight-800">Refill to continue chatting.</p>
+          </div>
+          <button
+            onClick={() => setRefillOpen(true)}
+            className="rounded-full px-3 py-1.5 text-xs font-display font-bold text-white"
+            style={{ background: 'linear-gradient(135deg, #22D3EE, #06B6D4)' }}
+          >
+            Refill
+          </button>
+        </div>
+      </div>
+
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 overscroll-contain">
         {isLoading && (
           <div className="space-y-3">
-            {[1, 2, 3].map((i) => <SkeletonCard key={i} className="h-16" />)}
+            {[1, 2, 3].map((item) => <SkeletonCard key={item} className="h-16" />)}
           </div>
         )}
 
-        {localMessages.map((msg) => (
-          <MessageBubble key={msg.id} message={msg} advisorName={advisor.name} />
+        {mergedMessages.map((message) => (
+          <MessageBubble key={message.id} message={message} advisorName={advisor.name} />
         ))}
 
-        {/* Suggested questions (shown at bottom if few messages) */}
-        {localMessages.length < 4 && suggested && (
+        {mergedMessages.length < 4 && suggested && (
           <div className="pt-2">
             <p className="text-[10px] text-text-muted mb-2 font-display">Suggested questions:</p>
             <div className="flex flex-wrap gap-1.5">
-              {suggested.slice(0, 3).map((q, i) => (
+              {suggested.slice(0, 3).map((question, index) => (
                 <button
-                  key={i}
-                  onClick={() => handleSend(q)}
+                  key={index}
+                  onClick={() => handleSend(question)}
                   className="text-[10px] text-cyan-glow bg-cyan-glow/8 border border-cyan-glow/20 px-3 py-1.5 rounded-full font-display transition-all active:scale-95"
                 >
-                  {q}
+                  {question}
                 </button>
               ))}
             </div>
@@ -218,7 +225,6 @@ export function ChatPageClient({ advisorId }: { advisorId: string }) {
         <div ref={bottomRef} />
       </div>
 
-      {/* ── Message input ── */}
       <div
         className="shrink-0 px-4 py-3 border-t border-white/5"
         style={{ background: 'rgba(10,22,40,0.97)', backdropFilter: 'blur(16px)' }}
@@ -229,10 +235,10 @@ export function ChatPageClient({ advisorId }: { advisorId: string }) {
         >
           <textarea
             value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault()
+            onChange={(event) => setInput(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault()
                 handleSend(input)
               }
             }}
@@ -259,6 +265,63 @@ export function ChatPageClient({ advisorId }: { advisorId: string }) {
           </div>
         </div>
       </div>
+
+      <BottomSheet open={refillOpen} onClose={() => setRefillOpen(false)} title="Maximize Your Consultation">
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-2">
+            {[
+              { label: '240', price: '$9.99' },
+              { label: '720', price: '$19.99', selected: true },
+              { label: '1080', price: '$29.99' },
+              { label: '2160', price: '$39.99' },
+            ].map((pack) => (
+              <button
+                key={pack.label}
+                className="rounded-2xl p-3 text-left"
+                style={{
+                  background: 'rgba(15,30,53,0.82)',
+                  border: pack.selected ? '1px solid rgba(34,211,238,0.6)' : '1px solid rgba(255,255,255,0.08)',
+                }}
+              >
+                <p className="font-display text-base font-bold text-[#F4E2B4]">{pack.label} gems</p>
+                <p className="text-sm text-text-secondary mt-1">{pack.price}</p>
+              </button>
+            ))}
+          </div>
+          <button
+            onClick={() => {
+              setRefillOpen(false)
+              setBillingIssueOpen(true)
+            }}
+            className="w-full rounded-full py-3 font-display font-bold text-midnight-950"
+            style={{ background: 'linear-gradient(135deg, #22D3EE, #06B6D4)' }}
+          >
+            Continue
+          </button>
+        </div>
+      </BottomSheet>
+
+      <BottomSheet open={billingIssueOpen} onClose={() => setBillingIssueOpen(false)} title="Billing Issue">
+        <div className="space-y-4">
+          <p className="text-sm text-text-secondary leading-relaxed">
+            We could not process your payment due to a billing issue. Please update your card details to continue.
+          </p>
+          <button
+            onClick={() => setBillingIssueOpen(false)}
+            className="w-full rounded-full py-3 font-display font-bold text-midnight-950"
+            style={{ background: 'linear-gradient(135deg, #22D3EE, #06B6D4)' }}
+          >
+            Update card details
+          </button>
+          <button
+            onClick={() => setBillingIssueOpen(false)}
+            className="w-full rounded-full py-3 font-display font-bold text-midnight-950"
+            style={{ background: '#FBBF24' }}
+          >
+            PayPal
+          </button>
+        </div>
+      </BottomSheet>
     </div>
   )
 }

@@ -3,8 +3,9 @@
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { ChevronRight, Sparkles, Crown } from 'lucide-react'
+import { ChevronRight, Sparkles, Crown, Settings } from 'lucide-react'
 import Image from 'next/image'
+import { STORY_CATEGORIES } from '@/data/stories'
 
 function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.05 })
@@ -141,7 +142,13 @@ export function FeaturesClient() {
           <p className="font-mystical text-[10px] text-text-muted tracking-widest">MYSTIC TOOLS</p>
           <h1 className="font-display text-base font-bold text-text-primary leading-tight">Features</h1>
         </div>
-        <div className="ml-auto flex items-center gap-1 bg-gold-accent/10 border border-gold-accent/25 px-2.5 py-1 rounded-full">
+        <button
+          onClick={() => router.push('/settings')}
+          className="ml-auto h-8 w-8 rounded-full flex items-center justify-center bg-white/6 border border-white/10"
+        >
+          <Settings size={14} className="text-text-secondary" />
+        </button>
+        <div className="flex items-center gap-1 bg-gold-accent/10 border border-gold-accent/25 px-2.5 py-1 rounded-full">
           <Crown size={10} className="text-gold-accent" />
           <span className="text-[9px] font-display font-bold text-gold-accent">PRO</span>
         </div>
@@ -153,7 +160,7 @@ export function FeaturesClient() {
         <FadeIn delay={0}>
           <div>
             <FeatureCard
-              imageSrc="/palm/heart-line.jpg"
+              imageSrc="/assets/avatar-1.png"
               imageAlt="Palm reading"
               title="Palm Reading"
               subtitle="Palmistry Analysis"
@@ -176,7 +183,7 @@ export function FeaturesClient() {
         {/* Tarot */}
         <FadeIn delay={0.08}>
           <FeatureCard
-            imageSrc="/features/tarot-cards.webp"
+            imageSrc="/assets/prediction-2026.png"
             imageAlt="Tarot cards"
             title="Tarot"
             subtitle="Card Readings"
@@ -191,7 +198,7 @@ export function FeaturesClient() {
         {/* Soulmate */}
         <FadeIn delay={0.14}>
           <FeatureCard
-            imageSrc="/features/compatibility.png"
+            imageSrc="/assets/soulmate-sketch.webp"
             imageAlt="Soulmate birth chart"
             title="Soulmate by Birth Chart"
             subtitle="Cosmic Love Match"
@@ -206,7 +213,7 @@ export function FeaturesClient() {
         {/* Magic Ball */}
         <FadeIn delay={0.20}>
           <FeatureCard
-            imageSrc="/features/magic-ball.png"
+            imageSrc="/assets/magic-ball.png"
             imageAlt="Magic ball oracle"
             title="Magic Ball"
             subtitle="Ask the Oracle"
@@ -218,7 +225,43 @@ export function FeaturesClient() {
           />
         </FadeIn>
 
+        {/* Story */}
+        <FadeIn delay={0.24}>
+          <FeatureCard
+            imageSrc="/assets/astrocartography.png"
+            imageAlt="Astro stories"
+            title="Story"
+            subtitle="Learn and Explore"
+            description="Browse short visual lessons across archetypes, moon phases, rituals, retrogrades, and practical astrology."
+            gradient="linear-gradient(135deg, rgba(34,211,238,0.12) 0%, rgba(34,211,238,0.04) 100%)"
+            borderColor="rgba(34,211,238,0.2)"
+            accentColor="#22D3EE"
+            onClick={() => router.push('/features/story')}
+          />
+        </FadeIn>
+
+        <FadeIn delay={0.28}>
+          <div className="flex gap-3 overflow-x-auto scrollbar-hide -mx-4 px-4 pb-1">
+            {STORY_CATEGORIES.slice(0, 8).map((category) => (
+              <button
+                key={category.id}
+                onClick={() => router.push(`/features/story/${category.id}`)}
+                className="shrink-0 flex flex-col items-center gap-1.5"
+              >
+                <div
+                  className="h-14 w-14 rounded-full overflow-hidden border"
+                  style={{ borderColor: `${category.accent}70` }}
+                >
+                  <Image src={category.image} alt={category.title} width={56} height={56} className="h-full w-full object-cover" />
+                </div>
+                <span className="text-[10px] text-text-secondary font-display">{category.title}</span>
+              </button>
+            ))}
+          </div>
+        </FadeIn>
+
       </div>
     </div>
   )
 }
+

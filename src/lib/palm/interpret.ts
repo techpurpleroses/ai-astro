@@ -20,6 +20,7 @@ const IDEAL_CURVATURE: Record<PalmLineId, number> = {
   life: 0.48,
   fate: 0.14,
 }
+const NOT_VISIBLE_SUMMARY = 'Line not clearly visible in this scan.'
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value))
@@ -131,6 +132,13 @@ function inferInsights(scores: Record<PalmLineId, number>) {
   }
 }
 
+function isLineVisible(lineId: PalmLineId, points: PalmLineMap[PalmLineId], confidence: number) {
+  if (lineId === 'fate') {
+    return points.length >= 4 && confidence >= 0.35
+  }
+  return points.length >= 2 && confidence >= 0.25
+}
+
 const OpenAiPalmNarrativeSchema = z.object({
   lineSuggestion: PalmLineTextMapSchema,
   insights: PalmInterpretResponseSchema.shape.insights,
@@ -237,18 +245,27 @@ function mergeNarrative(
   base: PalmInterpretResponse,
   narrative: OpenAiPalmNarrative
 ): PalmInterpretResponse {
+  const keepBase = (lineId: PalmLineId) => base.lines[lineId].summary === NOT_VISIBLE_SUMMARY
+
+  const lineSuggestion = {
+    heart: keepBase('heart') ? base.core.lineSuggestion.heart : narrative.lineSuggestion.heart,
+    head: keepBase('head') ? base.core.lineSuggestion.head : narrative.lineSuggestion.head,
+    life: keepBase('life') ? base.core.lineSuggestion.life : narrative.lineSuggestion.life,
+    fate: keepBase('fate') ? base.core.lineSuggestion.fate : narrative.lineSuggestion.fate,
+  }
+
   return PalmInterpretResponseSchema.parse({
     ...base,
     core: {
       ...base.core,
-      lineSuggestion: narrative.lineSuggestion,
+      lineSuggestion,
     },
     insights: narrative.insights,
     lines: {
-      heart: { ...base.lines.heart, summary: narrative.lineSuggestion.heart },
-      head: { ...base.lines.head, summary: narrative.lineSuggestion.head },
-      life: { ...base.lines.life, summary: narrative.lineSuggestion.life },
-      fate: { ...base.lines.fate, summary: narrative.lineSuggestion.fate },
+      heart: { ...base.lines.heart, summary: lineSuggestion.heart },
+      head: { ...base.lines.head, summary: lineSuggestion.head },
+      life: { ...base.lines.life, summary: lineSuggestion.life },
+      fate: { ...base.lines.fate, summary: lineSuggestion.fate },
     },
   })
 }
@@ -309,8 +326,25 @@ export function interpretPalmScanDeterministic(input: PalmInterpretRequest): Pal
   }
 
   for (const lineId of PALM_LINE_IDS) {
-    const metrics = lineMetrics(input.lines[lineId], input.confidence[lineId])
-    const score = scoreLine(lineId, metrics.lengthRaw, metrics.curvatureRaw, input.confidence[lineId])
+    const points = input.lines[lineId]
+    const confidence = input.confidence[lineId]
+    const metrics = lineMetrics(points, confidence)
+    const visible = isLineVisible(lineId, points, confidence)
+    if (!visible) {
+      scoreByLine[lineId] = 0
+      suggestionByLine[lineId] = NOT_VISIBLE_SUMMARY
+      lines[lineId] = {
+        score: 0,
+        summary: NOT_VISIBLE_SUMMARY,
+        metrics: {
+          length: 0,
+          depth: round(confidence, 2),
+          curvature: 0,
+        },
+      }
+      continue
+    }
+    const score = scoreLine(lineId, metrics.lengthRaw, metrics.curvatureRaw, confidence)
     const summary = lineSummary(lineId, score)
 
     scoreByLine[lineId] = score

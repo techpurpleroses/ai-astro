@@ -6,7 +6,15 @@ export function useHoroscope(date: string) {
     queryKey: ['horoscope', date],
     queryFn: async (): Promise<HoroscopeReading | undefined> => {
       const data = await import('@/data/horoscope.json')
-      return (data as { readings: HoroscopeReading[] }).readings.find((r) => r.date === date)
+      const readings = (data as { readings: HoroscopeReading[] }).readings
+      if (!readings.length) return undefined
+
+      const exact = readings.find((r) => r.date === date)
+      if (exact) return exact
+
+      const sorted = [...readings].sort((a, b) => a.date.localeCompare(b.date))
+      const previous = [...sorted].reverse().find((r) => r.date <= date)
+      return previous ?? sorted[sorted.length - 1]
     },
     staleTime: 1000 * 60 * 60,
   })

@@ -129,7 +129,7 @@ export function TestimonialsSection() {
           className="absolute pointer-events-none"
           style={{ left: d.x, top: d.y, opacity: d.op }}
         >
-          <Image src="/decorative/stars.png" alt="" width={d.s} height={d.s} />
+          <Image src="/assets/decorative/stars.png" alt="" width={d.s} height={d.s} />
         </div>
       ))}
 
@@ -176,7 +176,7 @@ export function TestimonialsSection() {
               <div className="flex items-center gap-4">
                 <div className="relative w-12 h-12 rounded-full overflow-hidden border border-white/10 bg-midnight-800 shrink-0">
                   <Image
-                    src={`/zodiac/${t.file}.png`}
+                    src={`/assets/zodiac/${t.file}.png`}
                     alt={t.sign}
                     fill
                     className="object-contain p-1.5"
@@ -257,3 +257,4 @@ export function TestimonialsSection() {
     </section>
   )
 }
+

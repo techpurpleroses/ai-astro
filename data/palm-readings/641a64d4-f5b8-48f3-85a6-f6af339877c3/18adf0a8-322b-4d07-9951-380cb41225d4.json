@@ -1,0 +1,208 @@
+{
+  "scanId": "18adf0a8-322b-4d07-9951-380cb41225d4",
+  "clientId": "641a64d4-f5b8-48f3-85a6-f6af339877c3",
+  "side": "left",
+  "createdAt": "2026-03-06T06:42:23.091Z",
+  "detect": {
+    "hasPalm": true,
+    "lines": {
+      "heart": [
+        [
+          0.4375,
+          0.5028
+        ],
+        [
+          0.4438,
+          0.5111
+        ],
+        [
+          0.45,
+          0.5167
+        ],
+        [
+          0.4594,
+          0.525
+        ],
+        [
+          0.4703,
+          0.5306
+        ],
+        [
+          0.4797,
+          0.5361
+        ],
+        [
+          0.4906,
+          0.5444
+        ],
+        [
+          0.5031,
+          0.55
+        ],
+        [
+          0.5141,
+          0.5556
+        ],
+        [
+          0.5266,
+          0.5639
+        ]
+      ],
+      "head": [
+        [
+          0.3797,
+          0.4806
+        ],
+        [
+          0.3922,
+          0.4861
+        ],
+        [
+          0.4031,
+          0.4944
+        ],
+        [
+          0.4141,
+          0.5028
+        ],
+        [
+          0.4234,
+          0.5139
+        ],
+        [
+          0.4328,
+          0.525
+        ],
+        [
+          0.4438,
+          0.5389
+        ],
+        [
+          0.4516,
+          0.5528
+        ],
+        [
+          0.4594,
+          0.5667
+        ],
+        [
+          0.4672,
+          0.5833
+        ]
+      ],
+      "life": [
+        [
+          0.3828,
+          0.4889
+        ],
+        [
+          0.3938,
+          0.5
+        ],
+        [
+          0.4063,
+          0.5139
+        ],
+        [
+          0.4156,
+          0.5333
+        ],
+        [
+          0.4219,
+          0.5528
+        ],
+        [
+          0.4266,
+          0.5722
+        ],
+        [
+          0.4297,
+          0.5944
+        ],
+        [
+          0.4313,
+          0.6167
+        ],
+        [
+          0.4297,
+          0.6389
+        ],
+        [
+          0.4281,
+          0.6583
+        ]
+      ],
+      "fate": []
+    },
+    "confidence": {
+      "heart": 0.664,
+      "head": 0.777,
+      "life": 0.529,
+      "fate": 0.25
+    },
+    "model": {
+      "provider": "roboflow",
+      "name": "palm-lines-recognition-wemy5/1"
+    }
+  },
+  "interpret": {
+    "core": {
+      "lineScore": {
+        "heart": 69,
+        "head": 73,
+        "life": 68,
+        "fate": 63
+      },
+      "lineSuggestion": {
+        "heart": "Heart line is moderately long and deep, indicating balanced emotional expression.",
+        "head": "Head line is long and deep with slight curvature, suggesting strong intellect and adaptability.",
+        "life": "Life line is long with moderate depth and curvature, reflecting good vitality and resilience.",
+        "fate": "Fate line is faint and short, implying a less defined career path or external influence."
+      }
+    },
+    "insights": {
+      "emotionalType": "Balanced and expressive emotions with healthy relationships.",
+      "cognitiveStyle": "Analytical thinker with adaptability to new ideas.",
+      "vitality": "Good physical energy and resilience to challenges.",
+      "careerFocus": "Career may be self-directed with moderate external influence."
+    },
+    "lines": {
+      "heart": {
+        "score": 69,
+        "summary": "Heart line is moderately long and deep, indicating balanced emotional expression.",
+        "metrics": {
+          "length": 1.09,
+          "depth": 0.66,
+          "curvature": 0.04
+        }
+      },
+      "head": {
+        "score": 73,
+        "summary": "Head line is long and deep with slight curvature, suggesting strong intellect and adaptability.",
+        "metrics": {
+          "length": 1.38,
+          "depth": 0.78,
+          "curvature": 0.12
+        }
+      },
+      "life": {
+        "score": 68,
+        "summary": "Life line is long with moderate depth and curvature, reflecting good vitality and resilience.",
+        "metrics": {
+          "length": 1.83,
+          "depth": 0.53,
+          "curvature": 0.21
+        }
+      },
+      "fate": {
+        "score": 63,
+        "summary": "Fate line is faint and short, implying a less defined career path or external influence.",
+        "metrics": {
+          "length": 0,
+          "depth": 0.25,
+          "curvature": 0
+        }
+      }
+    }
+  }
+}

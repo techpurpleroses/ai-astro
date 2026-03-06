@@ -76,7 +76,7 @@ export default function HoroscopePage() {
                 animate={{ y: [0, -8, 0] }}
                 transition={{ repeat: Infinity, duration: 3 + i * 0.4, delay: i * 0.3 }}
               >
-                <Image src={`/zodiac/${s}.png`} alt={s} width={40} height={40} />
+                <Image src={`/assets/zodiac/${s}.png`} alt={s} width={40} height={40} />
               </motion.div>
             ))}
           </div>
@@ -148,7 +148,7 @@ export default function HoroscopePage() {
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Image src={`/zodiac/${sign.file}.png`} alt={sign.name} width={36} height={36} />
+                <Image src={`/assets/zodiac/${sign.file}.png`} alt={sign.name} width={36} height={36} />
                 <span className="text-[10px] text-slate-400 font-medium">{sign.name}</span>
               </motion.button>
             ))}
@@ -168,7 +168,7 @@ export default function HoroscopePage() {
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(6,182,212,0.06)_0%,transparent_60%)] pointer-events-none" />
 
                 <div className="flex items-center gap-3 mb-6">
-                  <Image src={`/zodiac/${SIGNS.find(s => s.name === selected)?.file}.png`} alt={selected!} width={48} height={48} />
+                  <Image src={`/assets/zodiac/${SIGNS.find(s => s.name === selected)?.file}.png`} alt={selected!} width={48} height={48} />
                   <div>
                     <h3 className="font-mystical text-2xl font-bold text-white">{selected}</h3>
                     <p className="text-cyan-400 text-xs font-semibold tracking-wider uppercase">Today&apos;s Reading · Preview</p>
@@ -242,3 +242,4 @@ export default function HoroscopePage() {
     </>
   )
 }
+

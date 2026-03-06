@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { ZodError } from 'zod'
 import { PalmDetectRequestSchema } from '@/lib/palm/contracts'
 import { detectPalmLines } from '@/lib/palm/detect'
@@ -29,3 +29,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'server_error' }, { status: 500 })
   }
 }
+

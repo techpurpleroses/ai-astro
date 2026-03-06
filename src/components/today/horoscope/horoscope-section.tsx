@@ -1,13 +1,17 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { YourHoroscopeCard } from './your-horoscope-card'
 import { AlternativeHoroscope } from './alternative-horoscope'
 import { DailyReadingsGrid } from './daily-readings-grid'
 import { TrendingsCard } from './trendings-card'
+import { TopInsightsStrip } from './top-insights-strip'
+import { ReportsFromAdvisors } from '@/components/reports/reports-from-advisors'
 import { useDailyReadings } from '@/hooks/use-horoscope'
 import { SkeletonCard } from '@/components/ui/skeleton'
+import { TabSectionBlock } from '@/components/today/shared/tab-section-block'
 
 function FadeInSection({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.05 })
@@ -24,17 +28,33 @@ function FadeInSection({ children, delay = 0 }: { children: React.ReactNode; del
   )
 }
 
-export function HoroscopeSection() {
+interface HoroscopeSectionProps {
+  showTopStrip?: boolean
+  showHeroCard?: boolean
+}
+
+export function HoroscopeSection({ showTopStrip = true, showHeroCard = true }: HoroscopeSectionProps) {
+  const router = useRouter()
   const { data: readings, isLoading } = useDailyReadings()
 
   return (
-    <div className="space-y-4 pb-4">
-      <FadeInSection delay={0}>
-        <YourHoroscopeCard />
-      </FadeInSection>
+    <div className="space-y-6 pb-5">
+      {showTopStrip && (
+        <FadeInSection delay={0}>
+          <TopInsightsStrip />
+        </FadeInSection>
+      )}
 
-      <FadeInSection delay={0.06}>
-        <AlternativeHoroscope />
+      {showHeroCard && (
+        <FadeInSection delay={0.04}>
+          <YourHoroscopeCard />
+        </FadeInSection>
+      )}
+
+      <FadeInSection delay={0.08}>
+        <TabSectionBlock title="Reports from advisors" titleClassName="text-text-muted tracking-widest" contentClassName="mt-2">
+          <ReportsFromAdvisors compact onOpenReport={(id) => router.push(`/settings/reports/${id}`)} />
+        </TabSectionBlock>
       </FadeInSection>
 
       <FadeInSection delay={0.12}>
@@ -44,8 +64,6 @@ export function HoroscopeSection() {
             <div className="grid grid-cols-2 gap-3">
               <SkeletonCard />
               <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
             </div>
           </div>
         ) : readings ? (
@@ -53,10 +71,14 @@ export function HoroscopeSection() {
         ) : null}
       </FadeInSection>
 
-      <FadeInSection delay={0.18}>
+      <FadeInSection delay={0.16}>
         {readings && (
           <TrendingsCard question={readings.trendingQuestion} />
         )}
+      </FadeInSection>
+
+      <FadeInSection delay={0.2}>
+        <AlternativeHoroscope />
       </FadeInSection>
     </div>
   )

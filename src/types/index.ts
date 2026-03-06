@@ -265,3 +265,58 @@ export interface CompatibilityData {
     sex: ZodiacMatch[]
   }
 }
+
+/* --- Reports --- */
+
+export type AdvisorReportStatus = 'buy' | 'owned'
+
+export interface AdvisorReportProduct {
+  id: string
+  title: string
+  teaser: string
+  price?: number
+  status: AdvisorReportStatus
+  badge?: string
+  icon: string
+  accent: string
+}
+
+export interface AdvisorReportSection {
+  title: string
+  body: string
+  bullets?: string[]
+}
+
+export interface AdvisorReportDetail {
+  id: string
+  title: string
+  subtitle: string
+  stats: Array<{
+    label: string
+    value: string
+  }>
+  sections: AdvisorReportSection[]
+}
+
+/* --- Story --- */
+
+export interface StoryCategory {
+  id: string
+  title: string
+  subtitle: string
+  accent: string
+  image: string
+}
+
+export interface StoryArticleSection {
+  heading: string
+  body: string
+  bullets?: string[]
+}
+
+export interface StoryArticle {
+  title: string
+  subtitle: string
+  accent: string
+  sections: StoryArticleSection[]
+}

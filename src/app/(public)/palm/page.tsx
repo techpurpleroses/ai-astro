@@ -16,7 +16,7 @@ const PALM_LINES = [
     bg: 'bg-rose-500/10',
     border: 'border-rose-500/25',
     glow: 'shadow-rose-500/20',
-    image: '/palm/heart-line.jpg',
+    image: '/assets/palm/heart-line.jpg',
     description: 'Running horizontally across the upper palm, the Heart Line reveals the depth of your emotional world. Its length, curve, and markings speak to your capacity for love, the nature of your relationships, and how you experience emotional bonds.',
     insights: [
       { label: 'Long & curved', meaning: 'Passionate, expressive, wears heart on sleeve' },
@@ -34,7 +34,7 @@ const PALM_LINES = [
     bg: 'bg-violet-500/10',
     border: 'border-violet-500/25',
     glow: 'shadow-violet-500/20',
-    image: '/palm/head-line.jpg',
+    image: '/assets/palm/head-line.jpg',
     description: 'Crossing the centre of the palm, the Head Line maps your mind — how you think, communicate, and process information. It reveals whether you are logical or intuitive, focused or scattered, and your capacity for concentration and creative thought.',
     insights: [
       { label: 'Long & straight', meaning: 'Analytical, logical, structured thinker' },
@@ -52,7 +52,7 @@ const PALM_LINES = [
     bg: 'bg-emerald-500/10',
     border: 'border-emerald-500/25',
     glow: 'shadow-emerald-500/20',
-    image: '/palm/life-line.jpg',
+    image: '/assets/palm/life-line.jpg',
     description: 'Arcing around the base of the thumb, the Life Line does not predict how long you will live — but rather the quality, vitality, and major turning points of your life. Breaks, branches, and islands each tell a story of change, resilience, and renewal.',
     insights: [
       { label: 'Long & deep', meaning: 'Strong vitality, rich life experiences, robust health' },
@@ -70,7 +70,7 @@ const PALM_LINES = [
     bg: 'bg-amber-500/10',
     border: 'border-amber-500/25',
     glow: 'shadow-amber-500/20',
-    image: '/palm/fate-line.jpg',
+    image: '/assets/palm/fate-line.jpg',
     description: 'Running vertically through the centre of the palm, the Fate Line speaks to your career, life purpose, and the degree to which you feel guided by destiny. Some people have very clear fate lines; others have none — both are equally meaningful.',
     insights: [
       { label: 'Deep & clear', meaning: 'Strong sense of purpose; life feels directed by fate' },
@@ -825,3 +825,4 @@ export default function PalmPage() {
     </>
   )
 }
+

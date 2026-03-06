@@ -10,7 +10,7 @@ const FEATURES = [
     id: 'horoscope',
     title: 'Daily Horoscope',
     desc: 'Personalized daily guidance aligned with your birth chart and current planetary transits.',
-    image: '/features/horoscope.png',
+    image: '/assets/features/horoscope.png',
     href: '/horoscope',
     accentClass: 'group-hover:border-cyan-500/50 group-hover:shadow-cyan-500/10',
     gradientClass: 'from-cyan-500/15 to-teal-500/5',
@@ -21,7 +21,7 @@ const FEATURES = [
     id: 'birth-chart',
     title: 'Birth Chart',
     desc: 'Your complete cosmic blueprint — planets, houses, aspects, and their precise meanings.',
-    image: '/features/birth-chart.png',
+    image: '/assets/features/birth-chart.png',
     href: '/natal-chart',
     accentClass: 'group-hover:border-violet-500/50 group-hover:shadow-violet-500/10',
     gradientClass: 'from-violet-500/15 to-purple-500/5',
@@ -32,7 +32,7 @@ const FEATURES = [
     id: 'compatibility',
     title: 'Love Compatibility',
     desc: 'Discover your romantic chemistry with any zodiac sign. 505+ detailed compatibility reports.',
-    image: '/features/compatibility.png',
+    image: '/assets/features/compatibility.png',
     href: '/compatibility',
     accentClass: 'group-hover:border-rose-500/50 group-hover:shadow-rose-500/10',
     gradientClass: 'from-rose-500/15 to-pink-500/5',
@@ -43,7 +43,7 @@ const FEATURES = [
     id: 'tarot',
     title: 'Tarot Readings',
     desc: 'Ancient wisdom meets AI. Love, career & life spreads with rich, nuanced interpretations.',
-    image: '/features/tarot-cards.webp',
+    image: '/assets/features/tarot-cards.webp',
     href: '/features/tarot',
     accentClass: 'group-hover:border-amber-500/50 group-hover:shadow-amber-500/10',
     gradientClass: 'from-amber-500/15 to-orange-500/5',
@@ -54,7 +54,7 @@ const FEATURES = [
     id: 'moon',
     title: 'Moon Phases',
     desc: 'Align rituals and decisions with lunar cycles. From new moon intentions to full moon releases.',
-    image: '/features/moon.png',
+    image: '/assets/features/moon.png',
     href: '/today',
     accentClass: 'group-hover:border-slate-400/50 group-hover:shadow-slate-400/10',
     gradientClass: 'from-slate-400/10 to-blue-500/5',
@@ -65,7 +65,7 @@ const FEATURES = [
     id: 'palm',
     title: 'Palm Reading',
     desc: 'AI-powered analysis of your palm lines. Heart, Head, Life, and Fate — all decoded.',
-    image: '/features/horoscope.png',
+    image: '/assets/features/horoscope.png',
     href: '/palm',
     accentClass: 'group-hover:border-teal-500/50 group-hover:shadow-teal-500/10',
     gradientClass: 'from-teal-500/15 to-emerald-500/5',
@@ -183,3 +183,4 @@ export function FeaturesSection() {
     </section>
   )
 }
+

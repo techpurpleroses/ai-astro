@@ -226,7 +226,7 @@ export function PalmScanDemo() {
   }, [])
 
   const useDemo = () => {
-    setImageUrl('/palm/life-line.jpg')
+    setImageUrl('/assets/palm/life-line.jpg')
     setStage('preview')
   }
 
@@ -685,3 +685,4 @@ export function PalmScanDemo() {
     </div>
   )
 }
+

@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import gsap from 'gsap'
+import { useState } from 'react'
+import Image from 'next/image'
 import { BottomSheet } from '@/components/ui/bottom-sheet'
 import { Button } from '@/components/ui/button'
 import type { MagicBallData } from '@/types'
@@ -15,47 +15,6 @@ export function MagicBall({ data }: MagicBallProps) {
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState<string | null>(null)
   const [isRevealing, setIsRevealing] = useState(false)
-
-  const containerRef = useRef<HTMLDivElement>(null)
-  const glowRef = useRef<HTMLDivElement>(null)
-  const shimmerRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!containerRef.current || !glowRef.current) return
-
-    const ctx = gsap.context(() => {
-      // Float animation
-      gsap.to(containerRef.current, {
-        y: -10,
-        duration: 3,
-        repeat: -1,
-        yoyo: true,
-        ease: 'power1.inOut',
-      })
-
-      // Glow pulse
-      gsap.to(glowRef.current, {
-        boxShadow:
-          '0 0 50px rgba(6,182,212,0.65), 0 0 100px rgba(6,182,212,0.22), inset 0 0 40px rgba(6,182,212,0.1)',
-        duration: 2.5,
-        repeat: -1,
-        yoyo: true,
-        ease: 'power2.inOut',
-      })
-
-      // Shimmer rotation
-      if (shimmerRef.current) {
-        gsap.to(shimmerRef.current, {
-          rotation: 360,
-          duration: 12,
-          repeat: -1,
-          ease: 'none',
-        })
-      }
-    }, containerRef)
-
-    return () => ctx.revert()
-  }, [])
 
   function handleReveal() {
     if (!question.trim() && data.suggestedQuestions.length === 0) return
@@ -76,65 +35,30 @@ export function MagicBall({ data }: MagicBallProps) {
 
   return (
     <>
-      {/* Ball trigger */}
       <button
         onClick={() => setSheetOpen(true)}
-        className="glass-card-interactive rounded-2xl p-4 flex flex-col items-center gap-3 w-full"
+        className="rounded-2xl overflow-hidden text-left relative h-[188px]"
+        style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(8,20,38,0.92)' }}
       >
-        <span className="text-[10px] font-display font-semibold text-cyan-glow uppercase tracking-widest">
-          Magic Ball
-        </span>
-
-        {/* Ball */}
-        <div ref={containerRef} className="relative">
-          {/* Outer glow ring */}
-          <div
-            ref={glowRef}
-            className="h-16 w-16 rounded-full"
-            style={{
-              boxShadow:
-                '0 0 20px rgba(6,182,212,0.35), 0 0 60px rgba(6,182,212,0.12), inset 0 0 30px rgba(6,182,212,0.06)',
-            }}
-          >
-            {/* Sphere */}
-            <div
-              className="h-full w-full rounded-full overflow-hidden relative"
-              style={{
-                background:
-                  'radial-gradient(circle at 35% 30%, rgba(6,182,212,0.5) 0%, rgba(15,30,80,0.9) 55%, rgba(10,22,40,1) 100%)',
-              }}
-            >
-              {/* Shimmer overlay */}
-              <div
-                ref={shimmerRef}
-                className="absolute inset-0 rounded-full"
-                style={{
-                  background:
-                    'conic-gradient(from 0deg, transparent, rgba(6,182,212,0.15), transparent)',
-                }}
-              />
-              {/* Reflection highlight */}
-              <div
-                className="absolute top-[15%] left-[20%] h-[20%] w-[25%] rounded-full opacity-60"
-                style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.6), transparent)' }}
-              />
-              {/* Center symbol */}
-              <div className="absolute inset-0 flex items-center justify-center text-xl opacity-70">
-                🔮
-              </div>
-            </div>
-          </div>
+        <div className="absolute inset-0">
+          <Image src="/assets/today/horoscope/magic-ball.webp" alt="Magic ball" fill className="object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#06213a]/65 via-transparent to-[#08111f]" />
         </div>
 
-        <p className="text-[11px] text-text-muted text-center leading-relaxed">
-          Ask yes or no — tap to consult the cosmos
-        </p>
+        <div className="relative h-full px-3 pt-3 pb-2 flex flex-col">
+          <p className="font-display text-[15px] font-bold leading-tight text-white">Magic Ball</p>
+          <div className="flex-1" />
+          <div
+            className="rounded-xl py-2 text-center text-xs font-display font-semibold text-[#E2E8F0]"
+            style={{ background: 'linear-gradient(180deg, rgba(71,85,105,0.7), rgba(51,65,85,0.9))' }}
+          >
+            Get the Answer
+          </div>
+        </div>
       </button>
 
-      {/* Sheet */}
       <BottomSheet open={sheetOpen} onClose={handleClose} title="Magic Ball">
         <div className="space-y-5">
-          {/* Suggestions */}
           <div>
             <p className="text-[11px] font-display text-text-muted uppercase tracking-widest mb-2">
               Suggested questions
@@ -152,7 +76,6 @@ export function MagicBall({ data }: MagicBallProps) {
             </div>
           </div>
 
-          {/* Input */}
           <div className="relative">
             <input
               type="text"
@@ -166,7 +89,6 @@ export function MagicBall({ data }: MagicBallProps) {
             />
           </div>
 
-          {/* Answer */}
           {answer && (
             <div
               className="rounded-xl p-4 text-center"
@@ -176,17 +98,12 @@ export function MagicBall({ data }: MagicBallProps) {
               }}
             >
               <p className="font-mystical text-base text-text-primary leading-relaxed">
-                "{answer}"
+                &quot;{answer}&quot;
               </p>
             </div>
           )}
 
-          <Button
-            fullWidth
-            onClick={handleReveal}
-            loading={isRevealing}
-            disabled={isRevealing}
-          >
+          <Button fullWidth onClick={handleReveal} loading={isRevealing} disabled={isRevealing}>
             {answer ? 'Ask Again' : 'Get the Answer'}
           </Button>
         </div>

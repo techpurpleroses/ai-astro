@@ -152,7 +152,7 @@ export default function ZodiacPage() {
                         animate={{ scale: isHovered ? 1.08 : 1 }}
                         transition={{ duration: 0.25 }}
                       >
-                        <Image src={`/zodiac/${sign.file}.png`} alt={sign.name} width={80} height={80} className="object-contain p-2" />
+                        <Image src={`/assets/zodiac/${sign.file}.png`} alt={sign.name} width={80} height={80} className="object-contain p-2" />
                       </motion.div>
 
                       {/* Name + dates */}
@@ -232,3 +232,4 @@ export default function ZodiacPage() {
     </>
   )
 }
+

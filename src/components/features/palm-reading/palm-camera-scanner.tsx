@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 /**
  * PalmCameraScanner
@@ -11,10 +11,11 @@
 
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Camera, Upload, RotateCcw, X, Lightbulb, CheckCircle, AlertCircle, Hand, Flashlight, FlashlightOff } from 'lucide-react'
+import { Camera, Upload, RotateCcw, X, CheckCircle, AlertCircle, Hand, Flashlight, FlashlightOff } from 'lucide-react'
+import Image from 'next/image'
 import type { PalmScanRecord } from '@/lib/palm/contracts'
 
-// â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Types ─────────────────────────────────────────────────────────────────────
 
 type Phase = 'intro' | 'camera' | 'scanning' | 'drawing' | 'results' | 'error'
 
@@ -36,7 +37,7 @@ interface PalmLine {
   trait: string
 }
 
-// â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Constants ─────────────────────────────────────────────────────────────────
 
 const LINE_META: PalmLine[] = [
   { id: 'heart', label: 'Heart Line', color: '#F43F5E', score: 0, trait: 'Emotional depth & relationships' },
@@ -60,6 +61,15 @@ const PALM_DEBUG = process.env.NEXT_PUBLIC_PALM_DEBUG !== '0'
 const UPLOAD_MAX_DIMENSION = 1600
 const UPLOAD_TARGET_BYTES = 1_400_000
 const UPLOAD_MIN_QUALITY = 0.62
+const MEDIAPIPE_WASM_ROOT = '/mediapipe-wasm'
+const MEDIAPIPE_HAND_MODEL = '/mediapipe-wasm/hand_landmarker.task'
+const MEDIAPIPE_MIN_COVERAGE = 0.11
+const MEDIAPIPE_MIN_HEIGHT_RATIO = 0.42
+const MEDIAPIPE_MIN_SPREAD = 0.12
+const MEDIAPIPE_MIN_BRIGHTNESS = 60
+const MEDIAPIPE_MIN_CONTRAST = 24
+const MEDIAPIPE_MIN_SHARPNESS = 10
+const TIP_INDEXES = [8, 12, 16, 20] as const
 
 type PalmScanApiPayload = Partial<PalmScanRecord> & {
   error?: string
@@ -71,6 +81,45 @@ interface ProcessedImage {
   width: number
   height: number
 }
+
+interface LandmarkPoint {
+  x: number
+  y: number
+}
+
+interface MpHandLandmarkerResult {
+  landmarks?: LandmarkPoint[][]
+  handednesses?: Array<Array<{ categoryName?: string; score?: number }>>
+}
+
+interface MpHandLandmarker {
+  detect: (image: HTMLImageElement) => MpHandLandmarkerResult
+}
+
+interface PalmCropRect {
+  x: number
+  y: number
+  w: number
+  h: number
+}
+
+interface PalmImageQuality {
+  brightness: number
+  contrast: number
+  sharpness: number
+}
+
+interface MediaPipePrepResult {
+  status: 'ok' | 'blocked' | 'unavailable'
+  processed: ProcessedImage
+  issues: string[]
+  coverage: number
+  spread: number
+  quality: PalmImageQuality
+  message?: string
+}
+
+let handLandmarkerPromise: Promise<MpHandLandmarker | null> | null = null
 
 function logScan(step: string, data?: Record<string, unknown>) {
   if (!PALM_DEBUG) return
@@ -119,6 +168,11 @@ function parseJsonSafe(text: string): unknown {
   } catch {
     return null
   }
+}
+
+function clamp01(value: number) {
+  if (!Number.isFinite(value)) return 0
+  return Math.min(1, Math.max(0, value))
 }
 
 function loadImageFromDataUrl(dataUrl: string): Promise<HTMLImageElement> {
@@ -186,6 +240,273 @@ async function enhancePalmImageDataUrl(input: ProcessedImage): Promise<Processed
   }
 }
 
+function distance(a: LandmarkPoint, b: LandmarkPoint) {
+  return Math.hypot(a.x - b.x, a.y - b.y)
+}
+
+function buildPalmCropRect(
+  box: { minX: number; maxX: number; minY: number; maxY: number },
+  imgW: number,
+  imgH: number,
+) {
+  const boxW = box.maxX - box.minX
+  const boxH = box.maxY - box.minY
+  const padX = boxW * 0.28
+  const padTop = boxH * 0.2
+  const padBottom = boxH * 0.24
+
+  let minX = clamp01(box.minX - padX)
+  let maxX = clamp01(box.maxX + padX)
+  let minY = clamp01(box.minY - padTop)
+  let maxY = clamp01(box.maxY + padBottom)
+
+  const targetRatio = 0.76
+  let w = Math.max(0.05, maxX - minX)
+  let h = Math.max(0.05, maxY - minY)
+  const ratio = w / h
+
+  if (ratio > targetRatio) {
+    const desiredH = w / targetRatio
+    const delta = desiredH - h
+    minY -= delta * 0.35
+    maxY += delta * 0.65
+  } else {
+    const desiredW = h * targetRatio
+    const delta = desiredW - w
+    minX -= delta / 2
+    maxX += delta / 2
+  }
+
+  minX = clamp01(minX)
+  maxX = clamp01(maxX)
+  minY = clamp01(minY)
+  maxY = clamp01(maxY)
+
+  w = Math.max(1 / imgW, maxX - minX)
+  h = Math.max(1 / imgH, maxY - minY)
+
+  return {
+    x: Math.max(0, Math.round(minX * imgW)),
+    y: Math.max(0, Math.round(minY * imgH)),
+    w: Math.max(1, Math.round(w * imgW)),
+    h: Math.max(1, Math.round(h * imgH)),
+  } as PalmCropRect
+}
+
+function cropImageToDataUrl(image: HTMLImageElement, rect: PalmCropRect): ProcessedImage {
+  const canvas = document.createElement('canvas')
+  canvas.width = rect.w
+  canvas.height = rect.h
+  const ctx = canvas.getContext('2d')
+  if (!ctx) throw new Error('canvas_unavailable')
+
+  ctx.drawImage(
+    image,
+    rect.x,
+    rect.y,
+    rect.w,
+    rect.h,
+    0,
+    0,
+    rect.w,
+    rect.h,
+  )
+
+  return {
+    dataUrl: canvas.toDataURL('image/jpeg', 0.9),
+    width: rect.w,
+    height: rect.h,
+  }
+}
+
+function measurePalmQuality(image: HTMLImageElement, rect: PalmCropRect): PalmImageQuality {
+  const sampleCanvas = document.createElement('canvas')
+  const sampleMax = 220
+  const scale = Math.min(1, sampleMax / Math.max(rect.w, rect.h))
+  sampleCanvas.width = Math.max(32, Math.round(rect.w * scale))
+  sampleCanvas.height = Math.max(32, Math.round(rect.h * scale))
+  const ctx = sampleCanvas.getContext('2d')
+  if (!ctx) {
+    return { brightness: 0, contrast: 0, sharpness: 0 }
+  }
+
+  ctx.drawImage(
+    image,
+    rect.x,
+    rect.y,
+    rect.w,
+    rect.h,
+    0,
+    0,
+    sampleCanvas.width,
+    sampleCanvas.height,
+  )
+
+  const { data, width, height } = ctx.getImageData(0, 0, sampleCanvas.width, sampleCanvas.height)
+  const luminance = new Float32Array(width * height)
+
+  let sum = 0
+  for (let i = 0, p = 0; i < data.length; i += 4, p++) {
+    const l = data[i] * 0.2126 + data[i + 1] * 0.7152 + data[i + 2] * 0.0722
+    luminance[p] = l
+    sum += l
+  }
+
+  const count = luminance.length
+  const mean = count ? sum / count : 0
+  let variance = 0
+  for (let i = 0; i < count; i++) {
+    const d = luminance[i] - mean
+    variance += d * d
+  }
+  const contrast = count ? Math.sqrt(variance / count) : 0
+
+  let laplacianEnergy = 0
+  let lapCount = 0
+  for (let y = 1; y < height - 1; y++) {
+    for (let x = 1; x < width - 1; x++) {
+      const p = y * width + x
+      const v = luminance[p]
+      const lap =
+        (4 * v) -
+        luminance[p - 1] -
+        luminance[p + 1] -
+        luminance[p - width] -
+        luminance[p + width]
+      laplacianEnergy += lap * lap
+      lapCount += 1
+    }
+  }
+  const sharpness = lapCount ? Math.sqrt(laplacianEnergy / lapCount) : 0
+  return {
+    brightness: Number(mean.toFixed(1)),
+    contrast: Number(contrast.toFixed(1)),
+    sharpness: Number(sharpness.toFixed(1)),
+  }
+}
+
+async function getHandLandmarker() {
+  if (handLandmarkerPromise) return handLandmarkerPromise
+  handLandmarkerPromise = (async () => {
+    try {
+      const vision = await import('@mediapipe/tasks-vision')
+      const fileset = await vision.FilesetResolver.forVisionTasks(MEDIAPIPE_WASM_ROOT)
+      try {
+        const gpu = await vision.HandLandmarker.createFromOptions(fileset, {
+          baseOptions: {
+            modelAssetPath: MEDIAPIPE_HAND_MODEL,
+            delegate: 'GPU',
+          },
+          runningMode: 'IMAGE',
+          numHands: 1,
+          minHandDetectionConfidence: 0.45,
+          minHandPresenceConfidence: 0.45,
+          minTrackingConfidence: 0.45,
+        })
+        return gpu as MpHandLandmarker
+      } catch {
+        const cpu = await vision.HandLandmarker.createFromOptions(fileset, {
+          baseOptions: { modelAssetPath: MEDIAPIPE_HAND_MODEL },
+          runningMode: 'IMAGE',
+          numHands: 1,
+          minHandDetectionConfidence: 0.45,
+          minHandPresenceConfidence: 0.45,
+          minTrackingConfidence: 0.45,
+        })
+        return cpu as MpHandLandmarker
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
+      console.warn('[PalmCameraScanner] mediapipe.init.failed', message)
+      return null
+    }
+  })()
+  return handLandmarkerPromise
+}
+
+function prepFailureMessage(issues: string[]) {
+  if (issues.includes('too_small')) {
+    return 'Move your hand closer so the palm fills most of the frame.'
+  }
+  if (issues.includes('low_light')) {
+    return 'Lighting is too low for reliable scanning. Turn on flash or move to better light.'
+  }
+  if (issues.includes('blur')) {
+    return 'Image is blurry. Hold still and retake the photo.'
+  }
+  return 'Palm pre-check failed. Reposition your hand and try again.'
+}
+
+async function prepPalmImageWithMediaPipe(input: ProcessedImage): Promise<MediaPipePrepResult> {
+  const landmarker = await getHandLandmarker()
+  if (!landmarker) {
+    return {
+      status: 'unavailable',
+      processed: input,
+      issues: ['mediapipe_unavailable'],
+      coverage: 0,
+      spread: 0,
+      quality: { brightness: 0, contrast: 0, sharpness: 0 },
+    }
+  }
+
+  const img = await loadImageFromDataUrl(input.dataUrl)
+  const result = landmarker.detect(img)
+  const points = result.landmarks?.[0]
+  if (!points || points.length < 5) {
+    return {
+      status: 'blocked',
+      processed: input,
+      issues: ['no_hand'],
+      coverage: 0,
+      spread: 0,
+      quality: { brightness: 0, contrast: 0, sharpness: 0 },
+      message: 'No hand detected in frame. Keep full palm visible and try again.',
+    }
+  }
+
+  const xs = points.map((p) => clamp01(p.x))
+  const ys = points.map((p) => clamp01(p.y))
+  const minX = Math.min(...xs)
+  const maxX = Math.max(...xs)
+  const minY = Math.min(...ys)
+  const maxY = Math.max(...ys)
+  const boxW = Math.max(0.0001, maxX - minX)
+  const boxH = Math.max(0.0001, maxY - minY)
+  const coverage = boxW * boxH
+
+  let spread = 0
+  for (let i = 0; i < TIP_INDEXES.length - 1; i++) {
+    const a = points[TIP_INDEXES[i]]
+    const b = points[TIP_INDEXES[i + 1]]
+    spread += distance(a, b)
+  }
+  spread /= Math.max(1, TIP_INDEXES.length - 1)
+  spread /= Math.max(0.0001, boxW)
+
+  const cropRect = buildPalmCropRect({ minX, maxX, minY, maxY }, input.width, input.height)
+  const quality = measurePalmQuality(img, cropRect)
+  const cropped = cropImageToDataUrl(img, cropRect)
+
+  const issues: string[] = []
+  if (coverage < MEDIAPIPE_MIN_COVERAGE || boxH < MEDIAPIPE_MIN_HEIGHT_RATIO) issues.push('too_small')
+  if (spread < MEDIAPIPE_MIN_SPREAD) issues.push('fingers_closed')
+  if (quality.brightness < MEDIAPIPE_MIN_BRIGHTNESS) issues.push('low_light')
+  if (quality.contrast < MEDIAPIPE_MIN_CONTRAST) issues.push('low_contrast')
+  if (quality.sharpness < MEDIAPIPE_MIN_SHARPNESS) issues.push('blur')
+
+  const blocked = issues.includes('too_small') || issues.includes('low_light') || issues.includes('blur')
+  return {
+    status: blocked ? 'blocked' : 'ok',
+    processed: cropped,
+    issues,
+    coverage: Number(coverage.toFixed(3)),
+    spread: Number(spread.toFixed(3)),
+    quality,
+    message: blocked ? prepFailureMessage(issues) : undefined,
+  }
+}
+
 function errorMessageForScanFailure(
   status: number,
   apiError?: string,
@@ -224,7 +545,7 @@ function detectedLineOrder(lines: DetectedLines): LineId[] {
   return order.length ? order : ['heart', 'head', 'life']
 }
 
-// â”€â”€ Canvas drawing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Canvas drawing ────────────────────────────────────────────────────────────
 
 function drawLine(
   ctx: CanvasRenderingContext2D,
@@ -338,7 +659,7 @@ function drawLine(
   }
 }
 
-// â”€â”€ Hand guide overlay â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Hand guide overlay ────────────────────────────────────────────────────────
 
 function HandGuideOverlay({ hand }: { hand: 'left' | 'right' }) {
   return (
@@ -348,21 +669,21 @@ function HandGuideOverlay({ hand }: { hand: 'left' | 'right' }) {
       transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
     >
       <Hand
-        strokeWidth={0.5}
-        color="white"
+        strokeWidth={0.65}
+        color="rgba(255,255,255,0.78)"
         style={{
-          width: 'auto',
-          height: '76%',
+          width: 'min(108vw, 620px)',
+          height: 'min(94dvh, 860px)',
           // Lucide Hand icon is a left hand by default; flip for right
           transform: hand === 'right' ? 'scaleX(-1)' : undefined,
-          filter: 'drop-shadow(0 0 18px rgba(255,255,255,0.4))',
+          filter: 'drop-shadow(0 0 22px rgba(255,255,255,0.48))',
         }}
       />
     </motion.div>
   )
 }
 
-// â”€â”€ Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Component ─────────────────────────────────────────────────────────────────
 
 interface Props { hand: 'left' | 'right'; onClose: () => void }
 
@@ -517,7 +838,44 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     }
   }, [hand])
 
-  // â”€â”€ Open camera â”€â”€
+  // ── Open camera ──
+  const preprocessPalmImage = useCallback(async (
+    input: ProcessedImage,
+    source: 'camera' | 'upload',
+  ): Promise<ProcessedImage | null> => {
+    const prep = await prepPalmImageWithMediaPipe(input)
+    logScan('mediapipe.precheck', {
+      source,
+      status: prep.status,
+      issues: prep.issues,
+      coverage: prep.coverage,
+      spread: prep.spread,
+      brightness: prep.quality.brightness,
+      contrast: prep.quality.contrast,
+      sharpness: prep.quality.sharpness,
+      outputWidth: prep.processed.width,
+      outputHeight: prep.processed.height,
+    })
+
+    if (prep.status === 'blocked') {
+      setErrorMsg(prep.message ?? 'Palm pre-check failed. Retake with better framing and lighting.')
+      setPhase('error')
+      return null
+    }
+
+    let prepared = prep.processed
+    if (prep.issues.includes('low_contrast')) {
+      prepared = await enhancePalmImageDataUrl(prepared)
+      logScan('mediapipe.precheck.enhanced', {
+        source,
+        width: prepared.width,
+        height: prepared.height,
+      })
+    }
+
+    return prepared
+  }, [])
+
   const startCamera = useCallback(async () => {
     const constraints: Array<{ video: MediaTrackConstraints; isBack: boolean }> = [
       { video: { facingMode: { exact: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, isBack: true },
@@ -553,6 +911,9 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
       setTorchOn(false)
     }
     setPhase('camera')
+    void getHandLandmarker().then((landmarker) => {
+      logScan('mediapipe.warmup', { available: Boolean(landmarker) })
+    })
   }, [])
 
   const toggleTorch = useCallback(async () => {
@@ -576,7 +937,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     }
   }, [torchBusy, torchOn])
 
-  // â”€â”€ Upload photo â”€â”€
+  // ── Upload photo ──
   const handleFile = useCallback(async (file: File) => {
     if (!file.type.startsWith('image/')) return
     try {
@@ -589,18 +950,25 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
         bytes: optimized.bytes,
         quality: optimized.quality,
       })
-      setImageUrl(optimized.dataUrl)
-      setImgSize({ w: optimized.width, h: optimized.height })
-      await analyzeImage(optimized.dataUrl, optimized.width, optimized.height)
+      const prepared = await preprocessPalmImage({
+        dataUrl: optimized.dataUrl,
+        width: optimized.width,
+        height: optimized.height,
+      }, 'upload')
+      if (!prepared) return
+
+      setImageUrl(prepared.dataUrl)
+      setImgSize({ w: prepared.width, h: prepared.height })
+      await analyzeImage(prepared.dataUrl, prepared.width, prepared.height)
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)
       setErrorMsg('Failed to process selected image.')
       setPhase('error')
       logScan('upload.process.fail', { message })
     }
-  }, [analyzeImage])
+  }, [analyzeImage, preprocessPalmImage])
 
-  // â”€â”€ Capture from camera â”€â”€
+  // ── Capture from camera ──
   const captureFrame = useCallback(async () => {
     const video  = videoRef.current
     const canvas = captureCanvas.current
@@ -633,18 +1001,25 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
         bytes: optimized.bytes,
         quality: optimized.quality,
       })
-      setImageUrl(optimized.dataUrl)
-      setImgSize({ w: optimized.width, h: optimized.height })
-      await analyzeImage(optimized.dataUrl, optimized.width, optimized.height)
+      const prepared = await preprocessPalmImage({
+        dataUrl: optimized.dataUrl,
+        width: optimized.width,
+        height: optimized.height,
+      }, 'camera')
+      if (!prepared) return
+
+      setImageUrl(prepared.dataUrl)
+      setImgSize({ w: prepared.width, h: prepared.height })
+      await analyzeImage(prepared.dataUrl, prepared.width, prepared.height)
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)
       setErrorMsg('Failed to process captured image.')
       setPhase('error')
       logScan('capture.process.fail', { message })
     }
-  }, [stopStream, analyzeImage])
+  }, [stopStream, analyzeImage, preprocessPalmImage])
 
-  // â”€â”€ Animate lines onto canvas when phase = drawing â”€â”€
+  // ── Animate lines onto canvas when phase = drawing ──
   useEffect(() => {
     if (phase !== 'drawing' || !detectedLines || !imgSize) return
     const canvas = overlayRef.current
@@ -770,7 +1145,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     }
   }, [phase, detectedLines, imgSize, lineOrder])
 
-  // â”€â”€ Reset â”€â”€
+  // ── Reset ──
   const reset = useCallback(() => {
     stopStream()
     cancelAnimationFrame(rafRef.current)
@@ -805,7 +1180,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
   const detectedCount = activeLineOrder.length
   const visibleLineIds = new Set<LineId>(activeLineOrder)
 
-  // â”€â”€ Render â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Render ────────────────────────────────────────────────────────────────
 
   return (
     <div className="fixed inset-0 z-[80] flex justify-center" style={{ background: 'rgba(0,0,0,0.7)' }}>
@@ -813,7 +1188,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
         className="w-full max-w-107.5 h-dvh flex flex-col"
         style={{ background: 'rgba(6,13,27,0.97)', backdropFilter: 'blur(20px)' }}
       >
-        {/* â”€â”€ Header â”€â”€ */}
+        {/* ── Header ── */}
         <div
           className="flex items-center justify-between px-4 py-3 shrink-0"
           style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}
@@ -831,7 +1206,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
           </button>
         </div>
 
-        {/* â”€â”€ CAMERA phase â€” full-screen live view â”€â”€ */}
+        {/* ── CAMERA phase — full-screen live view ── */}
         {phase === 'camera' && (
           <motion.div
             key="camera-full"
@@ -897,7 +1272,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
           </motion.div>
         )}
 
-        {/* â”€â”€ TEXT phases (intro / error) â€” centered, constrained â”€â”€ */}
+        {/* ── TEXT phases (intro / error) — centered, constrained ── */}
         {(phase === 'intro' || phase === 'error') && (
           <div className="flex-1 overflow-y-auto">
             <div className="max-w-sm mx-auto w-full">
@@ -909,73 +1284,110 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
-                    className="flex flex-col items-center gap-5 px-5 py-10 text-center"
+                    className="relative min-h-[560px] flex flex-col items-center px-4 pt-7 pb-6"
+                    style={{ background: 'radial-gradient(circle at top, rgba(6,182,212,0.16) 0%, rgba(6,35,49,0.4) 26%, rgba(6,13,27,0.95) 100%)' }}
                   >
-                    <div className="relative">
+                    <div className="pointer-events-none absolute inset-x-0 top-4 flex justify-center opacity-25">
                       <motion.div
-                        className="w-28 h-28 rounded-full flex items-center justify-center"
-                        style={{ background: 'rgba(244,63,94,0.1)', border: '1px solid rgba(244,63,94,0.2)' }}
-                        animate={{ scale: [1, 1.06, 1] }}
-                        transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                        animate={{ opacity: [0.24, 0.4, 0.24] }}
+                        transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
                       >
-                        <span className="text-6xl select-none">{hand === 'left' ? 'ðŸ¤š' : 'âœ‹'}</span>
-                      </motion.div>
-                      {[1, 2].map((i) => (
-                        <motion.div
-                          key={i}
-                          className="absolute inset-0 rounded-full border border-rose-400/15"
-                          animate={{ scale: [1, 1.7], opacity: [0.5, 0] }}
-                          transition={{ duration: 2.2, delay: i * 0.9, repeat: Infinity, ease: 'easeOut' }}
+                        <Hand
+                          strokeWidth={0.55}
+                          color="rgba(148,163,184,0.7)"
+                          style={{
+                            width: 180,
+                            height: 180,
+                            transform: hand === 'right' ? 'scaleX(-1)' : undefined,
+                            filter: 'drop-shadow(0 0 24px rgba(100,116,139,0.24))',
+                          }}
                         />
-                      ))}
-                    </div>
-
-                    <div>
-                      <h2 className="text-white font-bold text-lg mb-1">Hold your {hand} palm up</h2>
-                      <p className="text-slate-400 text-sm leading-relaxed max-w-xs">
-                        AI analyzes your actual palm photo and traces heart, head, life &amp; fate lines.
-                      </p>
+                      </motion.div>
                     </div>
 
                     <div
-                      className="w-full rounded-2xl p-4 text-left space-y-2"
-                      style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.15)' }}
+                      className="relative z-10 w-full rounded-2xl p-4 mt-16 space-y-3"
+                      style={{ background: 'rgba(29,78,102,0.9)', border: '1px solid rgba(148,163,184,0.22)' }}
                     >
-                      <div className="flex items-center gap-2 mb-1">
-                        <Lightbulb size={13} className="text-amber-400" />
-                        <span className="text-xs font-semibold text-amber-400">Tips for best results</span>
-                      </div>
-                      {[
-                        'Good lighting â€” natural light works best',
-                        'Spread fingers slightly, palm facing camera',
-                        'Keep background plain (table or floor)',
-                        'Fill the frame with your full hand',
-                      ].map((tip) => (
-                        <div key={tip} className="flex items-start gap-2">
-                          <div className="w-1 h-1 rounded-full bg-amber-400/50 mt-1.5 shrink-0" />
-                          <p className="text-xs text-slate-400">{tip}</p>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle size={15} className="text-cyan-300 shrink-0" />
+                          <h2 className="text-[27px] leading-none font-display font-bold text-[#F8E9BE]">Correct Gesture</h2>
                         </div>
-                      ))}
-                    </div>
+                        <div className="flex items-end gap-5 pl-5">
+                          <Image src="/assets/palm-scan/left-hand.png" alt="Correct left hand" width={50} height={50} className="h-12 w-12 object-contain" />
+                          <Image src="/assets/palm-scan/right-hand.png" alt="Correct right hand" width={50} height={50} className="h-12 w-12 object-contain" />
+                        </div>
+                      </div>
 
-                    <div className="flex flex-col gap-3 w-full">
+                      <div className="space-y-2 pt-1">
+                        <div className="flex items-center gap-2">
+                          <div className="h-4 w-4 rounded-full border border-rose-400 flex items-center justify-center">
+                            <X size={11} className="text-rose-400" />
+                          </div>
+                          <p className="font-display font-bold text-[#F8E9BE] text-[29px] leading-none">Incorrect Gesture &amp; Background</p>
+                        </div>
+                        <div className="flex items-end gap-3 pl-4">
+                          <Image
+                            src="/assets/palm-scan/left-hand.png"
+                            alt="Incorrect hand example one"
+                            width={42}
+                            height={42}
+                            className="h-11 w-11 object-contain opacity-75 rotate-12"
+                            style={{ transformOrigin: 'bottom center' }}
+                          />
+                          <Image
+                            src="/assets/palm-scan/right-hand.png"
+                            alt="Incorrect hand example two"
+                            width={42}
+                            height={42}
+                            className="h-11 w-11 object-contain opacity-75 -rotate-12"
+                            style={{ transformOrigin: 'bottom center' }}
+                          />
+                          <div className="rounded-lg p-1.5" style={{ background: 'rgba(255,255,255,0.16)', border: '1px solid rgba(148,163,184,0.35)' }}>
+                            <Image src="/assets/palm-scan/rescan-left.png" alt="Bad background example" width={48} height={48} className="h-12 w-12 object-contain" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <p className="text-[12px] leading-snug text-[#E2E8F0]">
+                        * It&apos;s better to choose a dark background without any objects on it.
+                      </p>
+
                       <motion.button
                         onClick={startCamera}
-                        whileTap={{ scale: 0.97 }}
-                        className="flex items-center justify-center gap-2 py-3.5 rounded-2xl font-semibold text-sm"
-                        style={{ background: 'linear-gradient(135deg, #F43F5E, #E11D48)', color: 'white' }}
+                        whileTap={{ scale: 0.98 }}
+                        className="w-full py-3 rounded-full font-display font-bold text-[30px] text-white"
+                        style={{ background: 'linear-gradient(90deg, #22D3EE, #2DD4BF)' }}
                       >
-                        <Camera size={16} />
-                        Open Camera
+                        Start
                       </motion.button>
-                      <motion.button
-                        onClick={openFilePicker}
-                        whileTap={{ scale: 0.97 }}
-                        className="flex items-center justify-center gap-2 py-3.5 rounded-2xl font-semibold text-sm"
-                        style={{ background: 'rgba(244,63,94,0.06)', border: '1px solid rgba(244,63,94,0.25)', color: '#F43F5E' }}
+                    </div>
+
+                    <button
+                      onClick={openFilePicker}
+                      className="relative z-10 mt-2 text-[12px] font-semibold text-cyan-100/90 underline underline-offset-4 decoration-cyan-200/40"
+                    >
+                      Upload photo instead
+                    </button>
+
+                    <div className="relative z-10 mt-auto flex flex-col items-center gap-4">
+                      <p
+                        className="max-w-xs text-center text-[12px] leading-snug px-4 py-2 rounded-xl text-slate-300"
+                        style={{ background: 'rgba(2,12,27,0.68)', border: '1px solid rgba(71,85,105,0.35)' }}
                       >
-                        <Upload size={16} />
-                        Upload Palm Photo
+                        Place your palm inside the outline and take a photo.
+                      </p>
+                      <motion.button
+                        onClick={startCamera}
+                        whileTap={{ scale: 0.94 }}
+                        className="relative h-16 w-16 rounded-full flex items-center justify-center"
+                        style={{ border: '3px solid rgba(100,116,139,0.7)', background: 'rgba(2,12,27,0.35)' }}
+                      >
+                        <span
+                          className="h-11 w-11 rounded-full"
+                          style={{ background: 'linear-gradient(135deg, rgba(45,212,191,0.85), rgba(8,145,178,0.85))' }}
+                        />
                       </motion.button>
                     </div>
                   </motion.div>
@@ -1014,11 +1426,11 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
           </div>
         )}
 
-        {/* â”€â”€ IMAGE phases (scanning / drawing / results) â€” full-width â”€â”€ */}
+        {/* ── IMAGE phases (scanning / drawing / results) — full-width ── */}
         {isImagePhase && imageUrl && (
           <div className="flex-1 flex flex-col min-h-0">
 
-            {/* Full-width image + canvas overlay â€” no forced aspect ratio */}
+            {/* Full-width image + canvas overlay — no forced aspect ratio */}
             <div ref={imageViewportRef} className="relative flex-1 min-h-0 bg-black overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -1033,7 +1445,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
                 style={{ background: phase === 'scanning' ? 'rgba(6,13,27,0.45)' : 'rgba(6,13,27,0.2)' }}
               />
 
-              {/* Canvas â€” mounted during scanning, persists through drawing + results */}
+              {/* Canvas — mounted during scanning, persists through drawing + results */}
               <canvas
                 ref={overlayRef}
                 className="absolute inset-0 w-full h-full pointer-events-none"
@@ -1134,7 +1546,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
               )}
             </div>
 
-            {/* Results panel â€” scrollable below the image */}
+            {/* Results panel — scrollable below the image */}
             {phase === 'results' && (
               <div
                 className="overflow-y-auto px-4 pt-4 space-y-3"
@@ -1195,4 +1607,5 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     </div>
   )
 }
+
 

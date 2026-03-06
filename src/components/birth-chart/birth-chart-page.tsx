@@ -1,10 +1,10 @@
 'use client'
 
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { Telescope, HelpCircle, Crown } from 'lucide-react'
+import { Telescope, HelpCircle, Crown, Settings } from 'lucide-react'
 import { useBirthChart } from '@/hooks/use-birth-chart'
 import { ChartWheelSVG } from './chart-wheel-svg'
 import { BigThreeCard } from './big-three-card'
@@ -12,6 +12,7 @@ import { StellarCompositionCard } from './stellar-composition'
 import { PlanetTable } from './planet-table'
 import { TransitCard } from '@/components/today/astro-events/transit-card'
 import { SkeletonCard } from '@/components/ui/skeleton'
+import { BottomSheet } from '@/components/ui/bottom-sheet'
 
 type BirthChartView = 'chart' | 'transits'
 
@@ -55,6 +56,8 @@ function ViewTabs({ active, onChange }: { active: BirthChartView; onChange: (v: 
 }
 
 function ChartView() {
+  const [learnOpen, setLearnOpen] = useState(false)
+  const [planetOpen, setPlanetOpen] = useState<string | null>(null)
   const { data, isLoading } = useBirthChart()
   if (isLoading) {
     return (
@@ -73,12 +76,21 @@ function ChartView() {
           <div className="rounded-3xl overflow-hidden p-3"
             style={{ background: 'rgba(10,22,40,0.95)', border: '1px solid rgba(6,182,212,0.15)', boxShadow: '0 0 40px rgba(6,182,212,0.08)' }}
           >
-            <ChartWheelSVG planets={data.planets} houses={data.houses} aspects={data.aspects} size={310} onPlanetClick={() => {}} />
+            <ChartWheelSVG
+              planets={data.planets}
+              houses={data.houses}
+              aspects={data.aspects}
+              size={310}
+              onPlanetClick={(planet) => setPlanetOpen(planet.name)}
+            />
           </div>
           <p className="text-xs leading-relaxed text-text-secondary text-center mt-3 px-2">
             This is your unique birth chart, based on your birth date, time, and place of birth.
           </p>
-          <button className="mt-2 flex items-center gap-1.5 text-[11px] text-cyan-glow font-display font-medium">
+          <button
+            onClick={() => setLearnOpen(true)}
+            className="mt-2 flex items-center gap-1.5 text-[11px] text-cyan-glow font-display font-medium"
+          >
             <HelpCircle size={12} className="text-cyan-glow" />
             What can you learn from reading your birth chart?
           </button>
@@ -114,11 +126,33 @@ function ChartView() {
           <StellarCompositionCard planets={data.planets} />
         </div>
       </FadeIn>
+
+      <BottomSheet open={learnOpen} onClose={() => setLearnOpen(false)} title="Birth Chart Basics">
+        <div className="space-y-3">
+          <p className="text-sm text-text-secondary leading-relaxed">
+            Your birth chart is a snapshot of the sky at your exact birth time. It helps decode personality patterns, strengths, challenges, and growth direction.
+          </p>
+          <ul className="space-y-1.5 text-xs text-text-secondary">
+            <li>* Planets show your core drives.</li>
+            <li>* Signs show how those drives express.</li>
+            <li>* Houses show where they play out in life.</li>
+          </ul>
+        </div>
+      </BottomSheet>
+
+      {planetOpen && (
+        <BottomSheet open={!!planetOpen} onClose={() => setPlanetOpen(null)} title={`${planetOpen} Details`}>
+          <p className="text-sm text-text-secondary leading-relaxed">
+            This section gives a compact interpretation for {planetOpen} in your chart. Use this as a quick reference while you explore your planets table below.
+          </p>
+        </BottomSheet>
+      )}
     </div>
   )
 }
 
 function TransitsView() {
+  const [transitInfoOpen, setTransitInfoOpen] = useState(false)
   const { data, isLoading } = useBirthChart()
   if (isLoading) {
     return (
@@ -165,7 +199,9 @@ function TransitsView() {
       </FadeIn>
 
       <FadeIn delay={0.06}>
-        <button className="mx-4 w-[calc(100%-2rem)] flex items-center justify-between px-4 py-3 rounded-xl text-left"
+        <button
+          onClick={() => setTransitInfoOpen(true)}
+          className="mx-4 w-[calc(100%-2rem)] flex items-center justify-between px-4 py-3 rounded-xl text-left"
           style={{ background: 'rgba(15,30,53,0.7)', border: '1px solid rgba(255,255,255,0.06)' }}
         >
           <span className="text-xs text-text-secondary">Why should you care about transits and aspects?</span>
@@ -194,6 +230,17 @@ function TransitsView() {
           </div>
         </FadeIn>
       )}
+
+      <BottomSheet open={transitInfoOpen} onClose={() => setTransitInfoOpen(false)} title="Transits and Aspects">
+        <div className="space-y-3">
+          <p className="text-sm text-text-secondary leading-relaxed">
+            Transits describe how current planet movement interacts with your natal chart. They show timing windows for action, review, and emotional shifts.
+          </p>
+          <p className="text-xs text-text-secondary">
+            Short-term transits are fast and tactical. Long-term transits are structural and define larger chapters.
+          </p>
+        </div>
+      </BottomSheet>
     </div>
   )
 }
@@ -231,6 +278,12 @@ export function BirthChartClient() {
           <p className="font-mystical text-[10px] text-text-muted tracking-widest">NATAL CHART</p>
           <h1 className="font-display text-base font-bold text-text-primary leading-tight">Birth Chart</h1>
         </div>
+        <button
+          onClick={() => router.push('/settings')}
+          className="h-8 w-8 rounded-full flex items-center justify-center bg-white/6 border border-white/10"
+        >
+          <Settings size={14} className="text-text-secondary" />
+        </button>
         <div className="flex items-center gap-1 bg-gold-accent/10 border border-gold-accent/25 px-2.5 py-1 rounded-full">
           <Crown size={10} className="text-gold-accent" />
           <span className="text-[9px] font-display font-bold text-gold-accent">PRO</span>

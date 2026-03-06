@@ -48,7 +48,7 @@ export function ZodiacGrid({ selected, onSelect }: ZodiacGridProps) {
               }}
             >
               <Image
-                src={`/zodiac/${slug}.png`}
+                src={`/assets/zodiac/${slug}.png`}
                 alt={sign.name}
                 width={40}
                 height={40}
@@ -68,3 +68,4 @@ export function ZodiacGrid({ selected, onSelect }: ZodiacGridProps) {
     </div>
   )
 }
+

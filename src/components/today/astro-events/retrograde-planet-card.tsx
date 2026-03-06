@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { format } from 'date-fns'
+import { motion } from 'framer-motion'
 import { Badge } from '@/components/ui/badge'
 import { BottomSheet } from '@/components/ui/bottom-sheet'
 import { PLANET_COLORS, PLANET_GLYPHS } from '@/lib/constants'
@@ -15,6 +16,8 @@ export function RetrogradePlanetCard({ retrograde }: RetrogradePlanetCardProps) 
   const [open, setOpen] = useState(false)
   const planetColor = PLANET_COLORS[retrograde.planet] ?? '#94A3B8'
   const glyph = PLANET_GLYPHS[retrograde.planet] ?? retrograde.planet[0]
+  const fastSpin = retrograde.isActive ? 9 : 13
+  const slowSpin = retrograde.isActive ? 19 : 25
 
   return (
     <>
@@ -34,8 +37,22 @@ export function RetrogradePlanetCard({ retrograde }: RetrogradePlanetCardProps) 
             border: `1px solid ${planetColor}30`,
           }}
         >
+          <motion.div
+            className="absolute inset-[6px] rounded-full opacity-70"
+            style={{
+              background: `conic-gradient(from 0deg, ${planetColor}18 0deg, rgba(255,255,255,0.05) 80deg, ${planetColor}35 170deg, rgba(255,255,255,0.06) 250deg, ${planetColor}18 360deg)`,
+            }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: fastSpin, repeat: Infinity, ease: 'linear' }}
+          />
+          <motion.div
+            className="absolute inset-[2px] rounded-full opacity-30"
+            style={{ border: `1px solid ${planetColor}66` }}
+            animate={{ rotate: -360 }}
+            transition={{ duration: slowSpin, repeat: Infinity, ease: 'linear' }}
+          />
           <div className="flex h-full w-full items-center justify-center">
-            <span className="text-2xl font-bold" style={{ color: planetColor }}>
+            <span className="relative z-10 text-2xl font-bold" style={{ color: planetColor }}>
               {glyph}
             </span>
           </div>
@@ -91,6 +108,20 @@ export function RetrogradePlanetCard({ retrograde }: RetrogradePlanetCardProps) 
                 '--planet-color-dim': `${planetColor}30`,
               } as React.CSSProperties}
             >
+              <motion.div
+                className="absolute inset-[10px] rounded-full opacity-70"
+                style={{
+                  background: `conic-gradient(from 0deg, ${planetColor}18 0deg, rgba(255,255,255,0.04) 80deg, ${planetColor}32 180deg, rgba(255,255,255,0.05) 260deg, ${planetColor}18 360deg)`,
+                }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: fastSpin + 2, repeat: Infinity, ease: 'linear' }}
+              />
+              <motion.div
+                className="absolute inset-[4px] rounded-full opacity-30"
+                style={{ border: `1px solid ${planetColor}66` }}
+                animate={{ rotate: -360 }}
+                transition={{ duration: slowSpin + 3, repeat: Infinity, ease: 'linear' }}
+              />
               <span className="text-4xl font-bold" style={{ color: planetColor }}>{glyph}</span>
             </div>
           </div>

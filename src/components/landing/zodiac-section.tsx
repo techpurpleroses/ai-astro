@@ -109,7 +109,7 @@ export function ZodiacSection() {
                     transition={{ duration: 0.2 }}
                   >
                     <Image
-                      src={`/zodiac/${sign.file}.png`}
+                      src={`/assets/zodiac/${sign.file}.png`}
                       alt={sign.name}
                       fill
                       className="object-contain p-1"
@@ -162,3 +162,4 @@ export function ZodiacSection() {
     </section>
   )
 }
+

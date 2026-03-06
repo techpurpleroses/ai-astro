@@ -73,7 +73,7 @@ export default function AboutPage() {
           <div className="glass-card rounded-3xl p-8 sm:p-12 lg:p-16 relative overflow-hidden">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_30%_50%,rgba(6,182,212,0.05)_0%,transparent_70%)] pointer-events-none" />
             <div className="absolute top-6 right-6 opacity-10">
-              <Image src="/decorative/gem-violet.png" alt="" width={120} height={120} />
+              <Image src="/assets/decorative/gem-violet.png" alt="" width={120} height={120} />
             </div>
             <motion.div
               className="relative max-w-2xl"
@@ -206,3 +206,4 @@ export default function AboutPage() {
     </>
   )
 }
+

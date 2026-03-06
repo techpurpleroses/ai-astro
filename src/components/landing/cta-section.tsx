@@ -91,7 +91,7 @@ export function CtaSection() {
         className="absolute right-[5%] top-[10%] opacity-15 pointer-events-none hidden lg:block"
       >
         <Image
-          src="/moon/full-moon.webp"
+          src="/assets/moon/full-moon.webp"
           alt=""
           width={300}
           height={300}
@@ -156,3 +156,4 @@ export function CtaSection() {
     </section>
   )
 }
+

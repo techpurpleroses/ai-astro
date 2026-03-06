@@ -11,7 +11,7 @@ export default function DashboardLayout({
     <Providers>
       <MobileFrame>
         {/* Scrollable content area */}
-        <main className="flex-1 min-h-0 overflow-y-auto overscroll-contain scroll-smooth pb-[68px]">
+        <main className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain scroll-smooth scrollbar-hide pb-[68px]">
           {children}
         </main>
         <BottomNav />
