@@ -1,0 +1,31 @@
+{
+  "remainingQuota": 6971,
+  "score": 29,
+  "scoreDescription": "Exceptional significance - Profound karmic bond, predominantly harmonious",
+  "dynamics": {
+    "harmony_percentage": 80,
+    "tension_percentage": 20,
+    "dynamic_type": "Harmonious Flow",
+    "key_strengths": [
+      "Sun trine Moon",
+      "Sun trine Ascendant",
+      "Mars trine Venus",
+      "Ascendant trine Moon"
+    ],
+    "growth_areas": [
+      "Sun square Sun (ego/emotional tension)"
+    ],
+    "summary": "This connection flows naturally with strong mutual support. Note: Sun aspects indicate core identity dynamics that require mutual respect. Strong Venus-Mars connections suggest natural romantic attraction."
+  },
+  "firstAspect": {
+    "point1": "Sun",
+    "point2": "Sun",
+    "aspect_type": "square",
+    "orb": 5.699407623433046,
+    "aspect_direction": null,
+    "transiting_house": null,
+    "peak_activations": null
+  },
+  "subject1Sign": "Gem",
+  "subject2Sign": "Vir"
+}

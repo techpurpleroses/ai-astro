@@ -10,7 +10,7 @@ const FEATURES = [
     id: 'horoscope',
     title: 'Daily Horoscope',
     desc: 'Personalized daily guidance aligned with your birth chart and current planetary transits.',
-    image: '/assets/features/horoscope.png',
+    image: '/assets/features/daily-horoscope-hq.png',
     href: '/horoscope',
     accentClass: 'group-hover:border-cyan-500/50 group-hover:shadow-cyan-500/10',
     gradientClass: 'from-cyan-500/15 to-teal-500/5',
@@ -21,7 +21,7 @@ const FEATURES = [
     id: 'birth-chart',
     title: 'Birth Chart',
     desc: 'Your complete cosmic blueprint — planets, houses, aspects, and their precise meanings.',
-    image: '/assets/features/birth-chart.png',
+    image: '/assets/features/birth-chart-hq.webp',
     href: '/natal-chart',
     accentClass: 'group-hover:border-violet-500/50 group-hover:shadow-violet-500/10',
     gradientClass: 'from-violet-500/15 to-purple-500/5',
@@ -32,7 +32,7 @@ const FEATURES = [
     id: 'compatibility',
     title: 'Love Compatibility',
     desc: 'Discover your romantic chemistry with any zodiac sign. 505+ detailed compatibility reports.',
-    image: '/assets/features/compatibility.png',
+    image: '/assets/features/love-compatibility-hq.webp',
     href: '/compatibility',
     accentClass: 'group-hover:border-rose-500/50 group-hover:shadow-rose-500/10',
     gradientClass: 'from-rose-500/15 to-pink-500/5',
@@ -54,7 +54,7 @@ const FEATURES = [
     id: 'moon',
     title: 'Moon Phases',
     desc: 'Align rituals and decisions with lunar cycles. From new moon intentions to full moon releases.',
-    image: '/assets/features/moon.png',
+    image: '/assets/features/moon-phases-hq.webp',
     href: '/today',
     accentClass: 'group-hover:border-slate-400/50 group-hover:shadow-slate-400/10',
     gradientClass: 'from-slate-400/10 to-blue-500/5',
@@ -65,7 +65,7 @@ const FEATURES = [
     id: 'palm',
     title: 'Palm Reading',
     desc: 'AI-powered analysis of your palm lines. Heart, Head, Life, and Fate — all decoded.',
-    image: '/assets/features/horoscope.png',
+    image: '/assets/features/palm-reading-hq.jpg',
     href: '/palm',
     accentClass: 'group-hover:border-teal-500/50 group-hover:shadow-teal-500/10',
     gradientClass: 'from-teal-500/15 to-emerald-500/5',
@@ -146,12 +146,13 @@ export function FeaturesSection() {
                 <div className="absolute inset-0 bg-linear-to-br from-white/[0.03] to-transparent pointer-events-none" />
 
                 {/* Feature image */}
-                <div className="relative h-44 overflow-hidden shrink-0">
+                <div className="relative h-44 overflow-hidden shrink-0 bg-midnight-900">
                   <Image
                     src={feat.image}
                     alt={feat.title}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover object-center group-hover:scale-[1.04] transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-midnight-800/95 via-midnight-800/30 to-transparent" />
                   <span className={`absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-bold ${feat.badgeClass}`}>

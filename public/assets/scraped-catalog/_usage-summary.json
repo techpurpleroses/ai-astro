@@ -1,0 +1,559 @@
+﻿{
+    "assets_root":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets",
+    "source_code_root":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\src",
+    "total_assets":  1479,
+    "total_scraped_assets":  686,
+    "total_unique_asset_references_in_code":  80,
+    "existing_asset_references":  80,
+    "missing_asset_references":  0,
+    "missing_asset_reference_paths":  [
+
+                                      ],
+    "scraped_assets_not_directly_referenced":  686,
+    "scraped_assets_not_directly_referenced_sample":  [
+                                                          {
+                                                              "web_path":  "/assets/scraped/advisors/avatars/variants/active-advisors-c98b443d4bfd287718b65647a16567d8.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\advisors\\avatars\\variants\\active-advisors-c98b443d4bfd287718b65647a16567d8.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/advisors/avatars/variants/astrologers-promo-medium-4ce6a78f9340e130b2ffa1e1af09050b.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\advisors\\avatars\\variants\\astrologers-promo-medium-4ce6a78f9340e130b2ffa1e1af09050b.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/advisors/avatars/variants/astrologers-promo-small-6c5e5d2d500afc16fea73e0255a45eec.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\advisors\\avatars\\variants\\astrologers-promo-small-6c5e5d2d500afc16fea73e0255a45eec.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/advisors/avatars/variants/Avatar_15-aa44b61f83df509c70fee562269be6f6.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\advisors\\avatars\\variants\\Avatar_15-aa44b61f83df509c70fee562269be6f6.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/advisors/avatars/variants/Avatar_17-44d4b85ce334fd46ae852e9897cbbd69.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\advisors\\avatars\\variants\\Avatar_17-44d4b85ce334fd46ae852e9897cbbd69.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/advisors/avatars/variants/Avatar_7-154493aaef28c27a79e2e0d044febd41.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\advisors\\avatars\\variants\\Avatar_7-154493aaef28c27a79e2e0d044febd41.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/advisors/avatars/variants/Avatar_8-183cde11f376a45c87550f076847b9aa.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\advisors\\avatars\\variants\\Avatar_8-183cde11f376a45c87550f076847b9aa.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/advisors/avatars/variants/christine-71d461d9840b819265b8c2fd7e8bc6c3.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\advisors\\avatars\\variants\\christine-71d461d9840b819265b8c2fd7e8bc6c3.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/advisors/avatars/variants/inactive-advisors-0d15cb806c25072a505b307f708d0991.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\advisors\\avatars\\variants\\inactive-advisors-0d15cb806c25072a505b307f708d0991.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/ascendant/ascendant-eb464045045cf8185c178d0c5cd59c8d.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\ascendant\\ascendant-eb464045045cf8185c178d0c5cd59c8d.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/ascendant/ascendant-icon-9c3e412a5afc8d835a5dc5b7c254ff05.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\ascendant\\ascendant-icon-9c3e412a5afc8d835a5dc5b7c254ff05.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/ascendant/color-ascendant-5d061382278a0df504e3f6dba8048cb2.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\ascendant\\color-ascendant-5d061382278a0df504e3f6dba8048cb2.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/jupiter/color-jupiter-558993991b32e48d9393f6555bc0e3b9.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\jupiter\\color-jupiter-558993991b32e48d9393f6555bc0e3b9.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/jupiter/jupiter-5bb7eb12f1e29917af2a0890614958ed.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\jupiter\\jupiter-5bb7eb12f1e29917af2a0890614958ed.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/jupiter/jupiter-929c9b5230ecfcf8419619685b65773a.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\jupiter\\jupiter-929c9b5230ecfcf8419619685b65773a.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/jupiter/jupiter-c546c3774cb40c9a364867b03c2eb6f3.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\jupiter\\jupiter-c546c3774cb40c9a364867b03c2eb6f3.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/mars/color-mars-3c37d6e0091a6ef4c3a6d6fe6402249f.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\mars\\color-mars-3c37d6e0091a6ef4c3a6d6fe6402249f.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/mars/mars-1dc3a576253260b859a0748d570d6ffb.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\mars\\mars-1dc3a576253260b859a0748d570d6ffb.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/mars/mars-5d5a1402d83c182d71ad1ef3264c0c3a.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\mars\\mars-5d5a1402d83c182d71ad1ef3264c0c3a.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/mars/mars-afd314339a814020f147ba159e1ba57a.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\mars\\mars-afd314339a814020f147ba159e1ba57a.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/mercury/color-mercury-b222f2e4359a087cc54539b748bca1b2.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\mercury\\color-mercury-b222f2e4359a087cc54539b748bca1b2.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/mercury/mercury-a016a3eb342dad66ee198e8fb8d0598f.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\mercury\\mercury-a016a3eb342dad66ee198e8fb8d0598f.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/mercury/mercury-b431d8ce0c0192b3efa299196df06ac3.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\mercury\\mercury-b431d8ce0c0192b3efa299196df06ac3.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/mercury/mercury-d3fb84c1cbfab2dc07519096b75c3205.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\mercury\\mercury-d3fb84c1cbfab2dc07519096b75c3205.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/moon/color-moon-4fe5d20f3db510278c4cdb3e963492c9.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\moon\\color-moon-4fe5d20f3db510278c4cdb3e963492c9.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/moon/moon.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\moon\\moon.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/moon/moon-2b82409ffcdf887e59615179c81b8e50.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\moon\\moon-2b82409ffcdf887e59615179c81b8e50.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/moon/moon-a96976e41f3d7455f5407bbad4c22619.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\moon\\moon-a96976e41f3d7455f5407bbad4c22619.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/neptune/color-neptune-bed09694e2f703d10d02b2a1d8a2979e.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\neptune\\color-neptune-bed09694e2f703d10d02b2a1d8a2979e.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/neptune/neptune-3360bfec5bc231d5efc0d5bb732016e8.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\neptune\\neptune-3360bfec5bc231d5efc0d5bb732016e8.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/neptune/neptune-6cc2f65ad74ffc0727e7911b08b96077.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\neptune\\neptune-6cc2f65ad74ffc0727e7911b08b96077.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/neptune/neptune-fa98e4b7e42d101ce68a978dda0cb85c.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\neptune\\neptune-fa98e4b7e42d101ce68a978dda0cb85c.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/pluto/color-pluto-836e8019ff67124f1eca34df237b6ed7.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\pluto\\color-pluto-836e8019ff67124f1eca34df237b6ed7.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/pluto/pluto-3e2cc42e3ac6599d8df0f45ca734f099.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\pluto\\pluto-3e2cc42e3ac6599d8df0f45ca734f099.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/pluto/pluto-6ca9bf454d5cb2fbac0e74fe5ac8960e.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\pluto\\pluto-6ca9bf454d5cb2fbac0e74fe5ac8960e.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/pluto/pluto-dfb51fdc4de056f3e2e7c9c50c3d1e0c.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\pluto\\pluto-dfb51fdc4de056f3e2e7c9c50c3d1e0c.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/pluto/pluto-icon-0c533a8fac7f041fbe32a4c2f0589dbe.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\pluto\\pluto-icon-0c533a8fac7f041fbe32a4c2f0589dbe.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/saturn/color-saturn-cc86703549ea96c087469b50bd5b15f0.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\saturn\\color-saturn-cc86703549ea96c087469b50bd5b15f0.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/saturn/saturn-149a2810f98f8311914fcd34e04c8e66.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\saturn\\saturn-149a2810f98f8311914fcd34e04c8e66.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/saturn/saturn-6f9e4c6782732150671aa2557cdc4274.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\saturn\\saturn-6f9e4c6782732150671aa2557cdc4274.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/saturn/saturn-a0aa7127e29ce0a8204be1ff07c637f4.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\saturn\\saturn-a0aa7127e29ce0a8204be1ff07c637f4.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/sun/color-sun-9eeb857450f76312313a914653edbbb3.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\sun\\color-sun-9eeb857450f76312313a914653edbbb3.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/sun/sun-739d1b30a551e121b0f27300c4d6e07a.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\sun\\sun-739d1b30a551e121b0f27300c4d6e07a.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/sun/sun-atmosphere-a0f69a7e31bfb21f910791491c0943ad.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\sun\\sun-atmosphere-a0f69a7e31bfb21f910791491c0943ad.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/sun/sun-df1d04c8c14c1131d9a52149a794b9da.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\sun\\sun-df1d04c8c14c1131d9a52149a794b9da.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/sun/sun-icon-d3c2a4554365298913cb5a0d8d0e8716.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\sun\\sun-icon-d3c2a4554365298913cb5a0d8d0e8716.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/uranus/color-uranus-0301e928f829573ab6464a812b676ffe.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\uranus\\color-uranus-0301e928f829573ab6464a812b676ffe.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/uranus/uranus-0867d5494fffd89eec4a85b69b2a7691.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\uranus\\uranus-0867d5494fffd89eec4a85b69b2a7691.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/uranus/uranus-416032e4b99fd0d9ee432cf278b13037.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\uranus\\uranus-416032e4b99fd0d9ee432cf278b13037.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/uranus/uranus-c8bbafc8fd897334f1e31f08c1103143.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\uranus\\uranus-c8bbafc8fd897334f1e31f08c1103143.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/uranus/uranus-icon-5aff8b3e1ed8347d079213248b694c1d.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\uranus\\uranus-icon-5aff8b3e1ed8347d079213248b694c1d.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/venus/color-venus-e6a6347111cbe5bf11f4b999eed4137f.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\venus\\color-venus-e6a6347111cbe5bf11f4b999eed4137f.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/venus/venus-15dcb356657bd6855bc248da84191cef.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\venus\\venus-15dcb356657bd6855bc248da84191cef.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/venus/venus-313203c363076fed9b9e5a53db11b75c.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\venus\\venus-313203c363076fed9b9e5a53db11b75c.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/astronomy/planets/venus/venus-afb8d1c2b32f27574e3c785a0f933f33.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\astronomy\\planets\\venus\\venus-afb8d1c2b32f27574e3c785a0f933f33.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/background-wave-d88818c74b3f2988492a6293112ccc00.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\background-wave-d88818c74b3f2988492a6293112ccc00.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/bg-383c1321589f5e9fe13cdcb28868cc04.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\bg-383c1321589f5e9fe13cdcb28868cc04.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/bg-3a1d73488d973370953e17260ade0f17.jpg",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\bg-3a1d73488d973370953e17260ade0f17.jpg"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/bg-4a2412b882a859d96281d28061a9137b.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\bg-4a2412b882a859d96281d28061a9137b.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/bg-5ef636ef5c8769be9f8c610d81dd2528.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\bg-5ef636ef5c8769be9f8c610d81dd2528.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/bg-603da60ea663684cd054acc9fe5c8612.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\bg-603da60ea663684cd054acc9fe5c8612.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/bg-8787094945d338028352df37006d9071.jpg",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\bg-8787094945d338028352df37006d9071.jpg"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/bg-d223ee4719dbd383c0b097d55ca46ffa.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\bg-d223ee4719dbd383c0b097d55ca46ffa.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/bg-e9965c7ee296e92adbad15886b1b49bd.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\bg-e9965c7ee296e92adbad15886b1b49bd.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/bg-gold-6bdd2d14a7e719c31f2dcbee8d7afa63.jpg",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\bg-gold-6bdd2d14a7e719c31f2dcbee8d7afa63.jpg"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/bg-green-7eacf2b86e41cbc6f02c9a100c7976ef.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\bg-green-7eacf2b86e41cbc6f02c9a100c7976ef.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/bg-purple-659911965e484c08534a35434d9ca099.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\bg-purple-659911965e484c08534a35434d9ca099.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/bg-sky-0a99e5ffa09bd96d63fa45f2b9ec72ad.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\bg-sky-0a99e5ffa09bd96d63fa45f2b9ec72ad.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/check-gradient-gold-0afc84a871826c2f77c288ffb80b2a72.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\check-gradient-gold-0afc84a871826c2f77c288ffb80b2a72.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/gradient-df011dd2dd237e3eaa4f016041b8cf6d.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\gradient-df011dd2dd237e3eaa4f016041b8cf6d.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/sky-041a3a7ee7ed633a1f50c2dcd6c12f61.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\sky-041a3a7ee7ed633a1f50c2dcd6c12f61.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/sky-05c64b9fdafa61cb2b1b4b837503b829.webp",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\sky-05c64b9fdafa61cb2b1b4b837503b829.webp"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/stars-79943f3307d1afb4043806299d12fa64.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\stars-79943f3307d1afb4043806299d12fa64.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/stars-bdcbc07fb2538df0a46fdce0760f5ad7.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\stars-bdcbc07fb2538df0a46fdce0760f5ad7.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/backgrounds/variants/waves-3d8cae37fb8c4f498b274914205fe5cf.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\backgrounds\\variants\\waves-3d8cae37fb8c4f498b274914205fe5cf.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/0183a69a118b19f5f563b412953696a9.jpg",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\0183a69a118b19f5f563b412953696a9.jpg"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/01f30a9e33b65927c55008b612bb8090.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\01f30a9e33b65927c55008b612bb8090.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/04807b27519fef7a64efd9894738e7ea.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\04807b27519fef7a64efd9894738e7ea.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/051de9f4966da7432a0058e16f3ab81d.jpg",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\051de9f4966da7432a0058e16f3ab81d.jpg"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/053496b4ca1027e84d42f44a33ea0c98.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\053496b4ca1027e84d42f44a33ea0c98.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/05403ee2e8a03c371162b0034f721d67.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\05403ee2e8a03c371162b0034f721d67.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/06e9471913a84346e1cb0468e258d4eb.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\06e9471913a84346e1cb0468e258d4eb.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/073f342435bb6202062cd6480c519974.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\073f342435bb6202062cd6480c519974.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/074773429cda8256728a64da3ccbe863.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\074773429cda8256728a64da3ccbe863.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/0773fec33dcc23379ee8ab9e1ed933c2.jpg",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\0773fec33dcc23379ee8ab9e1ed933c2.jpg"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/085d9e236397bf8603983ed6d1e9cf06.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\085d9e236397bf8603983ed6d1e9cf06.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/093e69cad672d87d53a066541d45fd7c.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\093e69cad672d87d53a066541d45fd7c.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/09972f0ca035dd7729761158697a445f.jpg",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\09972f0ca035dd7729761158697a445f.jpg"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/0a46a15211da1dab5a4a5d9e9ab8706d.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\0a46a15211da1dab5a4a5d9e9ab8706d.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/0aedc2c6cd1c04efa46ffe26acce4694.jpg",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\0aedc2c6cd1c04efa46ffe26acce4694.jpg"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/0c18f469ad0d4eb5672bd05a6bfaeb46.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\0c18f469ad0d4eb5672bd05a6bfaeb46.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/0d8537ec3e1df171632f5f90bff35325.jpg",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\0d8537ec3e1df171632f5f90bff35325.jpg"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/0f003a73682b49fe787520ee3396076e.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\0f003a73682b49fe787520ee3396076e.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/0f249daa8738.gif",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\0f249daa8738.gif"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/0f961312cc7d4f366c3202cbb73b2359.jpg",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\0f961312cc7d4f366c3202cbb73b2359.jpg"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/101dd0db0bda4f4befbd678b881d216d.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\101dd0db0bda4f4befbd678b881d216d.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/10fcf5862ca6b0a3f38a03ac59f5912a.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\10fcf5862ca6b0a3f38a03ac59f5912a.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/1223a1b5192fe0d8bbfebe8344c83b99.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\1223a1b5192fe0d8bbfebe8344c83b99.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/1344d5b3e622746281fd904033cab5a3.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\1344d5b3e622746281fd904033cab5a3.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/13595819540c53513a7e3e52405d02f2.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\13595819540c53513a7e3e52405d02f2.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/137d3cf4d6c34cf27430654ff88edc40.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\137d3cf4d6c34cf27430654ff88edc40.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/138e8fcfb3393e3bf483767c1376c725.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\138e8fcfb3393e3bf483767c1376c725.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/17922f39810559055ab3eb5f353f73a6.jpg",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\17922f39810559055ab3eb5f353f73a6.jpg"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/17edd9b4710e5d9f143c61e69908437b.jpg",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\17edd9b4710e5d9f143c61e69908437b.jpg"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/17faa58db857165b30606fc0dbca4787.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\17faa58db857165b30606fc0dbca4787.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/186383cd1c7c993ceb4536ffe3ef0c0b.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\186383cd1c7c993ceb4536ffe3ef0c0b.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/186a56ec76fa8b08008625f042448bd2.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\186a56ec76fa8b08008625f042448bd2.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/19fff8faa727afea2d837e2bfc8db0cb.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\19fff8faa727afea2d837e2bfc8db0cb.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/1a85740c7aeeb6fa8e69628670e8420a.jpg",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\1a85740c7aeeb6fa8e69628670e8420a.jpg"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/1e348d4f1a635dec83f7761259216b9c.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\1e348d4f1a635dec83f7761259216b9c.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/203d5ee2a40ac95d0bd4d182d85855cd.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\203d5ee2a40ac95d0bd4d182d85855cd.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/222a0de1dae5606ecc328b8da705510c.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\222a0de1dae5606ecc328b8da705510c.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/228d70dff17d7d8a946a990f8c1dbbcf.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\228d70dff17d7d8a946a990f8c1dbbcf.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/235395d1f451d10ff0269f3764d56d40.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\235395d1f451d10ff0269f3764d56d40.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/2381eb0b8db331fe7b11b7e9618747d2.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\2381eb0b8db331fe7b11b7e9618747d2.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/24381b798698edc2e5103556dae98314.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\24381b798698edc2e5103556dae98314.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/24d7da2c7cff7a7c9df73d1938f277a4.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\24d7da2c7cff7a7c9df73d1938f277a4.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/261b8083864ee6a4e941dfa6bd97a307.jfif",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\261b8083864ee6a4e941dfa6bd97a307.jfif"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/26efee85e78ed30cd36d9f532b485939.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\26efee85e78ed30cd36d9f532b485939.png"
+                                                          },
+                                                          {
+                                                              "web_path":  "/assets/scraped/misc/raw-hash/27c4d5950ebc1dce68f89b916d9a4e4a.png",
+                                                              "absolute_path":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped\\misc\\raw-hash\\27c4d5950ebc1dce68f89b916d9a4e4a.png"
+                                                          }
+                                                      ],
+    "zodiac_variant_counts":  [
+                                  {
+                                      "sign":  "aquarius",
+                                      "variant_count":  7,
+                                      "canonical_match_count":  1
+                                  },
+                                  {
+                                      "sign":  "aries",
+                                      "variant_count":  8,
+                                      "canonical_match_count":  1
+                                  },
+                                  {
+                                      "sign":  "cancer",
+                                      "variant_count":  7,
+                                      "canonical_match_count":  1
+                                  },
+                                  {
+                                      "sign":  "capricorn",
+                                      "variant_count":  8,
+                                      "canonical_match_count":  1
+                                  },
+                                  {
+                                      "sign":  "gemini",
+                                      "variant_count":  5,
+                                      "canonical_match_count":  1
+                                  },
+                                  {
+                                      "sign":  "leo",
+                                      "variant_count":  6,
+                                      "canonical_match_count":  1
+                                  },
+                                  {
+                                      "sign":  "libra",
+                                      "variant_count":  6,
+                                      "canonical_match_count":  1
+                                  },
+                                  {
+                                      "sign":  "pisces",
+                                      "variant_count":  6,
+                                      "canonical_match_count":  1
+                                  },
+                                  {
+                                      "sign":  "sagittarius",
+                                      "variant_count":  7,
+                                      "canonical_match_count":  1
+                                  },
+                                  {
+                                      "sign":  "scorpio",
+                                      "variant_count":  7,
+                                      "canonical_match_count":  1
+                                  },
+                                  {
+                                      "sign":  "taurus",
+                                      "variant_count":  7,
+                                      "canonical_match_count":  1
+                                  },
+                                  {
+                                      "sign":  "virgo",
+                                      "variant_count":  6,
+                                      "canonical_match_count":  1
+                                  }
+                              ],
+    "unreferenced_csv":  "c:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped-catalog\\_usage-unreferenced.csv",
+    "zodiac_variant_csv":  "c:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped-catalog\\_zodiac-variant-index.csv"
+}

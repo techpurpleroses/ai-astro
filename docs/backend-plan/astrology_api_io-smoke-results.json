@@ -1,0 +1,62 @@
+[
+  {
+    "endpoint": "GET /api/v3/data/now",
+    "status": "200",
+    "credit_headers": "x-remaining-quota=6997",
+    "response": "name, birth_data"
+  },
+  {
+    "endpoint": "POST /api/v3/data/lunar-metrics",
+    "status": "200",
+    "credit_headers": "x-remaining-quota=6996",
+    "response": "success, data, metadata, warnings, pagination"
+  },
+  {
+    "endpoint": "POST /api/v3/lunar/events",
+    "status": "200",
+    "credit_headers": "x-remaining-quota=6995",
+    "response": "success, data, metadata, warnings, pagination"
+  },
+  {
+    "endpoint": "POST /api/v3/charts/transit",
+    "status": "200",
+    "credit_headers": "x-remaining-quota=6994",
+    "response": "subject_data, chart_data"
+  },
+  {
+    "endpoint": "POST /api/v3/charts/natal",
+    "status": "200",
+    "credit_headers": "x-remaining-quota=6993",
+    "response": "subject_data, chart_data"
+  },
+  {
+    "endpoint": "POST /api/v3/charts/natal-transits",
+    "status": "200",
+    "credit_headers": "x-remaining-quota=6992",
+    "response": "events"
+  },
+  {
+    "endpoint": "POST /api/v3/analysis/compatibility-score",
+    "status": "200",
+    "credit_headers": "x-remaining-quota=6991",
+    "response": "success, data, metadata, warnings, pagination"
+  },
+  {
+    "endpoint": "POST /api/v3/numerology/core-numbers",
+    "status": "200",
+    "credit_headers": "x-remaining-quota=6990",
+    "response": "success, data, metadata, warnings, pagination"
+  },
+  {
+    "endpoint": "GET /api/v3/tarot/cards/daily",
+    "status": "200",
+    "credit_headers": "x-remaining-quota=6989",
+    "response": "success, card, report, date, personalization"
+  },
+  {
+    "endpoint": "POST /api/v3/tarot/cards/draw",
+    "status": "200",
+    "credit_headers": "x-remaining-quota=6988",
+    "response": "success, data, metadata, warnings, pagination"
+  }
+]

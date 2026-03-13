@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { ChevronLeft, ChevronRight, Globe, LogOut, Shield, CreditCard, HelpCircle, FileText } from 'lucide-react'
 import { ReportsFromAdvisors } from '@/components/reports/reports-from-advisors'
 import { SETTINGS_BENEFITS } from '@/data/reports'
@@ -33,8 +34,21 @@ function SettingsRow({
   )
 }
 
-export function SettingsClient() {
+export function SettingsClient({ userEmail }: { userEmail: string | null }) {
   const router = useRouter()
+  const [loggingOut, setLoggingOut] = useState(false)
+
+  async function handleLogout() {
+    if (loggingOut) return
+    setLoggingOut(true)
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' })
+      router.replace('/auth/login')
+      router.refresh()
+    } finally {
+      setLoggingOut(false)
+    }
+  }
 
   return (
     <div className="flex flex-col">
@@ -87,14 +101,21 @@ export function SettingsClient() {
         </div>
 
         <button
+          onClick={() => {
+            void handleLogout()
+          }}
+          disabled={loggingOut}
           className="w-full rounded-xl px-4 py-3.5 text-left"
           style={{
             background: 'rgba(15,30,53,0.82)',
             border: '1px solid rgba(255,255,255,0.07)',
           }}
         >
-          <div className="font-display text-xl font-semibold text-text-primary text-center">Log out</div>
-          <div className="text-xs text-text-muted text-center">darshanranade36@gmail.com</div>
+          <div className="font-display text-xl font-semibold text-text-primary text-center flex items-center justify-center gap-2">
+            <LogOut size={16} className="text-text-secondary" />
+            <span>{loggingOut ? 'Logging out...' : 'Log out'}</span>
+          </div>
+          <div className="text-xs text-text-muted text-center">{userEmail ?? 'Signed in user'}</div>
         </button>
 
         <SettingsRow icon={<CreditCard size={16} className="text-text-secondary" />} label="Payment Methods" />

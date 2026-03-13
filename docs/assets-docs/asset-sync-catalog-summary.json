@@ -1,0 +1,174 @@
+﻿{
+    "source_root":  "C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-asset-scrapper\\astro-scraper\\downloaded_assets",
+    "destination_root":  "c:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped-catalog",
+    "source_files":  686,
+    "destination_files_after_sync":  686,
+    "copied_from_source":  0,
+    "moved_from_existing":  0,
+    "already_in_place":  686,
+    "missing_in_destination_after_sync":  0,
+    "extra_files_in_destination_not_from_source":  0,
+    "categories":  [
+                       {
+                           "name":  "advisors/avatars/variants",
+                           "count":  4
+                       },
+                       {
+                           "name":  "astronomy/planets/ascendant",
+                           "count":  3
+                       },
+                       {
+                           "name":  "astronomy/planets/jupiter",
+                           "count":  4
+                       },
+                       {
+                           "name":  "astronomy/planets/mars",
+                           "count":  4
+                       },
+                       {
+                           "name":  "astronomy/planets/mercury",
+                           "count":  4
+                       },
+                       {
+                           "name":  "astronomy/planets/moon",
+                           "count":  5
+                       },
+                       {
+                           "name":  "astronomy/planets/neptune",
+                           "count":  4
+                       },
+                       {
+                           "name":  "astronomy/planets/pluto",
+                           "count":  5
+                       },
+                       {
+                           "name":  "astronomy/planets/saturn",
+                           "count":  4
+                       },
+                       {
+                           "name":  "astronomy/planets/sun",
+                           "count":  5
+                       },
+                       {
+                           "name":  "astronomy/planets/uranus",
+                           "count":  5
+                       },
+                       {
+                           "name":  "astronomy/planets/venus",
+                           "count":  4
+                       },
+                       {
+                           "name":  "backgrounds/variants",
+                           "count":  23
+                       },
+                       {
+                           "name":  "features/palm/variants",
+                           "count":  15
+                       },
+                       {
+                           "name":  "misc/raw-hash",
+                           "count":  278
+                       },
+                       {
+                           "name":  "misc/unclassified",
+                           "count":  108
+                       },
+                       {
+                           "name":  "reports/variants",
+                           "count":  9
+                       },
+                       {
+                           "name":  "today/events/variants",
+                           "count":  8
+                       },
+                       {
+                           "name":  "today/horoscope/alternatives/chinese",
+                           "count":  2
+                       },
+                       {
+                           "name":  "today/horoscope/alternatives/druid",
+                           "count":  2
+                       },
+                       {
+                           "name":  "today/horoscope/alternatives/indian-lunar",
+                           "count":  2
+                       },
+                       {
+                           "name":  "today/horoscope/alternatives/indian-solar",
+                           "count":  2
+                       },
+                       {
+                           "name":  "today/horoscope/alternatives/mayan",
+                           "count":  2
+                       },
+                       {
+                           "name":  "today/horoscope/variants",
+                           "count":  11
+                       },
+                       {
+                           "name":  "today/moon/phases/variants",
+                           "count":  12
+                       },
+                       {
+                           "name":  "today/moon/variants",
+                           "count":  5
+                       },
+                       {
+                           "name":  "ui/icons/variants",
+                           "count":  71
+                       },
+                       {
+                           "name":  "videos",
+                           "count":  3
+                       },
+                       {
+                           "name":  "zodiac/signs/aquarius/variants",
+                           "count":  7
+                       },
+                       {
+                           "name":  "zodiac/signs/aries/variants",
+                           "count":  8
+                       },
+                       {
+                           "name":  "zodiac/signs/cancer/variants",
+                           "count":  7
+                       },
+                       {
+                           "name":  "zodiac/signs/capricorn/variants",
+                           "count":  10
+                       },
+                       {
+                           "name":  "zodiac/signs/gemini/variants",
+                           "count":  5
+                       },
+                       {
+                           "name":  "zodiac/signs/leo/variants",
+                           "count":  6
+                       },
+                       {
+                           "name":  "zodiac/signs/libra/variants",
+                           "count":  6
+                       },
+                       {
+                           "name":  "zodiac/signs/pisces/variants",
+                           "count":  6
+                       },
+                       {
+                           "name":  "zodiac/signs/sagittarius/variants",
+                           "count":  7
+                       },
+                       {
+                           "name":  "zodiac/signs/scorpio/variants",
+                           "count":  7
+                       },
+                       {
+                           "name":  "zodiac/signs/taurus/variants",
+                           "count":  7
+                       },
+                       {
+                           "name":  "zodiac/signs/virgo/variants",
+                           "count":  6
+                       }
+                   ],
+    "manifest_csv":  "c:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\public\\assets\\scraped-catalog\\_manifest.csv"
+}

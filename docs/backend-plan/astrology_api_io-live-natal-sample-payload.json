@@ -1,0 +1,75 @@
+{
+  "remainingQuota": 6972,
+  "firstPlanet": {
+    "name": "Sun",
+    "sign": "Tau",
+    "degree": 24.46,
+    "absolute_longitude": 54.46,
+    "house": 9,
+    "is_retrograde": false,
+    "speed": 0.9642
+  },
+  "secondPlanet": {
+    "name": "Moon",
+    "sign": "Cap",
+    "degree": 27.93,
+    "absolute_longitude": 297.93,
+    "house": 5,
+    "is_retrograde": false,
+    "speed": 12.3691
+  },
+  "firstHouse": {
+    "house": 1,
+    "sign": "Vir",
+    "degree": 19.7,
+    "absolute_longitude": 169.7
+  },
+  "firstAspect": {
+    "point1": "Sun",
+    "point2": "Moon",
+    "aspect_type": "trine",
+    "orb": -3.4781054060602514,
+    "aspect_direction": null,
+    "transiting_house": null,
+    "peak_activations": null
+  },
+  "subjectSun": {
+    "name": "Sun",
+    "quality": "Fixed",
+    "element": "Earth",
+    "sign": "Tau",
+    "sign_num": 1,
+    "position": 24.456380972320247,
+    "abs_pos": 54.45638097232025,
+    "emoji": "♉️",
+    "point_type": "Planet",
+    "house": "Ninth_House",
+    "retrograde": false
+  },
+  "subjectMoon": {
+    "name": "Moon",
+    "quality": "Cardinal",
+    "element": "Earth",
+    "sign": "Cap",
+    "sign_num": 9,
+    "position": 27.934486378380484,
+    "abs_pos": 297.9344863783805,
+    "emoji": "♑️",
+    "point_type": "Planet",
+    "house": "Fifth_House",
+    "retrograde": false
+  },
+  "subjectAscendant": {
+    "name": "Ascendant",
+    "quality": "Mutable",
+    "element": "Earth",
+    "sign": "Vir",
+    "sign_num": 5,
+    "position": 19.7021987355688,
+    "abs_pos": 169.7021987355688,
+    "emoji": "♍️",
+    "point_type": "AxialCusps",
+    "house": "First_House",
+    "retrograde": false
+  }
+}

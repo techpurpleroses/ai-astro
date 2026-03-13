@@ -1,0 +1,26 @@
+[
+  {
+    "endpoint": "POST /api/v3/horoscope/sign/daily/text",
+    "status": "200",
+    "quota": "x-remaining-quota=6987;",
+    "summary": "success, data, metadata, warnings, pagination"
+  },
+  {
+    "endpoint": "POST /api/v3/insights/wellness/biorhythms",
+    "status": "200",
+    "quota": "x-remaining-quota=6986;",
+    "summary": "success, data, metadata, warnings, pagination"
+  },
+  {
+    "endpoint": "POST /api/v3/data/global-positions",
+    "status": "200",
+    "quota": "x-remaining-quota=6985;",
+    "summary": "success, data, metadata, warnings, pagination"
+  },
+  {
+    "endpoint": "POST /api/v3/data/aspects",
+    "status": "200",
+    "quota": "x-remaining-quota=6984;",
+    "summary": "success, data, metadata, warnings, pagination"
+  }
+]

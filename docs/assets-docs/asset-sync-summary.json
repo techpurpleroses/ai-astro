@@ -1,0 +1,161 @@
+﻿{
+    "copied_files":  686,
+    "image_files_copied":  683,
+    "missing_in_repo_before_sync":  559,
+    "already_present_stem_before_sync":  127,
+    "categories":  [
+                       {
+                           "Name":  "advisors\\avatars\\variants",
+                           "Count":  9
+                       },
+                       {
+                           "Name":  "astronomy\\planets\\ascendant",
+                           "Count":  3
+                       },
+                       {
+                           "Name":  "astronomy\\planets\\jupiter",
+                           "Count":  4
+                       },
+                       {
+                           "Name":  "astronomy\\planets\\mars",
+                           "Count":  4
+                       },
+                       {
+                           "Name":  "astronomy\\planets\\mercury",
+                           "Count":  4
+                       },
+                       {
+                           "Name":  "astronomy\\planets\\moon",
+                           "Count":  4
+                       },
+                       {
+                           "Name":  "astronomy\\planets\\neptune",
+                           "Count":  4
+                       },
+                       {
+                           "Name":  "astronomy\\planets\\pluto",
+                           "Count":  5
+                       },
+                       {
+                           "Name":  "astronomy\\planets\\saturn",
+                           "Count":  4
+                       },
+                       {
+                           "Name":  "astronomy\\planets\\sun",
+                           "Count":  5
+                       },
+                       {
+                           "Name":  "astronomy\\planets\\uranus",
+                           "Count":  5
+                       },
+                       {
+                           "Name":  "astronomy\\planets\\venus",
+                           "Count":  4
+                       },
+                       {
+                           "Name":  "backgrounds\\variants",
+                           "Count":  20
+                       },
+                       {
+                           "Name":  "misc\\raw-hash",
+                           "Count":  277
+                       },
+                       {
+                           "Name":  "misc\\unclassified",
+                           "Count":  156
+                       },
+                       {
+                           "Name":  "today\\events\\variants",
+                           "Count":  13
+                       },
+                       {
+                           "Name":  "today\\horoscope\\alternatives\\chinese",
+                           "Count":  1
+                       },
+                       {
+                           "Name":  "today\\horoscope\\alternatives\\druid",
+                           "Count":  1
+                       },
+                       {
+                           "Name":  "today\\horoscope\\alternatives\\indian-lunar",
+                           "Count":  1
+                       },
+                       {
+                           "Name":  "today\\horoscope\\alternatives\\indian-solar",
+                           "Count":  1
+                       },
+                       {
+                           "Name":  "today\\horoscope\\alternatives\\mayan",
+                           "Count":  1
+                       },
+                       {
+                           "Name":  "today\\horoscope\\variants",
+                           "Count":  11
+                       },
+                       {
+                           "Name":  "today\\moon\\phases\\variants",
+                           "Count":  13
+                       },
+                       {
+                           "Name":  "today\\moon\\variants",
+                           "Count":  7
+                       },
+                       {
+                           "Name":  "ui\\icons\\variants",
+                           "Count":  46
+                       },
+                       {
+                           "Name":  "videos",
+                           "Count":  3
+                       },
+                       {
+                           "Name":  "zodiac\\signs\\aquarius\\variants",
+                           "Count":  7
+                       },
+                       {
+                           "Name":  "zodiac\\signs\\aries\\variants",
+                           "Count":  8
+                       },
+                       {
+                           "Name":  "zodiac\\signs\\cancer\\variants",
+                           "Count":  7
+                       },
+                       {
+                           "Name":  "zodiac\\signs\\capricorn\\variants",
+                           "Count":  8
+                       },
+                       {
+                           "Name":  "zodiac\\signs\\gemini\\variants",
+                           "Count":  5
+                       },
+                       {
+                           "Name":  "zodiac\\signs\\leo\\variants",
+                           "Count":  6
+                       },
+                       {
+                           "Name":  "zodiac\\signs\\libra\\variants",
+                           "Count":  6
+                       },
+                       {
+                           "Name":  "zodiac\\signs\\pisces\\variants",
+                           "Count":  6
+                       },
+                       {
+                           "Name":  "zodiac\\signs\\sagittarius\\variants",
+                           "Count":  7
+                       },
+                       {
+                           "Name":  "zodiac\\signs\\scorpio\\variants",
+                           "Count":  7
+                       },
+                       {
+                           "Name":  "zodiac\\signs\\taurus\\variants",
+                           "Count":  7
+                       },
+                       {
+                           "Name":  "zodiac\\signs\\virgo\\variants",
+                           "Count":  6
+                       }
+                   ],
+    "manifest_csv":  "c:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\docs\\assets\\asset-sync-manifest.csv"
+}

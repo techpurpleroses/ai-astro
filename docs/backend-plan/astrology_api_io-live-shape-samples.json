@@ -1,0 +1,74 @@
+{
+  "GET /api/v3/data/now": {
+    "status": 200,
+    "remainingQuota": 6983,
+    "keys": [
+      "name",
+      "birth_data"
+    ],
+    "firstKeyShape": "string"
+  },
+  "POST /api/v3/data/lunar-metrics": {
+    "status": 200,
+    "remainingQuota": 6982,
+    "keys": [
+      "success",
+      "data",
+      "metadata",
+      "warnings",
+      "pagination"
+    ],
+    "firstKeyShape": "boolean"
+  },
+  "POST /api/v3/data/aspects": {
+    "status": 200,
+    "remainingQuota": 6981,
+    "keys": [
+      "success",
+      "data",
+      "metadata",
+      "warnings",
+      "pagination"
+    ],
+    "firstKeyShape": "boolean"
+  },
+  "POST /api/v3/lunar/events": {
+    "status": 200,
+    "remainingQuota": 6980,
+    "keys": [
+      "success",
+      "data",
+      "metadata",
+      "warnings",
+      "pagination"
+    ],
+    "firstKeyShape": "boolean"
+  },
+  "POST /api/v3/analysis/compatibility-score": {
+    "status": 200,
+    "remainingQuota": 6979,
+    "keys": [
+      "success",
+      "data",
+      "metadata",
+      "warnings",
+      "pagination"
+    ],
+    "firstKeyShape": "boolean"
+  },
+  "POST /api/v3/charts/natal": {
+    "status": 200,
+    "remainingQuota": 6978,
+    "keys": [
+      "subject_data",
+      "chart_data"
+    ],
+    "firstKeyShape": "object keys: name, year, month, day, hour, minute, city, nation, lng, lat",
+    "chartDataKeys": [
+      "planetary_positions",
+      "house_cusps",
+      "aspects",
+      "fixed_stars"
+    ]
+  }
+}

@@ -91,11 +91,11 @@ export function CtaSection() {
         className="absolute right-[5%] top-[10%] opacity-15 pointer-events-none hidden lg:block"
       >
         <Image
-          src="/assets/moon/full-moon.webp"
+          src="/assets/today/moon/phases/waxing-crescent.webp"
           alt=""
-          width={300}
-          height={300}
-          className="rounded-full"
+          width={240}
+          height={240}
+          className="rounded-full object-cover"
           style={{ filter: 'blur(1px)' }}
         />
       </div>
@@ -134,9 +134,9 @@ export function CtaSection() {
 
           {/* CTA buttons */}
           <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
-            <Link href="/today">
+            <Link href="/auth/signup">
               <motion.button
-                className="group flex items-center gap-2.5 px-10 py-4 rounded-full bg-gradient-to-r from-cyan-500 to-teal-400 text-[#060D1B] font-bold text-base hover:shadow-2xl hover:shadow-cyan-500/30 transition-shadow"
+                className="group flex items-center gap-2.5 px-10 py-4 rounded-full bg-gradient-to-r from-cyan-500 to-teal-400 text-[#060D1B] font-bold text-base hover:shadow-2xl hover:shadow-cyan-500/30 transition-shadow cursor-pointer"
                 whileHover={{ scale: 1.06 }}
                 whileTap={{ scale: 0.97 }}
               >

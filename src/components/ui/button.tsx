@@ -55,7 +55,7 @@ export function Button({
   return (
     <button
       className={cn(
-        'inline-flex items-center justify-center gap-2',
+        'inline-flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed',
         'font-display transition-all duration-150',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-glow/60',
         variantMap[variant],

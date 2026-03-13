@@ -6,7 +6,7 @@
 cd "c:/Purple Roses Technology/SaaS Projects/Astro-AI/astro-ai-repo" && git add . && git commit -m "update" && git push
 
 
-git add . ; git commit -m "Updates Palm Reading RoboFlow API" ;  git push --set-upstream origin main
+git add . ; git commit -m "Major Updates - Auth System AND Backend for DB." ;  git push --set-upstream origin main
 ```
 
 ---

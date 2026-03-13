@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Sparkles, Menu, X, ChevronDown } from 'lucide-react'
+import { Sparkles, Menu, X } from 'lucide-react'
 
 const PAGE_LINKS = [
   { label: 'Zodiac',       href: '/zodiac' },
@@ -24,9 +24,6 @@ export function LandingNav() {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
-
-  /* Close mobile menu on route change */
-  useEffect(() => setMenuOpen(false), [pathname])
 
   return (
     <>
@@ -84,9 +81,9 @@ export function LandingNav() {
 
           {/* ── Right: CTA + hamburger ── */}
           <div className="flex items-center gap-3 shrink-0">
-            <Link href="/today">
+            <Link href="/auth/signup">
               <motion.button
-                className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-full bg-linear-to-r from-cyan-500 to-teal-400 text-midnight-950 font-bold text-sm shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/35 transition-shadow"
+                className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-full bg-linear-to-r from-cyan-500 to-teal-400 text-midnight-950 font-bold text-sm shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/35 transition-shadow cursor-pointer"
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.97 }}
               >
@@ -138,6 +135,7 @@ export function LandingNav() {
                 >
                   <Link
                     href={link.href}
+                    onClick={() => setMenuOpen(false)}
                     className={`flex items-center py-3 px-2 rounded-xl text-base font-medium transition-colors border-b border-white/4 ${
                       pathname === link.href
                         ? 'text-cyan-400'
@@ -149,9 +147,9 @@ export function LandingNav() {
                 </motion.div>
               ))}
 
-              <Link href="/today" className="mt-4">
+              <Link href="/auth/signup" className="mt-4" onClick={() => setMenuOpen(false)}>
                 <motion.button
-                  className="w-full py-3.5 rounded-full bg-linear-to-r from-cyan-500 to-teal-400 text-midnight-950 font-bold text-sm"
+                  className="w-full py-3.5 rounded-full bg-linear-to-r from-cyan-500 to-teal-400 text-midnight-950 font-bold text-sm cursor-pointer"
                   whileTap={{ scale: 0.97 }}
                 >
                   Open App Free

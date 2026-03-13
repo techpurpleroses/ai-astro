@@ -1,0 +1,220 @@
+{
+  "lunarMetrics": {
+    "status": 200,
+    "remainingQuota": 6977,
+    "topKeys": [
+      "success",
+      "data",
+      "metadata",
+      "warnings",
+      "pagination"
+    ],
+    "data": {
+      "keys": [
+        "date",
+        "within_perigee_range",
+        "distance",
+        "within_apogee_range",
+        "apogee_distance",
+        "moon_sign",
+        "moon_phase",
+        "moon_age_in_days",
+        "moon_day",
+        "moon_illumination"
+      ],
+      "date": {
+        "type": "string",
+        "value": "2024-03-15"
+      },
+      "within_perigee_range": {
+        "type": "boolean",
+        "value": false
+      },
+      "distance": {
+        "type": "number",
+        "value": 376058.29878272844
+      },
+      "within_apogee_range": {
+        "type": "boolean",
+        "value": false
+      },
+      "apogee_distance": {
+        "type": "number",
+        "value": 405503.56
+      },
+      "moon_sign": {
+        "type": "string",
+        "value": "Gem"
+      },
+      "moon_phase": {
+        "type": "string",
+        "value": "Waxing Crescent"
+      },
+      "moon_age_in_days": {
+        "type": "number",
+        "value": 5.47889997731545
+      },
+      "moon_day": {
+        "type": "number",
+        "value": 6
+      },
+      "moon_illumination": {
+        "type": "number",
+        "value": 36.3543701171875
+      }
+    }
+  },
+  "aspects": {
+    "status": 200,
+    "remainingQuota": 6976,
+    "topKeys": [
+      "success",
+      "data",
+      "metadata",
+      "warnings",
+      "pagination"
+    ],
+    "data": {
+      "keys": [
+        "aspects"
+      ],
+      "aspects": {
+        "type": "array",
+        "len": 40,
+        "firstItemKeys": [
+          "point1",
+          "point2",
+          "aspect_type",
+          "orb",
+          "aspect_direction",
+          "transiting_house",
+          "peak_activations"
+        ]
+      }
+    }
+  },
+  "lunarEvents": {
+    "status": 200,
+    "remainingQuota": 6975,
+    "topKeys": [
+      "success",
+      "data",
+      "metadata",
+      "warnings",
+      "pagination"
+    ],
+    "data": {
+      "keys": [
+        "current_events",
+        "upcoming_events",
+        "events_summary",
+        "significance_analysis",
+        "next_major_event",
+        "calculation_settings"
+      ],
+      "current_events": {
+        "type": "array",
+        "len": 0,
+        "firstItemKeys": null
+      },
+      "upcoming_events": {
+        "type": "array",
+        "len": 0,
+        "firstItemKeys": null
+      },
+      "events_summary": {
+        "type": "object",
+        "keys": [
+          "total_events",
+          "current_count",
+          "upcoming_count",
+          "days_searched",
+          "most_significant",
+          "by_type"
+        ]
+      },
+      "significance_analysis": {
+        "type": "array",
+        "len": 0,
+        "firstItemKeys": null
+      },
+      "next_major_event": {
+        "type": "object",
+        "value": null
+      },
+      "calculation_settings": {
+        "type": "object",
+        "keys": [
+          "search_period_days",
+          "location_provided",
+          "supermoon_threshold_km",
+          "micromoon_threshold_km"
+        ]
+      }
+    }
+  },
+  "compatibility": {
+    "status": 200,
+    "remainingQuota": 6974,
+    "topKeys": [
+      "success",
+      "data",
+      "metadata",
+      "warnings",
+      "pagination"
+    ],
+    "data": {
+      "keys": [
+        "score",
+        "score_description",
+        "is_destiny_sign",
+        "aspects",
+        "dynamics",
+        "subject_data"
+      ],
+      "score": {
+        "type": "number",
+        "value": 29
+      },
+      "score_description": {
+        "type": "string",
+        "value": "Exceptional significance - Profound karmic bond, predominantly harmonious"
+      },
+      "is_destiny_sign": {
+        "type": "boolean",
+        "value": true
+      },
+      "aspects": {
+        "type": "array",
+        "len": 5,
+        "firstItemKeys": [
+          "point1",
+          "point2",
+          "aspect_type",
+          "orb",
+          "aspect_direction",
+          "transiting_house",
+          "peak_activations"
+        ]
+      },
+      "dynamics": {
+        "type": "object",
+        "keys": [
+          "harmony_percentage",
+          "tension_percentage",
+          "dynamic_type",
+          "key_strengths",
+          "growth_areas",
+          "summary"
+        ]
+      },
+      "subject_data": {
+        "type": "object",
+        "keys": [
+          "subject1",
+          "subject2"
+        ]
+      }
+    }
+  }
+}

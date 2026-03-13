@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Space_Grotesk, Inter, Cinzel } from 'next/font/google'
+import { ServiceWorkerRegistration } from '@/components/pwa/service-worker-registration'
 import './globals.css'
 
 const spaceGrotesk = Space_Grotesk({
@@ -58,6 +59,7 @@ export default function RootLayout({
           antialiased
         `}
       >
+        <ServiceWorkerRegistration />
         {children}
       </body>
     </html>

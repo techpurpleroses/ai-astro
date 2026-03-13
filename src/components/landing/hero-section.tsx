@@ -1,12 +1,12 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, Star } from 'lucide-react'
+import { ArrowRight, Download, Star } from 'lucide-react'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -49,12 +49,19 @@ const signPositions = ZODIAC.map((sign, i) => {
   }
 })
 
+type BeforeInstallPromptEvent = Event & {
+  prompt: () => Promise<void>
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>
+}
 
 export function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const orbitRef = useRef<HTMLDivElement>(null)
   const moonRef = useRef<HTMLDivElement>(null)
   const ring1Ref = useRef<SVGCircleElement>(null)
+  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null)
+  const [isStandalone, setIsStandalone] = useState(false)
+  const [installHelp, setInstallHelp] = useState<string | null>(null)
 
   const { scrollY } = useScroll()
   const orbitalY = useTransform(scrollY, [0, 700], [0, -120])
@@ -113,6 +120,61 @@ export function HeroSection() {
 
     return () => ctx.revert()
   }, [])
+
+  useEffect(() => {
+    const displayModeMedia = window.matchMedia('(display-mode: standalone)')
+
+    const checkStandalone = () => {
+      const navigatorWithStandalone = window.navigator as Navigator & { standalone?: boolean }
+      const iosStandalone = navigatorWithStandalone.standalone === true
+      setIsStandalone(displayModeMedia.matches || iosStandalone)
+    }
+
+    const onBeforeInstallPrompt = (event: Event) => {
+      event.preventDefault()
+      setInstallPrompt(event as BeforeInstallPromptEvent)
+      setInstallHelp(null)
+    }
+
+    const onAppInstalled = () => {
+      setInstallPrompt(null)
+      setIsStandalone(true)
+    }
+
+    checkStandalone()
+    window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt)
+    window.addEventListener('appinstalled', onAppInstalled)
+    displayModeMedia.addEventListener('change', checkStandalone)
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt)
+      window.removeEventListener('appinstalled', onAppInstalled)
+      displayModeMedia.removeEventListener('change', checkStandalone)
+    }
+  }, [])
+
+  const handleInstallClick = async () => {
+    if (isStandalone) return
+
+    if (installPrompt) {
+      await installPrompt.prompt()
+      await installPrompt.userChoice
+      setInstallPrompt(null)
+      return
+    }
+
+    const userAgent = window.navigator.userAgent.toLowerCase()
+    const isIOS = /iphone|ipad|ipod/.test(userAgent)
+
+    if (isIOS) {
+      setInstallHelp('On iPhone/iPad: tap Share, then Add to Home Screen.')
+      return
+    }
+
+    setInstallHelp('Open your browser menu and choose Install App.')
+  }
+
+  const installLabel = isStandalone ? 'App Installed' : 'Download As App'
 
   return (
     <section
@@ -211,7 +273,7 @@ export function HeroSection() {
                   alt={sign}
                   width={38}
                   height={38}
-                  className="hero-orbit-icon opacity-50 hover:opacity-90 transition-opacity duration-300 drop-shadow-[0_0_8px_rgba(6,182,212,0.6)]"
+                  className="hero-orbit-icon opacity-55 hover:opacity-80 transition-opacity duration-300 drop-shadow-[0_0_8px_rgba(6,182,212,0.28)]"
                 />
               </div>
             ))}
@@ -224,10 +286,11 @@ export function HeroSection() {
             style={{ width: 172, height: 172, boxShadow: '0 0 60px 20px rgba(6,182,212,0.18), 0 0 120px 40px rgba(6,182,212,0.06)' }}
           >
             <Image
-              src="/assets/moon/moon-color.png"
+              src="/assets/today/moon/phases/waxing-crescent.webp"
               alt="Moon"
               fill
-              className="object-cover"
+              sizes="172px"
+              className="object-cover object-center"
               priority
             />
           </div>
@@ -300,9 +363,9 @@ export function HeroSection() {
           {...fadeUp(0.85)}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <Link href="/today">
+          <Link href="/auth/signup">
             <motion.button
-              className="group flex items-center gap-2.5 px-8 py-4 rounded-full bg-gradient-to-r from-cyan-500 to-teal-400 text-[#060D1B] font-bold text-base hover:shadow-2xl hover:shadow-cyan-500/30 transition-shadow"
+              className="group flex items-center gap-2.5 px-8 py-4 rounded-full bg-gradient-to-r from-cyan-500 to-teal-400 text-[#060D1B] font-bold text-base hover:shadow-2xl hover:shadow-cyan-500/30 transition-shadow cursor-pointer"
               whileHover={{ scale: 1.06 }}
               whileTap={{ scale: 0.97 }}
             >
@@ -310,16 +373,29 @@ export function HeroSection() {
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </motion.button>
           </Link>
-          <a href="#features">
-            <motion.button
-              className="px-8 py-4 rounded-full border border-white/15 text-white font-medium text-base hover:bg-white/8 transition-colors backdrop-blur-sm"
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              Explore Features
-            </motion.button>
-          </a>
+          <motion.button
+            type="button"
+            onClick={() => {
+              void handleInstallClick()
+            }}
+            disabled={isStandalone}
+            title={
+              isStandalone
+                ? 'AstroAI is already installed'
+                : 'Install AstroAI as an app'
+            }
+            className="flex items-center gap-2.5 px-8 py-4 rounded-full border border-white/15 text-white font-medium text-base transition-colors backdrop-blur-sm hover:bg-white/8 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+            whileHover={{ scale: isStandalone ? 1 : 1.04 }}
+            whileTap={{ scale: isStandalone ? 1 : 0.97 }}
+          >
+            <Download className="w-4 h-4" />
+            {installLabel}
+          </motion.button>
         </motion.div>
+
+        {installHelp && (
+          <p className="mt-3 text-xs text-slate-500">{installHelp}</p>
+        )}
 
         {/* Trust line */}
         <motion.div
