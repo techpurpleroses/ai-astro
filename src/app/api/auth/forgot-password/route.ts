@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError, z } from "zod";
 import { getServerSupabaseClient } from "@/lib/supabase/server";
+import { buildAuthRedirectUrl, normalizeNextPath } from "@/lib/auth/flow";
 
 export const runtime = "nodejs";
 
@@ -9,31 +10,17 @@ const ForgotPasswordSchema = z.object({
   next: z.string().default("/today"),
 });
 
-function normalizeNext(nextPath: string): string {
-  if (!nextPath.startsWith("/")) return "/today";
-  if (nextPath.startsWith("/auth")) return "/today";
-  return nextPath;
-}
-
-function authPublicBaseUrl(request: NextRequest): string {
-  const configured = process.env.AUTH_PUBLIC_URL ?? process.env.NEXT_PUBLIC_APP_URL;
-  if (configured) return configured.replace(/\/+$/, "");
-  return request.nextUrl.origin.replace(/\/+$/, "");
-}
-
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const input = ForgotPasswordSchema.parse(body);
     const supabase = await getServerSupabaseClient();
 
-    const nextPath = normalizeNext(input.next);
-    const redirectUrl = new URL("/auth/callback", authPublicBaseUrl(request));
-    redirectUrl.searchParams.set("next", nextPath);
-    redirectUrl.searchParams.set("intent", "recovery");
+    const nextPath = normalizeNextPath(input.next);
+    const redirectTo = buildAuthRedirectUrl(request, "recovery", nextPath);
 
     const { error } = await supabase.auth.resetPasswordForEmail(input.email, {
-      redirectTo: redirectUrl.toString(),
+      redirectTo,
     });
 
     if (error) {
@@ -61,4 +48,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

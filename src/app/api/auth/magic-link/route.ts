@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { ZodError, z } from "zod";
 import { randomUUID } from "crypto";
 import { getServerSupabaseClient } from "@/lib/supabase/server";
+import { buildAuthRedirectUrl, normalizeNextPath } from "@/lib/auth/flow";
 
 export const runtime = "nodejs";
 
@@ -11,16 +12,11 @@ const SignupSchema = z.object({
   next: z.string().default("/today"),
 });
 
-function normalizeNext(nextPath: string): string {
-  if (!nextPath.startsWith("/")) return "/today";
-  if (nextPath.startsWith("/auth")) return "/today";
-  return nextPath;
-}
-
-function authPublicBaseUrl(request: NextRequest): string {
-  const configured = process.env.AUTH_PUBLIC_URL ?? process.env.NEXT_PUBLIC_APP_URL;
-  if (configured) return configured.replace(/\/+$/, "");
-  return request.nextUrl.origin.replace(/\/+$/, "");
+function maskEmail(email: string): string {
+  const [name, domain] = email.split("@");
+  if (!name || !domain) return "***";
+  if (name.length <= 2) return `${name[0] ?? "*"}***@${domain}`;
+  return `${name.slice(0, 2)}***@${domain}`;
 }
 
 export async function POST(request: NextRequest) {
@@ -29,17 +25,15 @@ export async function POST(request: NextRequest) {
     const input = SignupSchema.parse(body);
     const supabase = await getServerSupabaseClient();
 
-    const nextPath = normalizeNext(input.next);
-    const redirectUrl = new URL("/auth/callback", authPublicBaseUrl(request));
-    redirectUrl.searchParams.set("next", nextPath);
-    redirectUrl.searchParams.set("intent", "signup");
+    const nextPath = normalizeNextPath(input.next);
+    const redirectTo = buildAuthRedirectUrl(request, "signup", nextPath);
 
     const temporaryPassword = `tmp_${randomUUID()}_Aa1!`;
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: input.email,
       password: temporaryPassword,
       options: {
-        emailRedirectTo: redirectUrl.toString(),
+        emailRedirectTo: redirectTo,
         data: {
           display_name: input.fullName,
         },
@@ -48,6 +42,40 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       throw new Error(error.message);
+    }
+
+    const identities = data.user?.identities ?? [];
+    const isExistingAccountSignupAttempt = identities.length === 0;
+
+    if (isExistingAccountSignupAttempt) {
+      const { error: resendError } = await supabase.auth.resend({
+        type: "signup",
+        email: input.email,
+        options: {
+          emailRedirectTo: redirectTo,
+        },
+      });
+
+      if (resendError && process.env.NODE_ENV !== "production") {
+        console.warn("[auth/signup] resend failed", {
+          email: maskEmail(input.email),
+          message: resendError.message,
+        });
+      }
+
+      return NextResponse.json({
+        ok: true,
+        message:
+          "Check your email and confirm your account. If already confirmed, please log in or use Forgot password.",
+      });
+    }
+
+    if (process.env.NODE_ENV !== "production") {
+      console.info("[auth/signup] verification email requested", {
+        email: maskEmail(input.email),
+        hasSession: Boolean(data.session),
+        redirectTo,
+      });
     }
 
     return NextResponse.json({
@@ -65,7 +93,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         ok: false,
-        error: error instanceof Error ? error.message : "Unable to send magic link.",
+        error: error instanceof Error ? error.message : "Unable to create account.",
       },
       { status: 400 }
     );
