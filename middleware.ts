@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { hasSupabasePublicEnv } from "@/lib/supabase/env";
 import { refreshAuthSession } from "@/lib/supabase/middleware";
 
 const PROTECTED_PREFIXES = [
@@ -34,7 +35,36 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const { response, user } = await refreshAuthSession(request);
+  if (!hasSupabasePublicEnv()) {
+    if (isProtectedPath(pathname) || isPasswordFlowPath(pathname)) {
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/auth/login";
+      loginUrl.searchParams.set("next", `${pathname}${search}`);
+      loginUrl.searchParams.set(
+        "error",
+        "Auth is not configured on this deployment. Add Supabase env vars in Vercel."
+      );
+      return NextResponse.redirect(loginUrl);
+    }
+    return NextResponse.next();
+  }
+
+  let response: NextResponse;
+  let user: Awaited<ReturnType<typeof refreshAuthSession>>["user"];
+  try {
+    const authState = await refreshAuthSession(request);
+    response = authState.response;
+    user = authState.user;
+  } catch {
+    if (isProtectedPath(pathname) || isPasswordFlowPath(pathname)) {
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/auth/login";
+      loginUrl.searchParams.set("next", `${pathname}${search}`);
+      loginUrl.searchParams.set("error", "Auth service unavailable. Please try again.");
+      return NextResponse.redirect(loginUrl);
+    }
+    return NextResponse.next();
+  }
 
   if ((isProtectedPath(pathname) || isPasswordFlowPath(pathname)) && !user) {
     const loginUrl = request.nextUrl.clone();
