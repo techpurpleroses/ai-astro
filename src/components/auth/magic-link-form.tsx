@@ -37,7 +37,7 @@ export function MagicLinkForm({ mode, nextPath, initialError = null }: AuthFormP
 
   const subtitle = useMemo(() => {
     return mode === "signup"
-      ? "We will send a verification link. After verification, you will set your password."
+      ? "Create your account. Check your email and confirm."
       : "Use your email and password to log in.";
   }, [mode]);
 
@@ -91,7 +91,7 @@ export function MagicLinkForm({ mode, nextPath, initialError = null }: AuthFormP
 
       if (mode === "signup") {
         setSuccessMessage(
-          body.message ?? "Verification link sent. Open your email and continue."
+          body.message ?? "Check your email and confirm your account."
         );
         setFullName("");
       } else {
@@ -186,7 +186,7 @@ export function MagicLinkForm({ mode, nextPath, initialError = null }: AuthFormP
             {submitting
               ? "Please wait..."
               : mode === "signup"
-                ? "Send Verification Link"
+                ? "Sign Up"
                 : "Log In"}
           </button>
         </form>
@@ -232,4 +232,3 @@ export function MagicLinkForm({ mode, nextPath, initialError = null }: AuthFormP
     </div>
   );
 }
-

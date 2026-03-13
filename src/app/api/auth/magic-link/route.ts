@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError, z } from "zod";
+import { randomUUID } from "crypto";
 import { getServerSupabaseClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 
-const MagicLinkSchema = z.object({
+const SignupSchema = z.object({
   email: z.string().email(),
   fullName: z.string().trim().min(2).max(100),
   next: z.string().default("/today"),
@@ -25,7 +26,7 @@ function authPublicBaseUrl(request: NextRequest): string {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const input = MagicLinkSchema.parse(body);
+    const input = SignupSchema.parse(body);
     const supabase = await getServerSupabaseClient();
 
     const nextPath = normalizeNext(input.next);
@@ -33,15 +34,16 @@ export async function POST(request: NextRequest) {
     redirectUrl.searchParams.set("next", nextPath);
     redirectUrl.searchParams.set("intent", "signup");
 
-    const { error } = await supabase.auth.signInWithOtp({
+    const temporaryPassword = `tmp_${randomUUID()}_Aa1!`;
+    const { error } = await supabase.auth.signUp({
       email: input.email,
+      password: temporaryPassword,
       options: {
         emailRedirectTo: redirectUrl.toString(),
-        shouldCreateUser: true,
         data: {
           display_name: input.fullName,
         },
-      },
+      }
     });
 
     if (error) {
@@ -50,8 +52,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       ok: true,
-      message:
-        "Verification link sent. After verification, you will set your password.",
+      message: "Check your email and confirm your account.",
     });
   } catch (error) {
     if (error instanceof ZodError) {
