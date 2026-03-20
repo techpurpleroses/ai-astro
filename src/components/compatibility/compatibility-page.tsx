@@ -10,7 +10,8 @@ import { ZodiacGrid } from './zodiac-grid'
 import { ScoreRing, CategoryBar } from './report-score-ring'
 import { BottomSheet } from '@/components/ui/bottom-sheet'
 import { SkeletonCard } from '@/components/ui/skeleton'
-import { useCompatibility } from '@/hooks/use-compatibility'
+import { FeatureGate } from '@/components/billing/feature-gate'
+import { useCompatibility, useCompatibilityPair } from '@/hooks/use-compatibility'
 import type { CompatibilityScore } from '@/types'
 
 const SIGN_COLORS: Record<string, string> = {
@@ -226,13 +227,12 @@ function TodaysMatchesSection() {
 
 export function CompatibilityClient() {
   const router = useRouter()
-  const { data, isLoading } = useCompatibility()
   const [sign1, setSign1] = useState<string | null>('Scorpio')
   const [sign2, setSign2] = useState<string | null>(null)
   const [selectingSlot, setSelectingSlot] = useState<1 | 2 | null>(null)
 
-  const pairKey = sign1 && sign2 ? [sign1.toLowerCase(), sign2.toLowerCase()].sort().join('-') : null
-  const report = pairKey && data?.pairs?.[pairKey] ? data.pairs[pairKey] : null
+  // Live per-pair report from provider
+  const { data: report, isLoading: isReportLoading } = useCompatibilityPair(sign1, sign2)
 
   const handleSelect = (sign: string) => {
     if (selectingSlot === 1) setSign1(sign)
@@ -308,8 +308,11 @@ export function CompatibilityClient() {
                 <Users size={10} className="text-text-muted" />
                 <span className="text-[10px] text-text-muted font-display">505 Reports delivered today</span>
               </div>
-              {sign1 && sign2 && !report && (
-                <p className="text-center text-[10px] text-text-muted">No detailed report for {sign1} and {sign2} yet.</p>
+              {sign1 && sign2 && isReportLoading && (
+                <p className="text-center text-[10px] text-cyan-glow animate-pulse">Loading compatibility…</p>
+              )}
+              {sign1 && sign2 && !isReportLoading && !report && (
+                <p className="text-center text-[10px] text-text-muted">No report available for {sign1} and {sign2} yet.</p>
               )}
             </div>
           </div>
@@ -317,7 +320,9 @@ export function CompatibilityClient() {
 
         {report && sign1 && sign2 && (
           <FadeIn delay={0.1}>
-            <CompatibilityReport report={report} />
+            <FeatureGate feature="compatibility.deep">
+              <CompatibilityReport report={report} />
+            </FeatureGate>
           </FadeIn>
         )}
 
@@ -359,19 +364,9 @@ export function CompatibilityClient() {
 
         <div className="h-px bg-white/6" />
 
-        {!isLoading && (
-          <FadeIn delay={0.2}>
-            <TodaysMatchesSection />
-          </FadeIn>
-        )}
-
-        {isLoading && (
-          <div className="space-y-3">
-            <SkeletonCard className="h-8 w-40" />
-            <SkeletonCard />
-            <SkeletonCard />
-          </div>
-        )}
+        <FadeIn delay={0.2}>
+          <TodaysMatchesSection />
+        </FadeIn>
       </div>
 
       <BottomSheet

@@ -1,0 +1,58 @@
+{
+  "new_moon": {
+    "name": "New Moon",
+    "illumination": "0%",
+    "keyword": "Beginnings",
+    "short": "The seed moment — invisible, full of potential",
+    "description": "Born under a New Moon, you carry the energy of fresh starts and unwritten possibilities. You are a natural initiator — drawn to beginnings, new projects, and the thrill of something not yet formed. Your life is shaped by cycles of renewal."
+  },
+  "waxing_crescent": {
+    "name": "Waxing Crescent",
+    "illumination": "1–49%",
+    "keyword": "Intention",
+    "short": "The first push — desire taking shape",
+    "description": "The Waxing Crescent soul is driven by intention. You set your sights on something and begin moving toward it with quiet determination. You are a builder in motion — always in the process of becoming something greater."
+  },
+  "first_quarter": {
+    "name": "First Quarter",
+    "illumination": "50%",
+    "keyword": "Action",
+    "short": "The turning point — commitment and decision",
+    "description": "Born at the First Quarter, you are wired for action and decision. You thrive in moments of challenge and cross-roads — when others freeze, you move. Your life is a series of decisive pivots that shape your trajectory."
+  },
+  "waxing_gibbous": {
+    "name": "Waxing Gibbous",
+    "illumination": "51–99%",
+    "keyword": "Refinement",
+    "short": "Almost there — the perfectionist's phase",
+    "description": "The Waxing Gibbous soul is driven by refinement and improvement. You are never quite satisfied — not from insecurity, but from a deep knowing that things can always be better. Your eye for detail is extraordinary."
+  },
+  "full_moon": {
+    "name": "Full Moon",
+    "illumination": "100%",
+    "keyword": "Illumination",
+    "short": "The peak — full expression and visibility",
+    "description": "Born under a Full Moon, you are here to be seen. You live at peak emotional intensity — feeling everything fully, expressing everything boldly. Your life pulls you toward moments of full illumination, where nothing is hidden."
+  },
+  "waning_gibbous": {
+    "name": "Waning Gibbous",
+    "illumination": "51–99% (waning)",
+    "keyword": "Sharing",
+    "short": "The harvest — wisdom given freely",
+    "description": "The Waning Gibbous soul is a natural teacher and sharer. You have gathered deep experience and your instinct is to give it away — through mentoring, storytelling, or simply being the wisest person in the room. Your generosity elevates everyone."
+  },
+  "last_quarter": {
+    "name": "Last Quarter",
+    "illumination": "50% (waning)",
+    "keyword": "Release",
+    "short": "The turning point — letting go with wisdom",
+    "description": "Born at the Last Quarter, your life is shaped by the courage to release. You are constantly clearing — old beliefs, old patterns, old relationships that no longer serve. This isn't loss; it is radical wisdom."
+  },
+  "waning_crescent": {
+    "name": "Waning Crescent",
+    "illumination": "1–49% (waning)",
+    "keyword": "Surrender",
+    "short": "The rest before the new — deep wisdom and stillness",
+    "description": "The Waning Crescent soul carries old-soul energy. You are at the end of a great cycle, integrating everything you've learned across lifetimes. You are deeply intuitive, spiritually attuned, and your wisdom comes from a place most people never reach."
+  }
+}

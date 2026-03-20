@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { astroFetchJson } from "@/lib/client/astro-fetch";
 
 interface ForgotPasswordFormProps {
   nextPath: string;
@@ -36,7 +37,8 @@ export function ForgotPasswordForm({ nextPath, initialError = null }: ForgotPass
 
     setSubmitting(true);
     try {
-      const res = await fetch("/api/auth/forgot-password", {
+      const body = await astroFetchJson<ApiResponse>("/api/auth/forgot-password", {
+        debugOrigin: "components.auth.forgot-password",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -47,8 +49,7 @@ export function ForgotPasswordForm({ nextPath, initialError = null }: ForgotPass
         }),
       });
 
-      const body = (await res.json()) as ApiResponse;
-      if (!res.ok || !body.ok) {
+      if (!body.ok) {
         throw new Error(body.error ?? "Unable to send reset link.");
       }
 
@@ -119,4 +120,3 @@ export function ForgotPasswordForm({ nextPath, initialError = null }: ForgotPass
     </div>
   );
 }
-

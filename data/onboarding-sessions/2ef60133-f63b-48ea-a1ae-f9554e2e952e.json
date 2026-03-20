@@ -1,0 +1,17 @@
+{
+  "sessionId": "2ef60133-f63b-48ea-a1ae-f9554e2e952e",
+  "category": "astrocartography",
+  "createdAt": "2026-03-16T07:37:53.039Z",
+  "updatedAt": "2026-03-16T07:37:53.039Z",
+  "status": "active",
+  "currentStep": 0,
+  "source": "public-onboarding",
+  "answers": {},
+  "events": [
+    {
+      "id": "0ab268ae-aca0-4e5c-92bc-7200597135f6",
+      "createdAt": "2026-03-16T07:37:53.039Z",
+      "type": "session_created"
+    }
+  ]
+}

@@ -1,0 +1,310 @@
+{
+  "sessionId": "e4068d4e-f276-47fb-9f2a-05922debea16",
+  "category": "astrocartography",
+  "createdAt": "2026-03-16T08:20:19.883Z",
+  "updatedAt": "2026-03-16T08:21:53.471Z",
+  "status": "active",
+  "currentStep": 5,
+  "source": "public-onboarding",
+  "answers": {
+    "welcome": "male",
+    "birth-date": "March 10, 1996",
+    "birth-time": "02:18 PM",
+    "birth-place": {
+      "label": "City of Rochester, United States",
+      "fullName": "City of Rochester, Monroe County, New York, United States",
+      "city": "City of Rochester",
+      "region": "New York",
+      "country": "United States",
+      "countryCode": "US",
+      "latitude": 43.157285,
+      "longitude": -77.615214,
+      "provider": "nominatim",
+      "providerId": "nominatim:325512997"
+    },
+    "computedChart": {
+      "sunSign": "pisces",
+      "moonSign": "scorpio",
+      "risingSign": "leo",
+      "ascendant": 126.6,
+      "midheaven": 19,
+      "lifePath": 11,
+      "element": "water",
+      "modality": "mutable",
+      "dominantElement": "water",
+      "planets": [
+        {
+          "planet": "sun",
+          "sign": "pisces",
+          "degree": 20.5,
+          "longitude": 350.5,
+          "house": 8,
+          "retrograde": false
+        },
+        {
+          "planet": "moon",
+          "sign": "scorpio",
+          "degree": 25.9,
+          "longitude": 235.9,
+          "house": 4,
+          "retrograde": false
+        },
+        {
+          "planet": "mercury",
+          "sign": "pisces",
+          "degree": 3,
+          "longitude": 333,
+          "house": 8,
+          "retrograde": false
+        },
+        {
+          "planet": "venus",
+          "sign": "taurus",
+          "degree": 3.6,
+          "longitude": 33.6,
+          "house": 10,
+          "retrograde": false
+        },
+        {
+          "planet": "mars",
+          "sign": "pisces",
+          "degree": 18,
+          "longitude": 348,
+          "house": 8,
+          "retrograde": false
+        },
+        {
+          "planet": "jupiter",
+          "sign": "capricorn",
+          "degree": 13,
+          "longitude": 283,
+          "house": 6,
+          "retrograde": false
+        },
+        {
+          "planet": "saturn",
+          "sign": "pisces",
+          "degree": 26.3,
+          "longitude": 356.3,
+          "house": 8,
+          "retrograde": false
+        },
+        {
+          "planet": "uranus",
+          "sign": "aquarius",
+          "degree": 3.2,
+          "longitude": 303.2,
+          "house": 7,
+          "retrograde": false
+        },
+        {
+          "planet": "neptune",
+          "sign": "capricorn",
+          "degree": 27.1,
+          "longitude": 297.1,
+          "house": 6,
+          "retrograde": false
+        },
+        {
+          "planet": "pluto",
+          "sign": "sagittarius",
+          "degree": 2.6,
+          "longitude": 242.6,
+          "house": 5,
+          "retrograde": false
+        }
+      ],
+      "houses": [
+        {
+          "house": 1,
+          "sign": "leo",
+          "longitude": 120
+        },
+        {
+          "house": 2,
+          "sign": "virgo",
+          "longitude": 150
+        },
+        {
+          "house": 3,
+          "sign": "libra",
+          "longitude": 180
+        },
+        {
+          "house": 4,
+          "sign": "scorpio",
+          "longitude": 210
+        },
+        {
+          "house": 5,
+          "sign": "sagittarius",
+          "longitude": 240
+        },
+        {
+          "house": 6,
+          "sign": "capricorn",
+          "longitude": 270
+        },
+        {
+          "house": 7,
+          "sign": "aquarius",
+          "longitude": 300
+        },
+        {
+          "house": 8,
+          "sign": "pisces",
+          "longitude": 330
+        },
+        {
+          "house": 9,
+          "sign": "aries",
+          "longitude": 0
+        },
+        {
+          "house": 10,
+          "sign": "taurus",
+          "longitude": 30
+        },
+        {
+          "house": 11,
+          "sign": "gemini",
+          "longitude": 60
+        },
+        {
+          "house": 12,
+          "sign": "cancer",
+          "longitude": 90
+        }
+      ],
+      "aspects": [
+        {
+          "planet1": "sun",
+          "planet2": "moon",
+          "type": "trine",
+          "orb": 5.4
+        },
+        {
+          "planet1": "sun",
+          "planet2": "mars",
+          "type": "conjunction",
+          "orb": 2.5
+        },
+        {
+          "planet1": "sun",
+          "planet2": "saturn",
+          "type": "conjunction",
+          "orb": 5.8
+        },
+        {
+          "planet1": "moon",
+          "planet2": "saturn",
+          "type": "trine",
+          "orb": 0.4
+        },
+        {
+          "planet1": "moon",
+          "planet2": "neptune",
+          "type": "sextile",
+          "orb": 1.2
+        },
+        {
+          "planet1": "moon",
+          "planet2": "pluto",
+          "type": "conjunction",
+          "orb": 6.7
+        },
+        {
+          "planet1": "mercury",
+          "planet2": "venus",
+          "type": "sextile",
+          "orb": 0.6
+        },
+        {
+          "planet1": "mercury",
+          "planet2": "pluto",
+          "type": "square",
+          "orb": 0.4
+        },
+        {
+          "planet1": "venus",
+          "planet2": "uranus",
+          "type": "square",
+          "orb": 0.4
+        },
+        {
+          "planet1": "venus",
+          "planet2": "neptune",
+          "type": "square",
+          "orb": 6.5
+        },
+        {
+          "planet1": "saturn",
+          "planet2": "neptune",
+          "type": "sextile",
+          "orb": 0.8
+        },
+        {
+          "planet1": "saturn",
+          "planet2": "pluto",
+          "type": "trine",
+          "orb": 6.3
+        },
+        {
+          "planet1": "uranus",
+          "planet2": "neptune",
+          "type": "conjunction",
+          "orb": 6.1
+        },
+        {
+          "planet1": "uranus",
+          "planet2": "pluto",
+          "type": "sextile",
+          "orb": 0.6
+        }
+      ]
+    }
+  },
+  "events": [
+    {
+      "id": "6bcf8e12-c6d6-448b-b944-7ca558f8592f",
+      "createdAt": "2026-03-16T08:20:19.883Z",
+      "type": "session_created"
+    },
+    {
+      "id": "9972220f-9d96-4baa-b364-328ff56f1a77",
+      "createdAt": "2026-03-16T08:20:24.880Z",
+      "type": "answer_saved",
+      "stepId": "welcome"
+    },
+    {
+      "id": "2943b7c5-7586-43fe-97b6-4a605901a893",
+      "createdAt": "2026-03-16T08:20:27.136Z",
+      "type": "step_advanced",
+      "stepId": "advisor-intro"
+    },
+    {
+      "id": "6790e701-26b0-42cf-90f2-ca97b2abcb50",
+      "createdAt": "2026-03-16T08:20:40.177Z",
+      "type": "answer_saved",
+      "stepId": "birth-date"
+    },
+    {
+      "id": "940e9597-28b4-4e57-8217-38e6470a6864",
+      "createdAt": "2026-03-16T08:20:56.861Z",
+      "type": "answer_saved",
+      "stepId": "birth-time"
+    },
+    {
+      "id": "1c12fe95-f569-4f82-a399-d2e294feb822",
+      "createdAt": "2026-03-16T08:21:53.440Z",
+      "type": "answer_saved",
+      "stepId": "birth-place"
+    },
+    {
+      "id": "9ad4b15e-15db-4663-8a08-f381c5fb508e",
+      "createdAt": "2026-03-16T08:21:53.471Z",
+      "type": "answer_saved",
+      "stepId": "computedChart"
+    }
+  ]
+}

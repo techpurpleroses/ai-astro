@@ -1,12 +1,24 @@
 import { useQuery } from '@tanstack/react-query'
+import { astroFetch, astroFetchJson } from '@/lib/client/astro-fetch'
 import type { Advisor, ChatMessage } from '@/types'
+
+export interface ChatHistoryResponse {
+  session: { id: string; status: string; startedAt: string; advisorSlug: string } | null
+  messages: ChatMessage[]
+}
 
 export function useAdvisors() {
   return useQuery<{ advisors: Advisor[]; recentChats: string[] }>({
     queryKey: ['advisors'],
     queryFn: async () => {
-      const data = await import('@/data/advisors.json')
-      return data as unknown as { advisors: Advisor[]; recentChats: string[] }
+      const data = await astroFetchJson<{ advisors: Array<Advisor & { avatarUrl?: string | null }> }>(
+        '/api/dashboard/advisors',
+        { debugOrigin: 'hooks.use-advisors.list' }
+      )
+      return {
+        advisors: (data.advisors ?? []).map((a) => ({ ...a, avatar: a.avatarUrl ?? undefined })),
+        recentChats: [],
+      }
     },
     staleTime: 5 * 60 * 1000,
   })
@@ -17,15 +29,15 @@ export function useAdvisor(id: string) {
   return data?.advisors.find((a) => a.id === id) ?? null
 }
 
-export function useChatMessages(advisorId: string) {
-  return useQuery<ChatMessage[]>({
-    queryKey: ['chat', advisorId],
+export function useChatMessages(advisorSlug: string) {
+  return useQuery<ChatHistoryResponse>({
+    queryKey: ['chat', advisorSlug],
     queryFn: async () => {
-      const data = await import('@/data/chat-messages.json')
-      const threads = data.threads as unknown as Record<string, ChatMessage[]>
-      return threads[advisorId] ?? []
+      return astroFetchJson<ChatHistoryResponse>(`/api/dashboard/advisors/${advisorSlug}/messages`, {
+        debugOrigin: 'hooks.use-advisors.chat-history',
+      })
     },
-    staleTime: Infinity,
+    staleTime: 0,
   })
 }
 
@@ -33,8 +45,12 @@ export function useSuggestedQuestions() {
   return useQuery<string[]>({
     queryKey: ['suggested-questions'],
     queryFn: async () => {
-      const data = await import('@/data/chat-messages.json')
-      return data.suggestedQuestions
+      const res = await astroFetch('/api/dashboard/features/magic-ball', {
+        debugOrigin: 'hooks.use-advisors.suggested-questions',
+      })
+      if (!res.ok) return []
+      const data = await res.json() as { suggestedQuestions?: string[] }
+      return data.suggestedQuestions ?? []
     },
     staleTime: Infinity,
   })

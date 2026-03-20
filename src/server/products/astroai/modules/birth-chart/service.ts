@@ -1,5 +1,6 @@
 import type { BirthChartDTO, BirthChartResponse } from "./types";
 import { resolveCacheFirst } from "../../cache-first";
+import { createServerLogger, durationMs } from "@/server/foundation/observability/logger";
 
 export interface BirthChartQuery {
   userId: string;
@@ -48,6 +49,8 @@ export class BirthChartService {
   ) {}
 
   async getBirthChart(input: BirthChartQuery & { traceId: string }): Promise<BirthChartResponse> {
+    const logger = createServerLogger("astroai.birth-chart.service");
+    const startedAt = Date.now();
     const now = new Date();
     const query: BirthChartQuery = {
       userId: input.userId,
@@ -55,8 +58,15 @@ export class BirthChartService {
       chartType: input.chartType,
       systemType: input.systemType,
     };
+    logger.info("getBirthChart.start", {
+      userId: input.userId,
+      subjectId: input.subjectId,
+      chartType: input.chartType,
+      systemType: input.systemType,
+    });
 
     const resolved = await resolveCacheFirst({
+      scope: "astroai.birth-chart.cache",
       query,
       now,
       cache: this.cache,
@@ -73,7 +83,7 @@ export class BirthChartService {
       },
     });
 
-    return {
+    const response = {
       data: resolved.entry.data,
       meta: {
         sourceProvider: resolved.entry.sourceProvider,
@@ -86,6 +96,14 @@ export class BirthChartService {
       },
       errors: [],
     };
+    logger.info("getBirthChart.success", {
+      durationMs: durationMs(startedAt),
+      outcome: "success",
+      cacheHit: resolved.cacheHit,
+      degraded: resolved.degraded,
+      freshnessStatus: resolved.freshnessStatus,
+      sourceProvider: resolved.entry.sourceProvider,
+    });
+    return response;
   }
 }
-

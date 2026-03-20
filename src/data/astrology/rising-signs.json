@@ -1,0 +1,74 @@
+{
+  "aries": {
+    "sign": "aries",
+    "title": "Aries Rising",
+    "short": "Immediate, energetic, impossible to ignore",
+    "description": "With Aries Rising, you arrive — boldly, directly, and undeniably. People sense your energy before you speak. You project confidence and independence even in moments of inner uncertainty, and your instinct is always to move first and think later."
+  },
+  "taurus": {
+    "sign": "taurus",
+    "title": "Taurus Rising",
+    "short": "Calm, magnetic, and quietly powerful",
+    "description": "Taurus Rising gives you a grounded, magnetic presence that makes people feel instantly comfortable. You move at your own pace, you cannot be rushed, and your steady energy is one of the most reassuring forces in any room."
+  },
+  "gemini": {
+    "sign": "gemini",
+    "title": "Gemini Rising",
+    "short": "Quick, curious, and endlessly fascinating",
+    "description": "Gemini Rising makes you endlessly interesting. You seem to know a little about everything, you light up in conversation, and your energy shifts and adapts with the room. People are drawn to your wit and your ability to make everyone feel heard."
+  },
+  "cancer": {
+    "sign": "cancer",
+    "title": "Cancer Rising",
+    "short": "Warm, nurturing, and emotionally perceptive",
+    "description": "Cancer Rising gives you an approachable warmth that makes people want to open up. You sense emotional undercurrents before they surface, and your instinct is always to protect and care for those around you — even strangers."
+  },
+  "leo": {
+    "sign": "leo",
+    "title": "Leo Rising",
+    "short": "Radiant, commanding, and naturally magnetic",
+    "description": "Leo Rising means you were born to be seen. Whether or not you seek attention, you receive it — because there is a warmth and authority to your presence that draws people in. You carry yourself like someone who knows their worth."
+  },
+  "virgo": {
+    "sign": "virgo",
+    "title": "Virgo Rising",
+    "short": "Precise, composed, and quietly brilliant",
+    "description": "Virgo Rising gives you an air of careful intelligence and quiet competence. You observe more than you speak, and when you do speak, it matters. People trust your judgment instinctively — and your ability to see through the noise to the essential truth."
+  },
+  "libra": {
+    "sign": "libra",
+    "title": "Libra Rising",
+    "short": "Graceful, charming, and naturally balanced",
+    "description": "Libra Rising is the most naturally charming placement. You move through the world with ease and grace, making everyone feel comfortable and valued. Your aesthetic sense is impeccable and your ability to create harmony in any environment is remarkable."
+  },
+  "scorpio": {
+    "sign": "scorpio",
+    "title": "Scorpio Rising",
+    "short": "Intense, magnetic, and impossible to forget",
+    "description": "Scorpio Rising means you are not easily forgotten. There is a depth and intensity to your presence that people sense immediately — a feeling that you see more than you show, and that beneath the surface, there is something profound. Your gaze alone communicates everything."
+  },
+  "sagittarius": {
+    "sign": "sagittarius",
+    "title": "Sagittarius Rising",
+    "short": "Expansive, optimistic, and genuinely free",
+    "description": "Sagittarius Rising gives you an infectious optimism and a sense of limitless possibility. You approach life as a grand adventure, and people are drawn to your enthusiasm and your genuine belief that things will work out. You make the world feel bigger."
+  },
+  "capricorn": {
+    "sign": "capricorn",
+    "title": "Capricorn Rising",
+    "short": "Composed, authoritative, and quietly ambitious",
+    "description": "Capricorn Rising gives you a natural authority that others respect even before you've proven yourself. You carry yourself with composure and purpose, and your instinct is always to play the long game. People trust you with things that matter."
+  },
+  "aquarius": {
+    "sign": "aquarius",
+    "title": "Aquarius Rising",
+    "short": "Original, electric, and unlike anyone else",
+    "description": "Aquarius Rising makes you one of a kind. There is something about you that doesn't quite fit any box — and that's exactly the point. You are here to break the mold, and your distinctly original presence opens minds simply by existing."
+  },
+  "pisces": {
+    "sign": "pisces",
+    "title": "Pisces Rising",
+    "short": "Dreamy, ethereal, and deeply compassionate",
+    "description": "Pisces Rising gives you an otherworldly quality — a gentleness and depth that makes people feel as though they've known you before. You absorb the energy of your environment effortlessly, and your compassion is visible in every interaction."
+  }
+}

@@ -1,4 +1,5 @@
 import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
+import { normalizeNextPath } from "@/lib/auth/flow";
 
 interface ForgotPasswordPageProps {
   searchParams: Promise<{
@@ -7,15 +8,9 @@ interface ForgotPasswordPageProps {
   }>;
 }
 
-function normalizeNext(next: string | undefined): string {
-  if (!next || !next.startsWith("/")) return "/today";
-  if (next.startsWith("/auth")) return "/today";
-  return next;
-}
-
 export default async function ForgotPasswordPage({ searchParams }: ForgotPasswordPageProps) {
   const params = await searchParams;
-  const nextPath = normalizeNext(params.next);
+  const nextPath = normalizeNextPath(params.next);
   const errorMessage = params.error ?? null;
 
   return <ForgotPasswordForm nextPath={nextPath} initialError={errorMessage} />;

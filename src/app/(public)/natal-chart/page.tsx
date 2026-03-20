@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { BRAND_NAME } from '@/lib/brand'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, Sun, Moon, Compass, Globe, Star, Zap } from 'lucide-react'
@@ -239,7 +240,7 @@ export default function NatalChartPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
-            Your AstroAI Birth Chart Includes
+            Your {BRAND_NAME} Birth Chart Includes
           </motion.h2>
           <motion.div
             className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
@@ -283,7 +284,7 @@ export default function NatalChartPage() {
           transition={{ duration: 0.7 }}
         >
           <h2 className="font-mystical text-3xl font-bold text-white mb-3">Reveal Your Chart</h2>
-          <p className="text-slate-400 mb-7">All you need is your date, time, and place of birth. AstroAI does the rest.</p>
+          <p className="text-slate-400 mb-7">All you need is your date, time, and place of birth. {BRAND_NAME} does the rest.</p>
           <Link href="/birth-chart">
             <motion.button
               className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-linear-to-r from-violet-500 to-cyan-500 text-white font-bold text-base shadow-lg shadow-violet-500/20"

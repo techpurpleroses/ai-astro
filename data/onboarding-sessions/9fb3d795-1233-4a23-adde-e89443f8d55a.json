@@ -1,0 +1,332 @@
+{
+  "sessionId": "9fb3d795-1233-4a23-adde-e89443f8d55a",
+  "category": "astrocartography",
+  "createdAt": "2026-03-14T11:21:24.506Z",
+  "updatedAt": "2026-03-14T11:23:14.475Z",
+  "status": "active",
+  "currentStep": 9,
+  "source": "public-onboarding",
+  "answers": {
+    "welcome": "male",
+    "birth-date": "November 1, 1994",
+    "birth-time": "07:15 AM",
+    "birth-place": {
+      "label": "Mumbai, India",
+      "fullName": "Mumbai, Mumbai Suburban District, Maharashtra, 400051, India",
+      "city": "Mumbai",
+      "region": "Maharashtra",
+      "country": "India",
+      "countryCode": "IN",
+      "latitude": 19.054999,
+      "longitude": 72.8692035,
+      "provider": "nominatim",
+      "providerId": "nominatim:230315199"
+    },
+    "computedChart": {
+      "sunSign": "scorpio",
+      "moonSign": "libra",
+      "risingSign": "scorpio",
+      "ascendant": 232.6,
+      "midheaven": 149,
+      "lifePath": 8,
+      "element": "water",
+      "modality": "fixed",
+      "dominantElement": "water",
+      "planets": [
+        {
+          "planet": "sun",
+          "sign": "scorpio",
+          "degree": 8.4,
+          "longitude": 218.4,
+          "house": 1,
+          "retrograde": false
+        },
+        {
+          "planet": "moon",
+          "sign": "libra",
+          "degree": 3.9,
+          "longitude": 183.9,
+          "house": 12,
+          "retrograde": false
+        },
+        {
+          "planet": "mercury",
+          "sign": "libra",
+          "degree": 20.8,
+          "longitude": 200.8,
+          "house": 12,
+          "retrograde": false
+        },
+        {
+          "planet": "venus",
+          "sign": "scorpio",
+          "degree": 12.3,
+          "longitude": 222.3,
+          "house": 1,
+          "retrograde": false
+        },
+        {
+          "planet": "mars",
+          "sign": "leo",
+          "degree": 13.7,
+          "longitude": 133.7,
+          "house": 10,
+          "retrograde": false
+        },
+        {
+          "planet": "jupiter",
+          "sign": "scorpio",
+          "degree": 21.1,
+          "longitude": 231.1,
+          "house": 1,
+          "retrograde": false
+        },
+        {
+          "planet": "saturn",
+          "sign": "pisces",
+          "degree": 5.6,
+          "longitude": 335.6,
+          "house": 5,
+          "retrograde": false
+        },
+        {
+          "planet": "uranus",
+          "sign": "capricorn",
+          "degree": 22.8,
+          "longitude": 292.8,
+          "house": 3,
+          "retrograde": false
+        },
+        {
+          "planet": "neptune",
+          "sign": "capricorn",
+          "degree": 20.8,
+          "longitude": 290.8,
+          "house": 3,
+          "retrograde": false
+        }
+      ],
+      "houses": [
+        {
+          "house": 1,
+          "sign": "scorpio",
+          "longitude": 210
+        },
+        {
+          "house": 2,
+          "sign": "sagittarius",
+          "longitude": 240
+        },
+        {
+          "house": 3,
+          "sign": "capricorn",
+          "longitude": 270
+        },
+        {
+          "house": 4,
+          "sign": "aquarius",
+          "longitude": 300
+        },
+        {
+          "house": 5,
+          "sign": "pisces",
+          "longitude": 330
+        },
+        {
+          "house": 6,
+          "sign": "aries",
+          "longitude": 0
+        },
+        {
+          "house": 7,
+          "sign": "taurus",
+          "longitude": 30
+        },
+        {
+          "house": 8,
+          "sign": "gemini",
+          "longitude": 60
+        },
+        {
+          "house": 9,
+          "sign": "cancer",
+          "longitude": 90
+        },
+        {
+          "house": 10,
+          "sign": "leo",
+          "longitude": 120
+        },
+        {
+          "house": 11,
+          "sign": "virgo",
+          "longitude": 150
+        },
+        {
+          "house": 12,
+          "sign": "libra",
+          "longitude": 180
+        }
+      ],
+      "aspects": [
+        {
+          "planet1": "sun",
+          "planet2": "venus",
+          "type": "conjunction",
+          "orb": 3.9
+        },
+        {
+          "planet1": "sun",
+          "planet2": "mars",
+          "type": "square",
+          "orb": 5.3
+        },
+        {
+          "planet1": "sun",
+          "planet2": "saturn",
+          "type": "trine",
+          "orb": 2.8
+        },
+        {
+          "planet1": "mercury",
+          "planet2": "uranus",
+          "type": "square",
+          "orb": 2
+        },
+        {
+          "planet1": "mercury",
+          "planet2": "neptune",
+          "type": "square",
+          "orb": 0
+        },
+        {
+          "planet1": "venus",
+          "planet2": "mars",
+          "type": "square",
+          "orb": 1.4
+        },
+        {
+          "planet1": "venus",
+          "planet2": "saturn",
+          "type": "trine",
+          "orb": 6.7
+        },
+        {
+          "planet1": "jupiter",
+          "planet2": "uranus",
+          "type": "sextile",
+          "orb": 1.7
+        },
+        {
+          "planet1": "jupiter",
+          "planet2": "neptune",
+          "type": "sextile",
+          "orb": 0.3
+        },
+        {
+          "planet1": "uranus",
+          "planet2": "neptune",
+          "type": "conjunction",
+          "orb": 2
+        }
+      ]
+    },
+    "relationship-status": "married",
+    "goals": [
+      "family"
+    ],
+    "energy-places": "yes",
+    "life-challenges": "dissatisfaction"
+  },
+  "events": [
+    {
+      "id": "27f04190-8711-445f-b615-be2a2f20c6bf",
+      "createdAt": "2026-03-14T11:21:24.506Z",
+      "type": "session_created"
+    },
+    {
+      "id": "44020b90-f49f-4512-8579-fc51b8871324",
+      "createdAt": "2026-03-14T11:21:26.158Z",
+      "type": "answer_saved",
+      "stepId": "welcome"
+    },
+    {
+      "id": "9c75750c-61d4-4cea-8f72-6a14950880ef",
+      "createdAt": "2026-03-14T11:21:30.154Z",
+      "type": "step_advanced",
+      "stepId": "advisor-intro"
+    },
+    {
+      "id": "be0ada90-8e08-439b-9159-e51a96bd3fe2",
+      "createdAt": "2026-03-14T11:21:59.033Z",
+      "type": "answer_saved",
+      "stepId": "birth-date"
+    },
+    {
+      "id": "8fc13a68-d3e8-4c2b-8e9c-0e2954fa5bc9",
+      "createdAt": "2026-03-14T11:22:26.412Z",
+      "type": "answer_saved",
+      "stepId": "birth-time"
+    },
+    {
+      "id": "1e43e6e4-2e60-4a8a-87bd-a23c830d6360",
+      "createdAt": "2026-03-14T11:22:34.737Z",
+      "type": "answer_saved",
+      "stepId": "birth-place"
+    },
+    {
+      "id": "9b0ec26b-3b04-4d6b-98fa-e09280520703",
+      "createdAt": "2026-03-14T11:22:34.745Z",
+      "type": "answer_saved",
+      "stepId": "computedChart"
+    },
+    {
+      "id": "6c62c100-daae-4149-a905-556d89592405",
+      "createdAt": "2026-03-14T11:22:45.065Z",
+      "type": "step_advanced",
+      "stepId": "video-story-1"
+    },
+    {
+      "id": "ba4c76a5-69ee-4769-a08f-f3ea9153f428",
+      "createdAt": "2026-03-14T11:22:48.099Z",
+      "type": "answer_saved",
+      "stepId": "relationship-status"
+    },
+    {
+      "id": "a18f0127-0729-42a6-9f58-3857fafe2268",
+      "createdAt": "2026-03-14T11:22:52.099Z",
+      "type": "answer_saved",
+      "stepId": "goals"
+    },
+    {
+      "id": "89507841-8e75-4af9-9811-6d22ea02e819",
+      "createdAt": "2026-03-14T11:22:54.704Z",
+      "type": "answer_saved",
+      "stepId": "energy-places"
+    },
+    {
+      "id": "135d3c56-9f5a-4480-bf87-67bfbfd29ab5",
+      "createdAt": "2026-03-14T11:22:57.329Z",
+      "type": "answer_saved",
+      "stepId": "life-challenges"
+    },
+    {
+      "id": "bfb2ca03-3be1-403c-bb21-dea4605e2eda",
+      "createdAt": "2026-03-14T11:23:08.847Z",
+      "type": "step_advanced",
+      "stepId": "video-story-2"
+    },
+    {
+      "id": "bedbb0fa-d22e-4406-9457-983f5363af25",
+      "createdAt": "2026-03-14T11:23:13.400Z",
+      "type": "step_back",
+      "stepId": "palm-photo-astro"
+    },
+    {
+      "id": "eb949c34-9b6c-4856-8744-52b3615cdb41",
+      "createdAt": "2026-03-14T11:23:14.475Z",
+      "type": "step_back",
+      "stepId": "video-story-2"
+    }
+  ]
+}

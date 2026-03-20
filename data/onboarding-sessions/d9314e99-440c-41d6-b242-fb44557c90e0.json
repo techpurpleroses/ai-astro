@@ -1,0 +1,414 @@
+{
+  "sessionId": "d9314e99-440c-41d6-b242-fb44557c90e0",
+  "category": "astrocartography",
+  "createdAt": "2026-03-16T08:39:57.124Z",
+  "updatedAt": "2026-03-16T10:05:06.106Z",
+  "status": "active",
+  "currentStep": 11,
+  "source": "public-onboarding",
+  "answers": {
+    "welcome": "male",
+    "birth-date": "November 16, 1989",
+    "birth-time": "05:22 PM",
+    "birth-place": {
+      "label": "Thembelihle Local Municipality, South Africa",
+      "fullName": "Orania, Thembelihle Local Municipality, Pixley ka Seme District Municipality, Northern Cape, 8752, South Africa",
+      "city": "Thembelihle Local Municipality",
+      "region": "Northern Cape",
+      "country": "South Africa",
+      "countryCode": "ZA",
+      "latitude": -29.8178034,
+      "longitude": 24.4118567,
+      "provider": "nominatim",
+      "providerId": "nominatim:30505240"
+    },
+    "computedChart": {
+      "sunSign": "scorpio",
+      "moonSign": "cancer",
+      "risingSign": "taurus",
+      "ascendant": 35.1,
+      "midheaven": 313,
+      "lifePath": 9,
+      "element": "water",
+      "modality": "fixed",
+      "dominantElement": "water",
+      "planets": [
+        {
+          "planet": "sun",
+          "sign": "scorpio",
+          "degree": 24.3,
+          "longitude": 234.3,
+          "house": 7,
+          "retrograde": false
+        },
+        {
+          "planet": "moon",
+          "sign": "cancer",
+          "degree": 11,
+          "longitude": 101,
+          "house": 3,
+          "retrograde": false
+        },
+        {
+          "planet": "mercury",
+          "sign": "scorpio",
+          "degree": 25.3,
+          "longitude": 235.3,
+          "house": 7,
+          "retrograde": false
+        },
+        {
+          "planet": "venus",
+          "sign": "capricorn",
+          "degree": 9.6,
+          "longitude": 279.6,
+          "house": 9,
+          "retrograde": false
+        },
+        {
+          "planet": "mars",
+          "sign": "scorpio",
+          "degree": 7.4,
+          "longitude": 217.4,
+          "house": 7,
+          "retrograde": false
+        },
+        {
+          "planet": "jupiter",
+          "sign": "cancer",
+          "degree": 10.4,
+          "longitude": 100.4,
+          "house": 3,
+          "retrograde": false
+        },
+        {
+          "planet": "saturn",
+          "sign": "capricorn",
+          "degree": 10.6,
+          "longitude": 280.6,
+          "house": 9,
+          "retrograde": false
+        },
+        {
+          "planet": "uranus",
+          "sign": "capricorn",
+          "degree": 3.1,
+          "longitude": 273.1,
+          "house": 9,
+          "retrograde": false
+        },
+        {
+          "planet": "neptune",
+          "sign": "capricorn",
+          "degree": 10.4,
+          "longitude": 280.4,
+          "house": 9,
+          "retrograde": false
+        },
+        {
+          "planet": "pluto",
+          "sign": "scorpio",
+          "degree": 14.9,
+          "longitude": 224.9,
+          "house": 7,
+          "retrograde": false
+        }
+      ],
+      "houses": [
+        {
+          "house": 1,
+          "sign": "taurus",
+          "longitude": 30
+        },
+        {
+          "house": 2,
+          "sign": "gemini",
+          "longitude": 60
+        },
+        {
+          "house": 3,
+          "sign": "cancer",
+          "longitude": 90
+        },
+        {
+          "house": 4,
+          "sign": "leo",
+          "longitude": 120
+        },
+        {
+          "house": 5,
+          "sign": "virgo",
+          "longitude": 150
+        },
+        {
+          "house": 6,
+          "sign": "libra",
+          "longitude": 180
+        },
+        {
+          "house": 7,
+          "sign": "scorpio",
+          "longitude": 210
+        },
+        {
+          "house": 8,
+          "sign": "sagittarius",
+          "longitude": 240
+        },
+        {
+          "house": 9,
+          "sign": "capricorn",
+          "longitude": 270
+        },
+        {
+          "house": 10,
+          "sign": "aquarius",
+          "longitude": 300
+        },
+        {
+          "house": 11,
+          "sign": "pisces",
+          "longitude": 330
+        },
+        {
+          "house": 12,
+          "sign": "aries",
+          "longitude": 0
+        }
+      ],
+      "aspects": [
+        {
+          "planet1": "sun",
+          "planet2": "mercury",
+          "type": "conjunction",
+          "orb": 1
+        },
+        {
+          "planet1": "moon",
+          "planet2": "venus",
+          "type": "opposition",
+          "orb": 1.4
+        },
+        {
+          "planet1": "moon",
+          "planet2": "mars",
+          "type": "trine",
+          "orb": 3.6
+        },
+        {
+          "planet1": "moon",
+          "planet2": "jupiter",
+          "type": "conjunction",
+          "orb": 0.6
+        },
+        {
+          "planet1": "moon",
+          "planet2": "saturn",
+          "type": "opposition",
+          "orb": 0.4
+        },
+        {
+          "planet1": "moon",
+          "planet2": "uranus",
+          "type": "opposition",
+          "orb": 7.9
+        },
+        {
+          "planet1": "moon",
+          "planet2": "neptune",
+          "type": "opposition",
+          "orb": 0.6
+        },
+        {
+          "planet1": "moon",
+          "planet2": "pluto",
+          "type": "trine",
+          "orb": 3.9
+        },
+        {
+          "planet1": "venus",
+          "planet2": "mars",
+          "type": "sextile",
+          "orb": 2.2
+        },
+        {
+          "planet1": "venus",
+          "planet2": "jupiter",
+          "type": "opposition",
+          "orb": 0.8
+        },
+        {
+          "planet1": "venus",
+          "planet2": "saturn",
+          "type": "conjunction",
+          "orb": 1
+        },
+        {
+          "planet1": "venus",
+          "planet2": "uranus",
+          "type": "conjunction",
+          "orb": 6.5
+        },
+        {
+          "planet1": "venus",
+          "planet2": "neptune",
+          "type": "conjunction",
+          "orb": 0.8
+        },
+        {
+          "planet1": "mars",
+          "planet2": "jupiter",
+          "type": "trine",
+          "orb": 3
+        },
+        {
+          "planet1": "mars",
+          "planet2": "saturn",
+          "type": "sextile",
+          "orb": 3.2
+        },
+        {
+          "planet1": "mars",
+          "planet2": "neptune",
+          "type": "sextile",
+          "orb": 3
+        },
+        {
+          "planet1": "mars",
+          "planet2": "pluto",
+          "type": "conjunction",
+          "orb": 7.5
+        },
+        {
+          "planet1": "jupiter",
+          "planet2": "saturn",
+          "type": "opposition",
+          "orb": 0.2
+        },
+        {
+          "planet1": "jupiter",
+          "planet2": "uranus",
+          "type": "opposition",
+          "orb": 7.3
+        },
+        {
+          "planet1": "jupiter",
+          "planet2": "neptune",
+          "type": "opposition",
+          "orb": 0
+        },
+        {
+          "planet1": "jupiter",
+          "planet2": "pluto",
+          "type": "trine",
+          "orb": 4.5
+        },
+        {
+          "planet1": "saturn",
+          "planet2": "uranus",
+          "type": "conjunction",
+          "orb": 7.5
+        },
+        {
+          "planet1": "saturn",
+          "planet2": "neptune",
+          "type": "conjunction",
+          "orb": 0.2
+        },
+        {
+          "planet1": "uranus",
+          "planet2": "neptune",
+          "type": "conjunction",
+          "orb": 7.3
+        }
+      ]
+    },
+    "relationship-status": "just-broke-up",
+    "goals": [
+      "travel",
+      "career",
+      "friends"
+    ],
+    "energy-places": "yes",
+    "life-challenges": "opportunities"
+  },
+  "events": [
+    {
+      "id": "19dcb191-92b2-4028-a1ec-d57f02a84278",
+      "createdAt": "2026-03-16T08:39:57.124Z",
+      "type": "session_created"
+    },
+    {
+      "id": "8a48537b-eeb1-47ea-9692-1ea16df01f25",
+      "createdAt": "2026-03-16T09:48:01.260Z",
+      "type": "answer_saved",
+      "stepId": "welcome"
+    },
+    {
+      "id": "22a6eea2-4823-45b3-aa29-135c1e26ea8d",
+      "createdAt": "2026-03-16T09:48:04.851Z",
+      "type": "step_advanced",
+      "stepId": "advisor-intro"
+    },
+    {
+      "id": "534e7e1f-aab5-4056-85b2-01fcae91155c",
+      "createdAt": "2026-03-16T09:48:16.410Z",
+      "type": "answer_saved",
+      "stepId": "birth-date"
+    },
+    {
+      "id": "879bb712-2aee-4cb5-acfb-b6a6bae0c8f1",
+      "createdAt": "2026-03-16T09:48:22.621Z",
+      "type": "answer_saved",
+      "stepId": "birth-time"
+    },
+    {
+      "id": "90166892-cc62-43e0-bd53-7e006a20268a",
+      "createdAt": "2026-03-16T09:49:18.978Z",
+      "type": "answer_saved",
+      "stepId": "birth-place"
+    },
+    {
+      "id": "1a38898c-efb2-4d16-b3ee-bf3018d70ee2",
+      "createdAt": "2026-03-16T09:49:19.008Z",
+      "type": "answer_saved",
+      "stepId": "computedChart"
+    },
+    {
+      "id": "6264055c-90d2-4f17-84b0-4d5c6d9d833d",
+      "createdAt": "2026-03-16T10:04:49.285Z",
+      "type": "step_advanced",
+      "stepId": "video-story-1"
+    },
+    {
+      "id": "d0ee0153-dc32-4abc-a494-277ff0134cba",
+      "createdAt": "2026-03-16T10:04:52.149Z",
+      "type": "answer_saved",
+      "stepId": "relationship-status"
+    },
+    {
+      "id": "23c5d52e-4231-4b79-8d45-c42e68bc9e2b",
+      "createdAt": "2026-03-16T10:04:57.277Z",
+      "type": "answer_saved",
+      "stepId": "goals"
+    },
+    {
+      "id": "b0d42ef5-0867-482c-a548-df0e0c005ec8",
+      "createdAt": "2026-03-16T10:04:59.499Z",
+      "type": "answer_saved",
+      "stepId": "energy-places"
+    },
+    {
+      "id": "e9c579f5-ab0e-4b71-bbcf-4e7f25e1f6e1",
+      "createdAt": "2026-03-16T10:05:03.381Z",
+      "type": "answer_saved",
+      "stepId": "life-challenges"
+    },
+    {
+      "id": "0c05fd7f-52bc-42c2-a318-4ef6a80737ec",
+      "createdAt": "2026-03-16T10:05:06.106Z",
+      "type": "step_advanced",
+      "stepId": "video-story-2"
+    }
+  ]
+}

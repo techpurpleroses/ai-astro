@@ -9,10 +9,9 @@ import {
 } from '@/lib/palm/contracts'
 import OpenAI from 'openai'
 import { z } from 'zod'
+import { type Pt, clamp, createDebugLogger, round } from '@/lib/palm/utils'
 
-type Pt = [number, number]
-const PALM_DEBUG = process.env.PALM_DEBUG !== '0'
-const PALM_INTERPRET_USE_MOCK = process.env.PALM_INTERPRET_USE_MOCK === '1'
+const debugLog = createDebugLogger('palm.interpret')
 
 const IDEAL_CURVATURE: Record<PalmLineId, number> = {
   heart: 0.32,
@@ -21,15 +20,6 @@ const IDEAL_CURVATURE: Record<PalmLineId, number> = {
   fate: 0.14,
 }
 const NOT_VISIBLE_SUMMARY = 'Line not clearly visible in this scan.'
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value))
-}
-
-function round(value: number, decimals = 2) {
-  const factor = 10 ** decimals
-  return Math.round(value * factor) / factor
-}
 
 function distance(a: Pt, b: Pt) {
   const dx = b[0] - a[0]
@@ -148,15 +138,6 @@ type OpenAiPalmNarrative = z.infer<typeof OpenAiPalmNarrativeSchema>
 
 let cachedOpenAi: OpenAI | null | undefined
 
-function debugLog(step: string, data?: Record<string, unknown>) {
-  if (!PALM_DEBUG) return
-  if (data) {
-    console.log(`[palm.interpret] ${step}`, data)
-    return
-  }
-  console.log(`[palm.interpret] ${step}`)
-}
-
 function getOpenAiClient() {
   if (cachedOpenAi !== undefined) return cachedOpenAi
   const key = process.env.OPENAI_API_KEY?.trim()
@@ -186,8 +167,6 @@ async function generateOpenAiNarrative(
   input: PalmInterpretRequest,
   base: PalmInterpretResponse
 ): Promise<OpenAiPalmNarrative | null> {
-  if (process.env.PALM_INTERPRET_USE_OPENAI === '0') return null
-
   const client = getOpenAiClient()
   if (!client) return null
 
@@ -233,9 +212,8 @@ async function generateOpenAiNarrative(
     })
     return validated.data
   } catch (error) {
-    console.warn('palm.interpret openai fallback:', error)
     debugLog('openai.response.fail', {
-      reason: error instanceof Error ? error.message : String(error),
+      error,
     })
     return null
   }
@@ -261,35 +239,6 @@ function mergeNarrative(
       lineSuggestion,
     },
     insights: narrative.insights,
-    lines: {
-      heart: { ...base.lines.heart, summary: lineSuggestion.heart },
-      head: { ...base.lines.head, summary: lineSuggestion.head },
-      life: { ...base.lines.life, summary: lineSuggestion.life },
-      fate: { ...base.lines.fate, summary: lineSuggestion.fate },
-    },
-  })
-}
-
-function mockNarrative(base: PalmInterpretResponse): PalmInterpretResponse {
-  const lineSuggestion = {
-    heart: 'Mock: heart line interpretation for UI testing.',
-    head: 'Mock: head line interpretation for UI testing.',
-    life: 'Mock: life line interpretation for UI testing.',
-    fate: 'Mock: fate line interpretation for UI testing.',
-  }
-
-  return PalmInterpretResponseSchema.parse({
-    ...base,
-    core: {
-      ...base.core,
-      lineSuggestion,
-    },
-    insights: {
-      emotionalType: 'Mock: emotional insight',
-      cognitiveStyle: 'Mock: cognitive insight',
-      vitality: 'Mock: vitality insight',
-      careerFocus: 'Mock: career insight',
-    },
     lines: {
       heart: { ...base.lines.heart, summary: lineSuggestion.heart },
       head: { ...base.lines.head, summary: lineSuggestion.head },
@@ -389,11 +338,6 @@ export async function interpretPalmScan(input: PalmInterpretRequest): Promise<Pa
   debugLog('pipeline.start', { side: input.side, confidence: input.confidence })
   const base = interpretPalmScanDeterministic(input)
   debugLog('deterministic.ready', { score: base.core.lineScore })
-  if (PALM_INTERPRET_USE_MOCK) {
-    const mocked = mockNarrative(base)
-    debugLog('pipeline.done.mock', { ms: Date.now() - startedAt })
-    return mocked
-  }
   const narrative = await generateOpenAiNarrative(input, base)
   if (!narrative) {
     debugLog('pipeline.done.fallback', { ms: Date.now() - startedAt })

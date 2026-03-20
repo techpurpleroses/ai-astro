@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Sparkles, ArrowRight, Star } from 'lucide-react'
+import { BRAND_NAME } from '@/lib/brand'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -116,7 +117,7 @@ export function CtaSection() {
 
           {/* Subtitle */}
           <p className="text-slate-400 text-lg max-w-lg leading-relaxed">
-            Join over 500,000 seekers who use AstroAI every day to navigate life with the wisdom of the stars.
+            Join over 500,000 seekers who use {BRAND_NAME} every day to navigate life with the wisdom of the stars.
           </p>
 
           {/* Feature pills */}
@@ -141,7 +142,7 @@ export function CtaSection() {
                 whileTap={{ scale: 0.97 }}
               >
                 <Sparkles className="w-4 h-4" />
-                Open AstroAI Free
+                Open {BRAND_NAME} Free
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </motion.button>
             </Link>

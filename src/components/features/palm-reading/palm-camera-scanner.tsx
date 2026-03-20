@@ -13,7 +13,9 @@ import { useRef, useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Camera, Upload, RotateCcw, X, CheckCircle, AlertCircle, Hand, Flashlight, FlashlightOff } from 'lucide-react'
 import Image from 'next/image'
+import { astroFetch } from '@/lib/client/astro-fetch'
 import type { PalmScanRecord } from '@/lib/palm/contracts'
+import { BRAND_NAME } from '@/lib/brand'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -57,7 +59,6 @@ const LINE_META_BY_ID: Record<LineId, PalmLine> = {
   life: LINE_META[2],
   fate: LINE_META[3],
 }
-const PALM_DEBUG = process.env.NEXT_PUBLIC_PALM_DEBUG !== '0'
 const UPLOAD_MAX_DIMENSION = 1600
 const UPLOAD_TARGET_BYTES = 1_400_000
 const UPLOAD_MIN_QUALITY = 0.62
@@ -117,17 +118,14 @@ interface MediaPipePrepResult {
   spread: number
   quality: PalmImageQuality
   message?: string
+  landmarks?: Array<{ x: number; y: number }>
 }
 
 let handLandmarkerPromise: Promise<MpHandLandmarker | null> | null = null
 
 function logScan(step: string, data?: Record<string, unknown>) {
-  if (!PALM_DEBUG) return
-  if (data) {
-    console.log(`[PalmCameraScanner] ${step}`, data)
-    return
-  }
-  console.log(`[PalmCameraScanner] ${step}`)
+  void step
+  void data
 }
 
 function getOrCreatePalmClientId() {
@@ -417,7 +415,7 @@ async function getHandLandmarker() {
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)
-      console.warn('[PalmCameraScanner] mediapipe.init.failed', message)
+      logScan('mediapipe.init.failed', { message })
       return null
     }
   })()
@@ -504,6 +502,18 @@ async function prepPalmImageWithMediaPipe(input: ProcessedImage): Promise<MediaP
     spread: Number(spread.toFixed(3)),
     quality,
     message: blocked ? prepFailureMessage(issues) : undefined,
+    landmarks: (() => {
+      // Remap from original-image coords → cropped-image coords so dots
+      // align with the image that is actually displayed after the crop.
+      const cropLeft = cropRect.x / input.width
+      const cropTop  = cropRect.y / input.height
+      const cropW    = cropRect.w / input.width
+      const cropH    = cropRect.h / input.height
+      return points.map((p) => ({
+        x: clamp01((clamp01(p.x) - cropLeft) / cropW),
+        y: clamp01((clamp01(p.y) - cropTop)  / cropH),
+      }))
+    })(),
   }
 }
 
@@ -614,10 +624,10 @@ function drawLine(
   ctx.save()
   drawPartialPath()
   ctx.strokeStyle = color
-  ctx.lineWidth = 9
+  ctx.lineWidth = 6
   ctx.globalAlpha = 0.12 * progress
   ctx.shadowColor = color
-  ctx.shadowBlur = 12
+  ctx.shadowBlur = 10
   ctx.lineCap = 'round'
   ctx.stroke()
   ctx.restore()
@@ -626,7 +636,7 @@ function drawLine(
   ctx.save()
   drawPartialPath()
   ctx.strokeStyle = 'rgba(3, 8, 18, 0.5)'
-  ctx.lineWidth = 6.5
+  ctx.lineWidth = 4.5
   ctx.globalAlpha = 0.9 * progress
   ctx.lineCap = 'round'
   ctx.stroke()
@@ -636,10 +646,10 @@ function drawLine(
   ctx.save()
   drawPartialPath()
   ctx.strokeStyle = color
-  ctx.lineWidth = 4.2
+  ctx.lineWidth = 2.8
   ctx.globalAlpha = 0.95 * progress
   ctx.shadowColor = color
-  ctx.shadowBlur = 5
+  ctx.shadowBlur = 4
   ctx.lineCap = 'round'
   ctx.stroke()
   ctx.restore()
@@ -685,9 +695,13 @@ function HandGuideOverlay({ hand }: { hand: 'left' | 'right' }) {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-interface Props { hand: 'left' | 'right'; onClose: () => void }
+interface Props {
+  hand: 'left' | 'right'
+  onClose: () => void
+  onboardingComplete?: (result: PalmScanRecord, email: string) => void
+}
 
-export function PalmCameraScanner({ hand, onClose }: Props) {
+export function PalmCameraScanner({ hand, onClose, onboardingComplete }: Props) {
   const videoRef      = useRef<HTMLVideoElement>(null)
   const captureCanvas = useRef<HTMLCanvasElement>(null)
   const overlayRef    = useRef<HTMLCanvasElement>(null)
@@ -696,8 +710,11 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
   const streamRef     = useRef<MediaStream | null>(null)
   const isBackCamRef  = useRef(false)
   const clientIdRef   = useRef('')
+  const scanRecordRef = useRef<PalmScanRecord | null>(null)
+  const landmarkPtsRef = useRef<Array<{ x: number; y: number }> | null>(null)
 
   const [phase, setPhase]             = useState<Phase>('intro')
+  const [signupEmail, setSignupEmail] = useState('')
   const [imageUrl, setImageUrl]       = useState<string | null>(null)
   const [imgSize, setImgSize]         = useState<{ w: number; h: number } | null>(null)
   const [errorMsg, setErrorMsg]       = useState('')
@@ -750,7 +767,8 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
 
     try {
       for (;;) {
-        const res = await fetch('/api/palm/scan', {
+        const res = await astroFetch('/api/palm/scan', {
+          debugOrigin: 'components.palm-camera-scanner.scan',
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -818,6 +836,10 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
           trait: data.interpret!.core.lineSuggestion[line.id],
         })))
 
+        if (data.scanId && data.clientId && data.createdAt && data.detect && data.interpret) {
+          scanRecordRef.current = data as PalmScanRecord
+        }
+
         setCurrentLine(0)
         setDrawnCount(0)
         setPhase('drawing')
@@ -861,6 +883,10 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
       setErrorMsg(prep.message ?? 'Palm pre-check failed. Retake with better framing and lighting.')
       setPhase('error')
       return null
+    }
+
+    if (prep.landmarks) {
+      landmarkPtsRef.current = prep.landmarks
     }
 
     let prepared = prep.processed
@@ -1145,6 +1171,43 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     }
   }, [phase, detectedLines, imgSize, lineOrder])
 
+  // ── Draw MediaPipe landmark dots during scanning phase ──
+  useEffect(() => {
+    if (phase !== 'scanning') return
+    const canvas = overlayRef.current
+    const viewport = imageViewportRef.current
+    const landmarks = landmarkPtsRef.current
+    if (!canvas || !viewport || !landmarks || !imgSize) return
+
+    const vw = Math.max(1, viewport.clientWidth)
+    const vh = Math.max(1, viewport.clientHeight)
+    const dpr = window.devicePixelRatio || 1
+    canvas.width = Math.floor(vw * dpr)
+    canvas.height = Math.floor(vh * dpr)
+    canvas.style.width = `${vw}px`
+    canvas.style.height = `${vh}px`
+    const ctx = canvas.getContext('2d')!
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    ctx.clearRect(0, 0, vw, vh)
+
+    // Mirror the mapToViewport logic from the drawing phase:
+    // image is letterboxed (aspect-ratio-preserved) inside the viewport.
+    const scale   = Math.min(vw / imgSize.w, vh / imgSize.h)
+    const drawW   = imgSize.w * scale
+    const drawH   = imgSize.h * scale
+    const offsetX = (vw - drawW) / 2
+    const offsetY = (vh - drawH) / 2
+
+    landmarks.forEach(({ x, y }) => {
+      ctx.beginPath()
+      ctx.arc(offsetX + x * drawW, offsetY + y * drawH, 4, 0, Math.PI * 2)
+      ctx.fillStyle = 'rgba(255,255,255,0.85)'
+      ctx.shadowColor = 'white'
+      ctx.shadowBlur = 8
+      ctx.fill()
+    })
+  }, [phase, imgSize])
+
   // ── Reset ──
   const reset = useCallback(() => {
     stopStream()
@@ -1159,6 +1222,9 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
     setLineOrder(LINE_ORDER)
     setDetectedLines(null)
     setPalmLines(LINE_META)
+    scanRecordRef.current = null
+    landmarkPtsRef.current = null
+    setSignupEmail('')
   }, [stopStream, imageUrl])
 
   const openFilePicker = useCallback(() => {
@@ -1547,7 +1613,7 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
             </div>
 
             {/* Results panel — scrollable below the image */}
-            {phase === 'results' && (
+            {phase === 'results' && !onboardingComplete && (
               <div
                 className="overflow-y-auto px-4 pt-4 space-y-3"
                 style={{ maxHeight: '45%', paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 1rem)' }}
@@ -1601,11 +1667,130 @@ export function PalmCameraScanner({ hand, onClose }: Props) {
                 </div>
               </div>
             )}
+
+            {/* Onboarding results: blurred cards + signup teaser */}
+            {phase === 'results' && onboardingComplete && (
+              <div className="relative overflow-hidden" style={{ maxHeight: '45%' }}>
+                {/* Blurred results preview */}
+                <div
+                  className="px-4 pt-4 space-y-3 select-none pointer-events-none"
+                  style={{ filter: 'blur(5px)', userSelect: 'none', paddingBottom: '9rem' }}
+                >
+                  {/* Palm line cards */}
+                  <p className="text-xs font-semibold text-slate-400">Your Palm Analysis</p>
+                  {palmLines.map((line, i) => {
+                    const visible = visibleLineIds.has(line.id)
+                    const displayScore = visible ? line.score : 0
+                    return (
+                    <motion.div
+                      key={line.id}
+                      initial={{ opacity: 0, x: -12 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.08 }}
+                      className="rounded-xl p-3.5"
+                      style={{ background: 'rgba(15,30,53,0.9)', border: `1px solid ${line.color}22` }}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full" style={{ background: line.color }} />
+                          <span className="text-sm font-semibold text-white">{line.label}</span>
+                        </div>
+                        <span className="text-sm font-bold" style={{ color: line.color }}>
+                          {visible ? `${line.score}%` : '--'}
+                        </span>
+                      </div>
+                      <div className="h-1.5 rounded-full bg-white/6 overflow-hidden mb-2">
+                        <motion.div
+                          className="h-full rounded-full"
+                          initial={{ width: 0 }}
+                          animate={{ width: `${displayScore}%` }}
+                          transition={{ duration: 0.9, delay: 0.2 + i * 0.1, ease: 'easeOut' }}
+                          style={{ background: `linear-gradient(90deg, ${line.color}70, ${line.color})`, boxShadow: `0 0 6px ${line.color}40` }}
+                        />
+                      </div>
+                      <p className="text-xs text-slate-500">{line.trait}</p>
+                    </motion.div>
+                    )
+                  })}
+
+                  {/* Personality traits */}
+                  <div className="rounded-xl p-3.5" style={{ background: 'rgba(15,30,53,0.9)', border: '1px solid rgba(99,102,241,0.2)' }}>
+                    <p className="text-xs font-semibold text-slate-400 mb-2.5">Personality Traits</p>
+                    <div className="flex flex-wrap gap-2">
+                      {['Emotionally Intuitive', 'Natural Leader', 'Deep Thinker', 'Creative Soul', 'Resilient'].map((t) => (
+                        <span key={t} className="px-2.5 py-1 rounded-full text-[11px] font-medium text-indigo-300" style={{ background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.3)' }}>{t}</span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Life area scores */}
+                  <div className="rounded-xl p-3.5" style={{ background: 'rgba(15,30,53,0.9)', border: '1px solid rgba(251,191,36,0.2)' }}>
+                    <p className="text-xs font-semibold text-slate-400 mb-3">Life Area Scores</p>
+                    {[
+                      { label: 'Love & Relationships', score: 78, color: '#f472b6' },
+                      { label: 'Career & Ambition',   score: 85, color: '#34d399' },
+                      { label: 'Health & Vitality',   score: 72, color: '#60a5fa' },
+                      { label: 'Wealth Potential',    score: 81, color: '#fbbf24' },
+                    ].map(({ label, score, color }) => (
+                      <div key={label} className="mb-2.5 last:mb-0">
+                        <div className="flex justify-between mb-1">
+                          <span className="text-xs text-white/70">{label}</span>
+                          <span className="text-xs font-bold" style={{ color }}>{score}%</span>
+                        </div>
+                        <div className="h-1 rounded-full bg-white/6 overflow-hidden">
+                          <div className="h-full rounded-full" style={{ width: `${score}%`, background: `linear-gradient(90deg, ${color}60, ${color})` }} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Full reading teaser */}
+                  <div className="rounded-xl p-3.5" style={{ background: 'rgba(15,30,53,0.9)', border: '1px solid rgba(45,212,191,0.15)' }}>
+                    <p className="text-xs font-semibold text-slate-400 mb-2">Your Full Palm Reading</p>
+                    <p className="text-xs text-white/50 leading-relaxed">
+                      Your heart line reveals a deeply empathetic nature with strong emotional intelligence. The distinctive curve suggests you form meaningful, lasting bonds. Your head line indicates analytical thinking balanced with creativity — rare in combination. The life line&apos;s depth points to remarkable resilience and an adventurous spirit that draws opportunities naturally...
+                    </p>
+                  </div>
+                </div>
+
+                {/* Frosted signup overlay */}
+                <div className="absolute inset-0 flex flex-col justify-end">
+                  <div
+                    className="px-5 pb-4 pt-4 space-y-3"
+                    style={{ background: 'linear-gradient(to bottom, transparent 0%, #0d1825 28%)' }}
+                  >
+                    <p className="text-center text-base font-bold text-white leading-snug">
+                      Sign up to understand yourself better<br />
+                      <span className="text-teal-400">with {BRAND_NAME}</span>
+                    </p>
+                    <input
+                      type="email"
+                      value={signupEmail}
+                      onChange={(e) => setSignupEmail(e.target.value)}
+                      placeholder="your@email.com"
+                      className="w-full h-12 rounded-2xl bg-white/10 border border-white/20 px-4 text-sm text-white placeholder:text-white/40 outline-none focus:border-teal-400"
+                    />
+                    <p className="text-[10px] text-center text-white/30">
+                      🔒 Your personal data is safe with us.
+                    </p>
+                    <button
+                      onClick={() => {
+                        if (!signupEmail || !scanRecordRef.current) return
+                        onboardingComplete(scanRecordRef.current, signupEmail)
+                      }}
+                      disabled={!signupEmail}
+                      className="w-full h-12 rounded-full bg-teal-400 text-[#0d1825] font-bold text-sm disabled:opacity-40"
+                    >
+                      Continue
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
     </div>
   )
 }
-
 

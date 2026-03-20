@@ -1,0 +1,38 @@
+{
+  "fire": {
+    "name": "Fire",
+    "signs": ["aries", "leo", "sagittarius"],
+    "emoji": "🔥",
+    "tagline": "Passionate, bold, and driven by vision",
+    "description": "Fire signs burn bright with enthusiasm and creative force. You are motivated by inspiration, not routine — you need a mission to feel alive. Your energy is contagious, your courage is real, and your belief in possibility is unshakeable.",
+    "strengths": ["Enthusiasm", "Courage", "Creativity", "Leadership"],
+    "shadow": "Burnout, impatience, can overlook details in the rush forward"
+  },
+  "earth": {
+    "name": "Earth",
+    "signs": ["taurus", "virgo", "capricorn"],
+    "emoji": "🌿",
+    "tagline": "Grounded, practical, and built to last",
+    "description": "Earth signs build the world. You understand that lasting value comes from patience and precision. Where others dream, you create — methodically, beautifully, durably. You are the ones people turn to when it matters most.",
+    "strengths": ["Reliability", "Patience", "Practicality", "Loyalty"],
+    "shadow": "Rigidity, over-caution, resistance to change"
+  },
+  "air": {
+    "name": "Air",
+    "signs": ["gemini", "libra", "aquarius"],
+    "emoji": "🌬️",
+    "tagline": "Curious, communicative, and always evolving",
+    "description": "Air signs live in the realm of ideas. You are the connectors, the thinkers, the communicators who see patterns before anyone else. Your mind is your greatest tool — and your greatest adventure.",
+    "strengths": ["Intelligence", "Communication", "Adaptability", "Objectivity"],
+    "shadow": "Overthinking, emotional detachment, difficulty settling down"
+  },
+  "water": {
+    "name": "Water",
+    "signs": ["cancer", "scorpio", "pisces"],
+    "emoji": "🌊",
+    "tagline": "Feeling, intuitive, and emotionally profound",
+    "description": "Water signs feel everything. Your emotional intelligence is extraordinary — you read people at depths they cannot access themselves. Your compassion, your intuition, and your ability to heal and connect are the rarest gifts.",
+    "strengths": ["Empathy", "Intuition", "Depth", "Emotional intelligence"],
+    "shadow": "Overwhelm, escapism, difficulty with boundaries"
+  }
+}

@@ -1,18 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { getServerSupabaseClient } from "@/lib/supabase/server";
-import { normalizeNextPath } from "@/lib/auth/flow";
+import { normalizeNextPath, VALID_OTP_TYPES } from "@/lib/auth/flow";
 
 export const runtime = "nodejs";
-
-const VALID_OTP_TYPES: EmailOtpType[] = [
-  "signup",
-  "magiclink",
-  "recovery",
-  "invite",
-  "email",
-  "email_change",
-];
 
 function buildLoginRedirect(request: NextRequest, nextPath: string, error: string): NextResponse {
   const loginUrl = new URL("/auth/login", request.url);

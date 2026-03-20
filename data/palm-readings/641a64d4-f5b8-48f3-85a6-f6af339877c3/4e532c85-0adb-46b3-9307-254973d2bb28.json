@@ -1,0 +1,208 @@
+{
+  "scanId": "4e532c85-0adb-46b3-9307-254973d2bb28",
+  "clientId": "641a64d4-f5b8-48f3-85a6-f6af339877c3",
+  "side": "left",
+  "createdAt": "2026-03-16T11:40:30.988Z",
+  "detect": {
+    "hasPalm": true,
+    "lines": {
+      "heart": [
+        [
+          0.5181,
+          0.4567
+        ],
+        [
+          0.5362,
+          0.485
+        ],
+        [
+          0.5567,
+          0.5125
+        ],
+        [
+          0.5847,
+          0.5367
+        ],
+        [
+          0.6168,
+          0.5558
+        ],
+        [
+          0.648,
+          0.57
+        ],
+        [
+          0.6817,
+          0.5808
+        ],
+        [
+          0.7179,
+          0.5883
+        ],
+        [
+          0.7508,
+          0.5933
+        ],
+        [
+          0.7829,
+          0.5975
+        ]
+      ],
+      "head": [
+        [
+          0.4013,
+          0.51
+        ],
+        [
+          0.4301,
+          0.5217
+        ],
+        [
+          0.4622,
+          0.5308
+        ],
+        [
+          0.4934,
+          0.5442
+        ],
+        [
+          0.5255,
+          0.5592
+        ],
+        [
+          0.5551,
+          0.5767
+        ],
+        [
+          0.5847,
+          0.5975
+        ],
+        [
+          0.6135,
+          0.6192
+        ],
+        [
+          0.6406,
+          0.6417
+        ],
+        [
+          0.6661,
+          0.6625
+        ]
+      ],
+      "life": [
+        [
+          0.4046,
+          0.5125
+        ],
+        [
+          0.4383,
+          0.5242
+        ],
+        [
+          0.4737,
+          0.5442
+        ],
+        [
+          0.5041,
+          0.5742
+        ],
+        [
+          0.5288,
+          0.6092
+        ],
+        [
+          0.5461,
+          0.6442
+        ],
+        [
+          0.5592,
+          0.6817
+        ],
+        [
+          0.5666,
+          0.72
+        ],
+        [
+          0.5683,
+          0.7567
+        ],
+        [
+          0.5641,
+          0.7958
+        ]
+      ],
+      "fate": []
+    },
+    "confidence": {
+      "heart": 0.859,
+      "head": 0.779,
+      "life": 0.84,
+      "fate": 0.25
+    },
+    "model": {
+      "provider": "roboflow",
+      "name": "palm-lines-recognition-wemy5/1"
+    }
+  },
+  "interpret": {
+    "core": {
+      "lineScore": {
+        "heart": 76,
+        "head": 75,
+        "life": 75,
+        "fate": 0
+      },
+      "lineSuggestion": {
+        "heart": "Heart line is strong and indicates emotional stability.",
+        "head": "Head line suggests clear and logical thinking.",
+        "life": "Life line is deep and long, showing good vitality.",
+        "fate": "Line not clearly visible in this scan."
+      }
+    },
+    "insights": {
+      "emotionalType": "Emotionally stable and balanced.",
+      "cognitiveStyle": "Logical and clear thinker.",
+      "vitality": "High vitality and strong health.",
+      "careerFocus": "Flexible and adaptable career focus."
+    },
+    "lines": {
+      "heart": {
+        "score": 76,
+        "summary": "Heart line is strong and indicates emotional stability.",
+        "metrics": {
+          "length": 3.15,
+          "depth": 0.86,
+          "curvature": 0.39
+        }
+      },
+      "head": {
+        "score": 75,
+        "summary": "Head line suggests clear and logical thinking.",
+        "metrics": {
+          "length": 3.09,
+          "depth": 0.78,
+          "curvature": 0.19
+        }
+      },
+      "life": {
+        "score": 75,
+        "summary": "Life line is deep and long, showing good vitality.",
+        "metrics": {
+          "length": 3.56,
+          "depth": 0.84,
+          "curvature": 0.59
+        }
+      },
+      "fate": {
+        "score": 0,
+        "summary": "Line not clearly visible in this scan.",
+        "metrics": {
+          "length": 0,
+          "depth": 0.25,
+          "curvature": 0
+        }
+      }
+    }
+  }
+}

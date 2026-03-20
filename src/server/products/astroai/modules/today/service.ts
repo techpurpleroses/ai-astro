@@ -1,6 +1,7 @@
 import type { DateScopedQuery } from "../../contracts";
 import type { TodayDTO, TodayResponse } from "./types";
 import { resolveCacheFirst } from "../../cache-first";
+import { createServerLogger, durationMs } from "@/server/foundation/observability/logger";
 
 export interface TodayCacheRepository {
   getFresh(query: DateScopedQuery, now: Date): Promise<{
@@ -42,8 +43,15 @@ export class TodayService {
   ) {}
 
   async getToday(input: DateScopedQuery & { traceId: string }): Promise<TodayResponse> {
+    const logger = createServerLogger("astroai.today.service");
+    const startedAt = Date.now();
     const now = new Date();
+    logger.info("getToday.start", {
+      date: input.date,
+      systemType: input.systemType,
+    });
     const resolved = await resolveCacheFirst({
+      scope: "astroai.today.cache",
       query: { date: input.date, systemType: input.systemType },
       now,
       cache: this.cache,
@@ -60,7 +68,7 @@ export class TodayService {
       },
     });
 
-    return {
+    const response = {
       data: resolved.entry.data,
       meta: {
         sourceProvider: resolved.entry.sourceProvider,
@@ -73,6 +81,14 @@ export class TodayService {
       },
       errors: [],
     };
+    logger.info("getToday.success", {
+      durationMs: durationMs(startedAt),
+      outcome: "success",
+      cacheHit: resolved.cacheHit,
+      degraded: resolved.degraded,
+      freshnessStatus: resolved.freshnessStatus,
+      sourceProvider: resolved.entry.sourceProvider,
+    });
+    return response;
   }
 }
-

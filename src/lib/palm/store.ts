@@ -33,6 +33,10 @@ function clientDir(clientId: string) {
   return path.join(PALM_DATA_ROOT, sanitizeClientId(clientId))
 }
 
+function scanFilePath(clientId: string, scanId: string) {
+  return path.join(clientDir(clientId), `${scanId}.json`)
+}
+
 export function normalizeClientId(clientId?: string) {
   return sanitizeClientId(clientId)
 }
@@ -41,7 +45,7 @@ export async function savePalmScanRecord(record: PalmScanRecord) {
   const parsed = PalmScanRecordSchema.parse(record)
   const dir = clientDir(parsed.clientId)
   await fs.mkdir(dir, { recursive: true })
-  const filePath = path.join(dir, `${parsed.scanId}.json`)
+  const filePath = scanFilePath(parsed.clientId, parsed.scanId)
   await fs.writeFile(filePath, JSON.stringify(parsed, null, 2), 'utf8')
 }
 
@@ -53,8 +57,9 @@ export async function listPalmScanRecords(clientId: string, limit: number) {
       fileNames
         .filter((name) => name.endsWith('.json'))
         .map(async (name) => {
+          const scanId = name.slice(0, -'.json'.length)
           try {
-            const raw = await fs.readFile(path.join(dir, name), 'utf8')
+            const raw = await fs.readFile(scanFilePath(clientId, scanId), 'utf8')
             const parsed = JSON.parse(raw)
             const record = PalmScanRecordSchema.safeParse(parsed)
             return record.success ? record.data : null

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { BRAND_NAME } from '@/lib/brand'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, Sparkles, Star, Sun, Moon, Zap } from 'lucide-react'
@@ -65,7 +66,7 @@ export default function HoroscopePage() {
             <span className="text-gradient-cyan">Horoscope</span>
           </h1>
           <p className="text-slate-400 text-lg leading-relaxed mb-8">
-            Not just your Sun sign — AstroAI reads planetary transits, your rising sign, and current cosmic weather to deliver guidance that is uniquely yours.
+            Not just your Sun sign — {BRAND_NAME} reads planetary transits, your rising sign, and current cosmic weather to deliver guidance that is uniquely yours.
           </p>
 
           {/* Floating sign images */}
@@ -124,7 +125,7 @@ export default function HoroscopePage() {
             <h2 className="font-mystical text-3xl sm:text-4xl font-bold text-white mb-3">
               Preview Your Reading
             </h2>
-            <p className="text-slate-400">Select your sign to see a sample daily horoscope powered by AstroAI.</p>
+            <p className="text-slate-400">Select your sign to see a sample daily horoscope powered by {BRAND_NAME}.</p>
           </motion.div>
 
           {/* Sign grid */}

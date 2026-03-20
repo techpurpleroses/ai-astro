@@ -7,6 +7,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, Download, Star } from 'lucide-react'
+import { BRAND_NAME } from '@/lib/brand'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -381,8 +382,8 @@ export function HeroSection() {
             disabled={isStandalone}
             title={
               isStandalone
-                ? 'AstroAI is already installed'
-                : 'Install AstroAI as an app'
+                ? `${BRAND_NAME} is already installed`
+                : `Install ${BRAND_NAME} as an app`
             }
             className="flex items-center gap-2.5 px-8 py-4 rounded-full border border-white/15 text-white font-medium text-base transition-colors backdrop-blur-sm hover:bg-white/8 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             whileHover={{ scale: isStandalone ? 1 : 1.04 }}

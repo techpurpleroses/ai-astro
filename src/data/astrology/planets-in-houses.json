@@ -1,0 +1,602 @@
+{
+  "sun-in-house-1": {
+    "title": "Sun in the 1st House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-house-2": {
+    "title": "Sun in the 2nd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-house-3": {
+    "title": "Sun in the 3rd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-house-4": {
+    "title": "Sun in the 4th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-house-5": {
+    "title": "Sun in the 5th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-house-6": {
+    "title": "Sun in the 6th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-house-7": {
+    "title": "Sun in the 7th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-house-8": {
+    "title": "Sun in the 8th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-house-9": {
+    "title": "Sun in the 9th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-house-10": {
+    "title": "Sun in the 10th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-house-11": {
+    "title": "Sun in the 11th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-house-12": {
+    "title": "Sun in the 12th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-house-1": {
+    "title": "Moon in the 1st House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-house-2": {
+    "title": "Moon in the 2nd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-house-3": {
+    "title": "Moon in the 3rd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-house-4": {
+    "title": "Moon in the 4th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-house-5": {
+    "title": "Moon in the 5th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-house-6": {
+    "title": "Moon in the 6th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-house-7": {
+    "title": "Moon in the 7th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-house-8": {
+    "title": "Moon in the 8th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-house-9": {
+    "title": "Moon in the 9th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-house-10": {
+    "title": "Moon in the 10th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-house-11": {
+    "title": "Moon in the 11th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-house-12": {
+    "title": "Moon in the 12th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-house-1": {
+    "title": "Mercury in the 1st House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-house-2": {
+    "title": "Mercury in the 2nd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-house-3": {
+    "title": "Mercury in the 3rd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-house-4": {
+    "title": "Mercury in the 4th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-house-5": {
+    "title": "Mercury in the 5th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-house-6": {
+    "title": "Mercury in the 6th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-house-7": {
+    "title": "Mercury in the 7th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-house-8": {
+    "title": "Mercury in the 8th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-house-9": {
+    "title": "Mercury in the 9th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-house-10": {
+    "title": "Mercury in the 10th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-house-11": {
+    "title": "Mercury in the 11th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-house-12": {
+    "title": "Mercury in the 12th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-house-1": {
+    "title": "Venus in the 1st House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-house-2": {
+    "title": "Venus in the 2nd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-house-3": {
+    "title": "Venus in the 3rd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-house-4": {
+    "title": "Venus in the 4th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-house-5": {
+    "title": "Venus in the 5th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-house-6": {
+    "title": "Venus in the 6th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-house-7": {
+    "title": "Venus in the 7th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-house-8": {
+    "title": "Venus in the 8th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-house-9": {
+    "title": "Venus in the 9th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-house-10": {
+    "title": "Venus in the 10th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-house-11": {
+    "title": "Venus in the 11th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-house-12": {
+    "title": "Venus in the 12th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-house-1": {
+    "title": "Mars in the 1st House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-house-2": {
+    "title": "Mars in the 2nd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-house-3": {
+    "title": "Mars in the 3rd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-house-4": {
+    "title": "Mars in the 4th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-house-5": {
+    "title": "Mars in the 5th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-house-6": {
+    "title": "Mars in the 6th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-house-7": {
+    "title": "Mars in the 7th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-house-8": {
+    "title": "Mars in the 8th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-house-9": {
+    "title": "Mars in the 9th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-house-10": {
+    "title": "Mars in the 10th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-house-11": {
+    "title": "Mars in the 11th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-house-12": {
+    "title": "Mars in the 12th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-house-1": {
+    "title": "Jupiter in the 1st House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-house-2": {
+    "title": "Jupiter in the 2nd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-house-3": {
+    "title": "Jupiter in the 3rd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-house-4": {
+    "title": "Jupiter in the 4th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-house-5": {
+    "title": "Jupiter in the 5th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-house-6": {
+    "title": "Jupiter in the 6th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-house-7": {
+    "title": "Jupiter in the 7th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-house-8": {
+    "title": "Jupiter in the 8th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-house-9": {
+    "title": "Jupiter in the 9th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-house-10": {
+    "title": "Jupiter in the 10th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-house-11": {
+    "title": "Jupiter in the 11th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-house-12": {
+    "title": "Jupiter in the 12th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-house-1": {
+    "title": "Saturn in the 1st House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-house-2": {
+    "title": "Saturn in the 2nd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-house-3": {
+    "title": "Saturn in the 3rd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-house-4": {
+    "title": "Saturn in the 4th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-house-5": {
+    "title": "Saturn in the 5th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-house-6": {
+    "title": "Saturn in the 6th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-house-7": {
+    "title": "Saturn in the 7th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-house-8": {
+    "title": "Saturn in the 8th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-house-9": {
+    "title": "Saturn in the 9th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-house-10": {
+    "title": "Saturn in the 10th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-house-11": {
+    "title": "Saturn in the 11th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-house-12": {
+    "title": "Saturn in the 12th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-house-1": {
+    "title": "Uranus in the 1st House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-house-2": {
+    "title": "Uranus in the 2nd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-house-3": {
+    "title": "Uranus in the 3rd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-house-4": {
+    "title": "Uranus in the 4th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-house-5": {
+    "title": "Uranus in the 5th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-house-6": {
+    "title": "Uranus in the 6th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-house-7": {
+    "title": "Uranus in the 7th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-house-8": {
+    "title": "Uranus in the 8th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-house-9": {
+    "title": "Uranus in the 9th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-house-10": {
+    "title": "Uranus in the 10th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-house-11": {
+    "title": "Uranus in the 11th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-house-12": {
+    "title": "Uranus in the 12th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-house-1": {
+    "title": "Neptune in the 1st House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-house-2": {
+    "title": "Neptune in the 2nd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-house-3": {
+    "title": "Neptune in the 3rd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-house-4": {
+    "title": "Neptune in the 4th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-house-5": {
+    "title": "Neptune in the 5th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-house-6": {
+    "title": "Neptune in the 6th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-house-7": {
+    "title": "Neptune in the 7th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-house-8": {
+    "title": "Neptune in the 8th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-house-9": {
+    "title": "Neptune in the 9th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-house-10": {
+    "title": "Neptune in the 10th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-house-11": {
+    "title": "Neptune in the 11th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-house-12": {
+    "title": "Neptune in the 12th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-house-1": {
+    "title": "Pluto in the 1st House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-house-2": {
+    "title": "Pluto in the 2nd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-house-3": {
+    "title": "Pluto in the 3rd House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-house-4": {
+    "title": "Pluto in the 4th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-house-5": {
+    "title": "Pluto in the 5th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-house-6": {
+    "title": "Pluto in the 6th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-house-7": {
+    "title": "Pluto in the 7th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-house-8": {
+    "title": "Pluto in the 8th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-house-9": {
+    "title": "Pluto in the 9th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-house-10": {
+    "title": "Pluto in the 10th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-house-11": {
+    "title": "Pluto in the 11th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-house-12": {
+    "title": "Pluto in the 12th House",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  }
+}

@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState, useCallback, useEffect } from 'react'
+import { BRAND_NAME } from '@/lib/brand'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -771,7 +772,7 @@ export default function PalmPage() {
             <span className="text-gradient-gold">Your Hands</span>
           </h1>
           <p className="text-slate-400 text-lg leading-relaxed mb-8">
-            Palmistry — the ancient art of reading hands — has guided seekers for thousands of years. AstroAI brings this wisdom into the modern age with AI-powered line analysis.
+            Palmistry — the ancient art of reading hands — has guided seekers for thousands of years. {BRAND_NAME} brings this wisdom into the modern age with AI-powered line analysis.
           </p>
           <Link href="/features/palm-reading">
             <motion.button
@@ -810,7 +811,7 @@ export default function PalmPage() {
           transition={{ duration: 0.7 }}
         >
           <h2 className="font-mystical text-3xl font-bold text-white mb-3">Unlock Your Palm Reading</h2>
-          <p className="text-slate-400 mb-7">Let AstroAI analyse your palm lines and reveal what your hands say about your love, mind, health, and destiny.</p>
+          <p className="text-slate-400 mb-7">Let {BRAND_NAME} analyse your palm lines and reveal what your hands say about your love, mind, health, and destiny.</p>
           <Link href="/features/palm-reading">
             <motion.button
               className="px-8 py-4 rounded-full bg-linear-to-r from-amber-500 to-orange-400 text-[#060D1B] font-bold text-base shadow-lg shadow-amber-500/20"

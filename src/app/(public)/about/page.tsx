@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { BRAND_NAME } from '@/lib/brand'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, Sparkles, Shield, Zap, Heart, Star, Globe } from 'lucide-react'
@@ -62,7 +63,7 @@ export default function AboutPage() {
             <span className="text-gradient-cyan">Meets Modern AI</span>
           </h1>
           <p className="text-slate-400 text-xl leading-relaxed">
-            AstroAI was born from a simple belief: the wisdom encoded in the stars should be accessible to everyone — not just those who have spent years studying astrology.
+            {BRAND_NAME} was born from a simple belief: the wisdom encoded in the stars should be accessible to everyone — not just those who have spent years studying astrology.
           </p>
         </motion.div>
       </section>
@@ -87,7 +88,7 @@ export default function AboutPage() {
                 We believe astrology is not about destiny being fixed — it is about understanding the cosmic weather and navigating it wisely. Just as a sailor reads the stars to chart a course, we help you read yours.
               </p>
               <p className="text-slate-400 leading-relaxed">
-                By combining the interpretive depth of traditional astrology with the computational power of modern AI, AstroAI delivers readings that are both deeply rooted in tradition and startlingly personal. We process thousands of astrological variables in seconds, so you receive guidance that actually reflects your unique cosmic fingerprint.
+                By combining the interpretive depth of traditional astrology with the computational power of modern AI, {BRAND_NAME} delivers readings that are both deeply rooted in tradition and startlingly personal. We process thousands of astrological variables in seconds, so you receive guidance that actually reflects your unique cosmic fingerprint.
               </p>
             </motion.div>
           </div>
@@ -128,7 +129,7 @@ export default function AboutPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
-            How AstroAI Works
+            How {BRAND_NAME} Works
           </motion.h2>
           <div className="space-y-4">
             {HOW_STEPS.map((step, i) => (

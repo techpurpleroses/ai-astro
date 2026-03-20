@@ -1,6 +1,16 @@
 import { NextRequest } from "next/server";
+import type { EmailOtpType } from "@supabase/supabase-js";
 
 export type AuthIntent = "signup" | "recovery";
+
+export const VALID_OTP_TYPES: EmailOtpType[] = [
+  "signup",
+  "magiclink",
+  "recovery",
+  "invite",
+  "email",
+  "email_change",
+];
 
 const DEFAULT_AUTH_CALLBACK_PATH = "/auth/callback";
 

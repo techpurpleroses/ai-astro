@@ -8,6 +8,8 @@ import { format } from 'date-fns'
 import { BottomSheet } from '@/components/ui/bottom-sheet'
 import { SkeletonCard } from '@/components/ui/skeleton'
 import { useAdvisor, useChatMessages, useSuggestedQuestions } from '@/hooks/use-advisors'
+import { usePlan } from '@/hooks/use-plan'
+import { astroFetch } from '@/lib/client/astro-fetch'
 import type { ChatMessage, TarotCard } from '@/types'
 
 function SessionTimer({ isOnline }: { isOnline: boolean }) {
@@ -95,39 +97,121 @@ function MessageBubble({ message, advisorName }: { message: ChatMessage; advisor
   )
 }
 
+function TypingIndicator({ advisorName }: { advisorName: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex gap-2 items-start"
+    >
+      <div
+        className="h-8 w-8 rounded-xl shrink-0 flex items-center justify-center text-xs font-display font-bold"
+        style={{ background: 'linear-gradient(135deg, rgba(6,182,212,0.25), rgba(167,139,250,0.15))' }}
+      >
+        {advisorName.split(' ').map((part) => part[0]).join('')}
+      </div>
+      <div
+        className="px-4 py-3 rounded-2xl flex items-center gap-1.5"
+        style={{
+          background: 'rgba(15,30,53,0.9)',
+          border: '1px solid rgba(6,182,212,0.15)',
+          borderRadius: '4px 18px 18px 18px',
+        }}
+      >
+        {[0, 1, 2].map((i) => (
+          <motion.div
+            key={i}
+            className="h-1.5 w-1.5 rounded-full bg-text-muted"
+            animate={{ opacity: [0.3, 1, 0.3] }}
+            transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2 }}
+          />
+        ))}
+      </div>
+    </motion.div>
+  )
+}
+
 export function ChatPageClient({ advisorId }: { advisorId: string }) {
   const router = useRouter()
   const advisor = useAdvisor(advisorId)
-  const { data: messages, isLoading } = useChatMessages(advisorId)
+  const { data: chatHistory, isLoading } = useChatMessages(advisorId)
   const { data: suggested } = useSuggestedQuestions()
 
+  const { creditBalance } = usePlan()
   const [input, setInput] = useState('')
   const [pendingMessages, setPendingMessages] = useState<ChatMessage[]>([])
+  const [isSending, setIsSending] = useState(false)
   const [refillOpen, setRefillOpen] = useState(false)
   const [billingIssueOpen, setBillingIssueOpen] = useState(false)
 
+  const hasCredits = creditBalance > 0
+
+  // Track session ID across sends — first send creates session, subsequent sends reuse it
+  const sessionIdRef = useRef<string | undefined>(undefined)
+
+  useEffect(() => {
+    if (chatHistory?.session?.id) {
+      sessionIdRef.current = chatHistory.session.id
+    }
+  }, [chatHistory?.session?.id])
+
   const bottomRef = useRef<HTMLDivElement>(null)
+  const serverMessages = chatHistory?.messages ?? []
   const mergedMessages = useMemo(
-    () => [...(messages ?? []), ...pendingMessages],
-    [messages, pendingMessages],
+    () => [...serverMessages, ...pendingMessages],
+    [serverMessages, pendingMessages],
   )
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [mergedMessages])
+  }, [mergedMessages, isSending])
 
-  const handleSend = useCallback((text: string) => {
-    if (!text.trim()) return
-    const newMessage: ChatMessage = {
+  const handleSend = useCallback(async (text: string) => {
+    if (!text.trim() || isSending) return
+
+    // Optimistically add user message
+    const optimisticMsg: ChatMessage = {
       id: `local-${Date.now()}`,
       advisorId,
       role: 'user',
       content: text,
       timestamp: new Date().toISOString(),
     }
-    setPendingMessages((prev) => [...prev, newMessage])
+    setPendingMessages((prev) => [...prev, optimisticMsg])
     setInput('')
-  }, [advisorId])
+    setIsSending(true)
+
+    try {
+      const res = await astroFetch(`/api/dashboard/advisors/${advisorId}/messages`, {
+        debugOrigin: 'components.advisors.chat.send-message',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          content: text,
+          sessionId: sessionIdRef.current,
+        }),
+      })
+
+      if (res.ok) {
+        const result = await res.json() as {
+          session: { id: string }
+          userMessage: ChatMessage
+          advisorMessage: ChatMessage
+        }
+        // Save session ID for subsequent messages
+        sessionIdRef.current = result.session.id
+        // Replace optimistic message with real messages from server
+        setPendingMessages((prev) => {
+          const withoutOptimistic = prev.filter((m) => m.id !== optimisticMsg.id)
+          return [...withoutOptimistic, result.userMessage, result.advisorMessage]
+        })
+      }
+    } catch {
+      // Keep optimistic message visible; user can retry
+    } finally {
+      setIsSending(false)
+    }
+  }, [advisorId, isSending])
 
   if (!advisor) {
     return (
@@ -172,28 +256,6 @@ export function ChatPageClient({ advisorId }: { advisorId: string }) {
         <p className="text-[9px] text-text-muted">All sessions are private and confidential</p>
       </div>
 
-      <div className="px-2 pt-2">
-        <div
-          className="rounded-2xl px-3 py-2.5 flex items-center gap-2"
-          style={{ background: 'rgba(244,239,220,0.95)', border: '1px solid rgba(255,255,255,0.16)' }}
-        >
-          <div className="h-6 w-6 rounded-full bg-midnight-800/80 text-white flex items-center justify-center text-[10px] font-bold">
-            !
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-[12px] font-display font-bold text-midnight-950">You are running out of minutes</p>
-            <p className="text-[11px] text-midnight-800">Refill to continue chatting.</p>
-          </div>
-          <button
-            onClick={() => setRefillOpen(true)}
-            className="rounded-full px-3 py-1.5 text-xs font-display font-bold text-white"
-            style={{ background: 'linear-gradient(135deg, #22D3EE, #06B6D4)' }}
-          >
-            Refill
-          </button>
-        </div>
-      </div>
-
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 overscroll-contain">
         {isLoading && (
           <div className="space-y-3">
@@ -205,7 +267,9 @@ export function ChatPageClient({ advisorId }: { advisorId: string }) {
           <MessageBubble key={message.id} message={message} advisorName={advisor.name} />
         ))}
 
-        {mergedMessages.length < 4 && suggested && (
+        {isSending && <TypingIndicator advisorName={advisor.name} />}
+
+        {mergedMessages.length === 0 && !isLoading && suggested && (
           <div className="pt-2">
             <p className="text-[10px] text-text-muted mb-2 font-display">Suggested questions:</p>
             <div className="flex flex-wrap gap-1.5">
@@ -229,41 +293,57 @@ export function ChatPageClient({ advisorId }: { advisorId: string }) {
         className="shrink-0 px-4 py-3 border-t border-white/5"
         style={{ background: 'rgba(10,22,40,0.97)', backdropFilter: 'blur(16px)' }}
       >
-        <div
-          className="flex items-end gap-2 rounded-2xl px-3 py-2"
-          style={{ background: 'rgba(15,30,53,0.8)', border: '1px solid rgba(255,255,255,0.08)' }}
-        >
-          <textarea
-            value={input}
-            onChange={(event) => setInput(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault()
-                handleSend(input)
-              }
-            }}
-            placeholder="Ask your question..."
-            rows={1}
-            className="flex-1 resize-none bg-transparent text-sm text-text-primary placeholder:text-text-muted outline-none py-1 max-h-24"
-            style={{ scrollbarWidth: 'none' }}
-          />
-          <div className="flex items-center gap-2 shrink-0 pb-0.5">
-            <button className="h-8 w-8 rounded-full flex items-center justify-center text-text-muted active:text-cyan-glow transition-colors">
-              <Mic size={15} />
-            </button>
+        {!hasCredits ? (
+          /* No credits — show Buy Credits CTA instead of send input */
+          <div className="space-y-2">
+            <p className="text-xs text-text-muted text-center">
+              You have <span className="text-amber-300 font-bold">0 credits</span> remaining.
+            </p>
             <button
-              onClick={() => handleSend(input)}
-              disabled={!input.trim()}
-              className="h-8 w-8 rounded-full flex items-center justify-center transition-all active:scale-95 disabled:opacity-40"
-              style={{
-                background: input.trim() ? 'rgba(6,182,212,0.2)' : 'rgba(255,255,255,0.06)',
-                border: input.trim() ? '1px solid rgba(6,182,212,0.4)' : '1px solid rgba(255,255,255,0.08)',
-              }}
+              onClick={() => router.push('/billing')}
+              className="w-full rounded-xl py-3 text-sm font-bold"
+              style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#0a1628' }}
             >
-              <Send size={13} className={input.trim() ? 'text-cyan-glow' : 'text-text-muted'} />
+              Buy Credits to Continue
             </button>
           </div>
-        </div>
+        ) : (
+          <div
+            className="flex items-end gap-2 rounded-2xl px-3 py-2"
+            style={{ background: 'rgba(15,30,53,0.8)', border: '1px solid rgba(255,255,255,0.08)' }}
+          >
+            <textarea
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                  event.preventDefault()
+                  void handleSend(input)
+                }
+              }}
+              placeholder="Ask your question..."
+              rows={1}
+              className="flex-1 resize-none bg-transparent text-sm text-text-primary placeholder:text-text-muted outline-none py-1 max-h-24"
+              style={{ scrollbarWidth: 'none' }}
+            />
+            <div className="flex items-center gap-2 shrink-0 pb-0.5">
+              <button className="h-8 w-8 rounded-full flex items-center justify-center text-text-muted active:text-cyan-glow transition-colors">
+                <Mic size={15} />
+              </button>
+              <button
+                onClick={() => void handleSend(input)}
+                disabled={!input.trim() || isSending}
+                className="h-8 w-8 rounded-full flex items-center justify-center transition-all active:scale-95 disabled:opacity-40"
+                style={{
+                  background: input.trim() && !isSending ? 'rgba(6,182,212,0.2)' : 'rgba(255,255,255,0.06)',
+                  border: input.trim() && !isSending ? '1px solid rgba(6,182,212,0.4)' : '1px solid rgba(255,255,255,0.08)',
+                }}
+              >
+                <Send size={13} className={input.trim() && !isSending ? 'text-cyan-glow' : 'text-text-muted'} />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <BottomSheet open={refillOpen} onClose={() => setRefillOpen(false)} title="Maximize Your Consultation">

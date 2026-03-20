@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { createServerLogger, durationMs } from "@/server/foundation/observability/logger";
 import type { DateScopedQuery } from "../../contracts";
 import type { TodayCacheRepository } from "./service";
 import type { TodayDTO } from "./types";
@@ -139,9 +140,19 @@ export class SupabaseTodayCacheRepository implements TodayCacheRepository {
     computedAt: string | null;
     expiresAt: string | null;
   } | null> {
+    const logger = createServerLogger("astroai.today.cache-repository");
+    const startedAt = Date.now();
     const cached = await this.loadByDate(query);
-    if (!cached) return null;
-    return toFreshnessStatus(cached.expiresAt, now) === "fresh" ? cached : null;
+    const fresh = cached && toFreshnessStatus(cached.expiresAt, now) === "fresh" ? cached : null;
+    logger.info("getFresh.complete", {
+      durationMs: durationMs(startedAt),
+      outcome: fresh ? "hit" : "miss",
+      date: query.date,
+      systemType: query.systemType,
+      hasCached: Boolean(cached),
+      sourceProvider: fresh?.sourceProvider ?? cached?.sourceProvider ?? null,
+    });
+    return fresh;
   }
 
   async getStale(query: DateScopedQuery): Promise<{
@@ -150,7 +161,17 @@ export class SupabaseTodayCacheRepository implements TodayCacheRepository {
     computedAt: string | null;
     expiresAt: string | null;
   } | null> {
-    return this.loadByDate(query);
+    const logger = createServerLogger("astroai.today.cache-repository");
+    const startedAt = Date.now();
+    const cached = await this.loadByDate(query);
+    logger.info("getStale.complete", {
+      durationMs: durationMs(startedAt),
+      outcome: cached ? "hit" : "miss",
+      date: query.date,
+      systemType: query.systemType,
+      sourceProvider: cached?.sourceProvider ?? null,
+    });
+    return cached;
   }
 
   async save(
@@ -162,6 +183,8 @@ export class SupabaseTodayCacheRepository implements TodayCacheRepository {
       expiresAt: string | null;
     }
   ): Promise<void> {
+    const logger = createServerLogger("astroai.today.cache-repository");
+    const startedAt = Date.now();
     const now = new Date();
     const computedAt = entry.computedAt ?? now.toISOString();
     const freshnessStatus = toFreshnessStatus(entry.expiresAt, now);
@@ -275,6 +298,14 @@ export class SupabaseTodayCacheRepository implements TodayCacheRepository {
         throw new Error(`Failed inserting astro_event_facts: ${insertEvents.error.message}`);
       }
     }
+    logger.info("save.success", {
+      durationMs: durationMs(startedAt),
+      outcome: "success",
+      date: query.date,
+      systemType: query.systemType,
+      transits: entry.data.transits.length,
+      events: entry.data.events.length,
+      sourceProvider: entry.sourceProvider,
+    });
   }
 }
-

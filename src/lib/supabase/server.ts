@@ -22,9 +22,13 @@ export async function getServerSupabaseClient(): Promise<SupabaseClient> {
           for (const { name, value, options } of cookiesToSet) {
             cookieStore.set(name, value, options);
           }
-        } catch {
-          // Server components cannot always write cookies.
-          // Middleware/route handlers will handle session refresh writes.
+        } catch (err) {
+          // Server Components cannot write cookies — this is expected and safe to ignore.
+          // Route Handlers can write cookies; if this throws there, session persistence
+          // will silently fail, so log it to surface the issue.
+          if (process.env.NODE_ENV !== "production") {
+            console.error("[supabase/server] setAll failed:", err);
+          }
         }
       },
     },

@@ -1,0 +1,17 @@
+{
+  "sessionId": "b0e66d2b-d4a3-4ea8-9087-d1343c17044f",
+  "category": "moon",
+  "createdAt": "2026-03-14T06:18:51.397Z",
+  "updatedAt": "2026-03-14T06:18:51.397Z",
+  "status": "active",
+  "currentStep": 0,
+  "source": "public-onboarding",
+  "answers": {},
+  "events": [
+    {
+      "id": "663cd6b1-c57c-4886-a21a-bc7163567722",
+      "createdAt": "2026-03-14T06:18:51.397Z",
+      "type": "session_created"
+    }
+  ]
+}

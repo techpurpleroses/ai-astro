@@ -1,0 +1,602 @@
+{
+  "sun-in-aries": {
+    "title": "Sun in Aries",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-taurus": {
+    "title": "Sun in Taurus",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-gemini": {
+    "title": "Sun in Gemini",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-cancer": {
+    "title": "Sun in Cancer",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-leo": {
+    "title": "Sun in Leo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-virgo": {
+    "title": "Sun in Virgo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-libra": {
+    "title": "Sun in Libra",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-scorpio": {
+    "title": "Sun in Scorpio",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-sagittarius": {
+    "title": "Sun in Sagittarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-capricorn": {
+    "title": "Sun in Capricorn",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-aquarius": {
+    "title": "Sun in Aquarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "sun-in-pisces": {
+    "title": "Sun in Pisces",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-aries": {
+    "title": "Moon in Aries",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-taurus": {
+    "title": "Moon in Taurus",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-gemini": {
+    "title": "Moon in Gemini",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-cancer": {
+    "title": "Moon in Cancer",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-leo": {
+    "title": "Moon in Leo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-virgo": {
+    "title": "Moon in Virgo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-libra": {
+    "title": "Moon in Libra",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-scorpio": {
+    "title": "Moon in Scorpio",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-sagittarius": {
+    "title": "Moon in Sagittarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-capricorn": {
+    "title": "Moon in Capricorn",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-aquarius": {
+    "title": "Moon in Aquarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "moon-in-pisces": {
+    "title": "Moon in Pisces",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-aries": {
+    "title": "Mercury in Aries",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-taurus": {
+    "title": "Mercury in Taurus",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-gemini": {
+    "title": "Mercury in Gemini",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-cancer": {
+    "title": "Mercury in Cancer",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-leo": {
+    "title": "Mercury in Leo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-virgo": {
+    "title": "Mercury in Virgo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-libra": {
+    "title": "Mercury in Libra",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-scorpio": {
+    "title": "Mercury in Scorpio",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-sagittarius": {
+    "title": "Mercury in Sagittarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-capricorn": {
+    "title": "Mercury in Capricorn",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-aquarius": {
+    "title": "Mercury in Aquarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mercury-in-pisces": {
+    "title": "Mercury in Pisces",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-aries": {
+    "title": "Venus in Aries",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-taurus": {
+    "title": "Venus in Taurus",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-gemini": {
+    "title": "Venus in Gemini",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-cancer": {
+    "title": "Venus in Cancer",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-leo": {
+    "title": "Venus in Leo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-virgo": {
+    "title": "Venus in Virgo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-libra": {
+    "title": "Venus in Libra",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-scorpio": {
+    "title": "Venus in Scorpio",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-sagittarius": {
+    "title": "Venus in Sagittarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-capricorn": {
+    "title": "Venus in Capricorn",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-aquarius": {
+    "title": "Venus in Aquarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "venus-in-pisces": {
+    "title": "Venus in Pisces",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-aries": {
+    "title": "Mars in Aries",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-taurus": {
+    "title": "Mars in Taurus",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-gemini": {
+    "title": "Mars in Gemini",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-cancer": {
+    "title": "Mars in Cancer",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-leo": {
+    "title": "Mars in Leo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-virgo": {
+    "title": "Mars in Virgo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-libra": {
+    "title": "Mars in Libra",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-scorpio": {
+    "title": "Mars in Scorpio",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-sagittarius": {
+    "title": "Mars in Sagittarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-capricorn": {
+    "title": "Mars in Capricorn",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-aquarius": {
+    "title": "Mars in Aquarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "mars-in-pisces": {
+    "title": "Mars in Pisces",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-aries": {
+    "title": "Jupiter in Aries",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-taurus": {
+    "title": "Jupiter in Taurus",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-gemini": {
+    "title": "Jupiter in Gemini",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-cancer": {
+    "title": "Jupiter in Cancer",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-leo": {
+    "title": "Jupiter in Leo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-virgo": {
+    "title": "Jupiter in Virgo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-libra": {
+    "title": "Jupiter in Libra",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-scorpio": {
+    "title": "Jupiter in Scorpio",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-sagittarius": {
+    "title": "Jupiter in Sagittarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-capricorn": {
+    "title": "Jupiter in Capricorn",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-aquarius": {
+    "title": "Jupiter in Aquarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "jupiter-in-pisces": {
+    "title": "Jupiter in Pisces",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-aries": {
+    "title": "Saturn in Aries",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-taurus": {
+    "title": "Saturn in Taurus",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-gemini": {
+    "title": "Saturn in Gemini",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-cancer": {
+    "title": "Saturn in Cancer",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-leo": {
+    "title": "Saturn in Leo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-virgo": {
+    "title": "Saturn in Virgo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-libra": {
+    "title": "Saturn in Libra",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-scorpio": {
+    "title": "Saturn in Scorpio",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-sagittarius": {
+    "title": "Saturn in Sagittarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-capricorn": {
+    "title": "Saturn in Capricorn",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-aquarius": {
+    "title": "Saturn in Aquarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "saturn-in-pisces": {
+    "title": "Saturn in Pisces",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-aries": {
+    "title": "Uranus in Aries",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-taurus": {
+    "title": "Uranus in Taurus",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-gemini": {
+    "title": "Uranus in Gemini",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-cancer": {
+    "title": "Uranus in Cancer",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-leo": {
+    "title": "Uranus in Leo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-virgo": {
+    "title": "Uranus in Virgo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-libra": {
+    "title": "Uranus in Libra",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-scorpio": {
+    "title": "Uranus in Scorpio",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-sagittarius": {
+    "title": "Uranus in Sagittarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-capricorn": {
+    "title": "Uranus in Capricorn",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-aquarius": {
+    "title": "Uranus in Aquarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "uranus-in-pisces": {
+    "title": "Uranus in Pisces",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-aries": {
+    "title": "Neptune in Aries",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-taurus": {
+    "title": "Neptune in Taurus",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-gemini": {
+    "title": "Neptune in Gemini",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-cancer": {
+    "title": "Neptune in Cancer",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-leo": {
+    "title": "Neptune in Leo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-virgo": {
+    "title": "Neptune in Virgo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-libra": {
+    "title": "Neptune in Libra",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-scorpio": {
+    "title": "Neptune in Scorpio",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-sagittarius": {
+    "title": "Neptune in Sagittarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-capricorn": {
+    "title": "Neptune in Capricorn",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-aquarius": {
+    "title": "Neptune in Aquarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "neptune-in-pisces": {
+    "title": "Neptune in Pisces",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-aries": {
+    "title": "Pluto in Aries",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-taurus": {
+    "title": "Pluto in Taurus",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-gemini": {
+    "title": "Pluto in Gemini",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-cancer": {
+    "title": "Pluto in Cancer",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-leo": {
+    "title": "Pluto in Leo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-virgo": {
+    "title": "Pluto in Virgo",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-libra": {
+    "title": "Pluto in Libra",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-scorpio": {
+    "title": "Pluto in Scorpio",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-sagittarius": {
+    "title": "Pluto in Sagittarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-capricorn": {
+    "title": "Pluto in Capricorn",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-aquarius": {
+    "title": "Pluto in Aquarius",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  },
+  "pluto-in-pisces": {
+    "title": "Pluto in Pisces",
+    "short": "TODO: add short description",
+    "description": "TODO: add full description"
+  }
+}

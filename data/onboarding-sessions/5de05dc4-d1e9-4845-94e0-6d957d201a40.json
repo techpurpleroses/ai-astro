@@ -1,0 +1,17 @@
+{
+  "sessionId": "5de05dc4-d1e9-4845-94e0-6d957d201a40",
+  "category": "sketch",
+  "createdAt": "2026-03-14T07:54:13.178Z",
+  "updatedAt": "2026-03-14T07:54:13.178Z",
+  "status": "active",
+  "currentStep": 0,
+  "source": "public-onboarding",
+  "answers": {},
+  "events": [
+    {
+      "id": "9a509e57-a32f-43b8-8ab6-741fc5c9ae23",
+      "createdAt": "2026-03-14T07:54:13.178Z",
+      "type": "session_created"
+    }
+  ]
+}

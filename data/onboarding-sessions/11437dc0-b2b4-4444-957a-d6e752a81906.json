@@ -1,0 +1,17 @@
+{
+  "sessionId": "11437dc0-b2b4-4444-957a-d6e752a81906",
+  "category": "numerology",
+  "createdAt": "2026-03-14T09:45:55.096Z",
+  "updatedAt": "2026-03-14T09:45:55.096Z",
+  "status": "active",
+  "currentStep": 0,
+  "source": "public-onboarding",
+  "answers": {},
+  "events": [
+    {
+      "id": "c371a5c5-5a05-47c5-8a36-a44497239d0c",
+      "createdAt": "2026-03-14T09:45:55.096Z",
+      "type": "session_created"
+    }
+  ]
+}

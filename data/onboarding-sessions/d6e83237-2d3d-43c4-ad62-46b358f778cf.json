@@ -1,0 +1,260 @@
+{
+  "sessionId": "d6e83237-2d3d-43c4-ad62-46b358f778cf",
+  "category": "astrocartography",
+  "createdAt": "2026-03-16T07:21:29.208Z",
+  "updatedAt": "2026-03-16T07:24:44.800Z",
+  "status": "active",
+  "currentStep": 5,
+  "source": "public-onboarding",
+  "answers": {
+    "welcome": "female",
+    "birth-date": "October 26, 1992",
+    "birth-time": "08:43 AM",
+    "birth-place": {
+      "label": "Ankleshwar, India",
+      "fullName": "Ankleshwar, Ankleshwar Taluka, Bharuch, Gujarat, India",
+      "city": "Ankleshwar",
+      "region": "Gujarat",
+      "country": "India",
+      "countryCode": "IN",
+      "latitude": 21.6293206,
+      "longitude": 72.9945103,
+      "provider": "nominatim",
+      "providerId": "nominatim:229721034"
+    },
+    "computedChart": {
+      "sunSign": "scorpio",
+      "moonSign": "scorpio",
+      "risingSign": "sagittarius",
+      "ascendant": 246.4,
+      "midheaven": 164.8,
+      "lifePath": 3,
+      "element": "water",
+      "modality": "fixed",
+      "dominantElement": "water",
+      "planets": [
+        {
+          "planet": "sun",
+          "sign": "scorpio",
+          "degree": 3,
+          "longitude": 213,
+          "house": 12,
+          "retrograde": false
+        },
+        {
+          "planet": "moon",
+          "sign": "scorpio",
+          "degree": 6.9,
+          "longitude": 216.9,
+          "house": 12,
+          "retrograde": false
+        },
+        {
+          "planet": "mercury",
+          "sign": "scorpio",
+          "degree": 24.1,
+          "longitude": 234.1,
+          "house": 12,
+          "retrograde": false
+        },
+        {
+          "planet": "venus",
+          "sign": "sagittarius",
+          "degree": 6,
+          "longitude": 246,
+          "house": 1,
+          "retrograde": false
+        },
+        {
+          "planet": "mars",
+          "sign": "cancer",
+          "degree": 20.4,
+          "longitude": 110.4,
+          "house": 8,
+          "retrograde": false
+        },
+        {
+          "planet": "jupiter",
+          "sign": "libra",
+          "degree": 2.8,
+          "longitude": 182.8,
+          "house": 11,
+          "retrograde": false
+        },
+        {
+          "planet": "saturn",
+          "sign": "aquarius",
+          "degree": 11.9,
+          "longitude": 311.9,
+          "house": 3,
+          "retrograde": false
+        },
+        {
+          "planet": "uranus",
+          "sign": "capricorn",
+          "degree": 14.5,
+          "longitude": 284.5,
+          "house": 2,
+          "retrograde": false
+        },
+        {
+          "planet": "neptune",
+          "sign": "capricorn",
+          "degree": 16.4,
+          "longitude": 286.4,
+          "house": 2,
+          "retrograde": false
+        }
+      ],
+      "houses": [
+        {
+          "house": 1,
+          "sign": "sagittarius",
+          "longitude": 240
+        },
+        {
+          "house": 2,
+          "sign": "capricorn",
+          "longitude": 270
+        },
+        {
+          "house": 3,
+          "sign": "aquarius",
+          "longitude": 300
+        },
+        {
+          "house": 4,
+          "sign": "pisces",
+          "longitude": 330
+        },
+        {
+          "house": 5,
+          "sign": "aries",
+          "longitude": 0
+        },
+        {
+          "house": 6,
+          "sign": "taurus",
+          "longitude": 30
+        },
+        {
+          "house": 7,
+          "sign": "gemini",
+          "longitude": 60
+        },
+        {
+          "house": 8,
+          "sign": "cancer",
+          "longitude": 90
+        },
+        {
+          "house": 9,
+          "sign": "leo",
+          "longitude": 120
+        },
+        {
+          "house": 10,
+          "sign": "virgo",
+          "longitude": 150
+        },
+        {
+          "house": 11,
+          "sign": "libra",
+          "longitude": 180
+        },
+        {
+          "house": 12,
+          "sign": "scorpio",
+          "longitude": 210
+        }
+      ],
+      "aspects": [
+        {
+          "planet1": "sun",
+          "planet2": "moon",
+          "type": "conjunction",
+          "orb": 3.9
+        },
+        {
+          "planet1": "moon",
+          "planet2": "saturn",
+          "type": "square",
+          "orb": 5
+        },
+        {
+          "planet1": "mercury",
+          "planet2": "mars",
+          "type": "trine",
+          "orb": 3.7
+        },
+        {
+          "planet1": "venus",
+          "planet2": "jupiter",
+          "type": "sextile",
+          "orb": 3.2
+        },
+        {
+          "planet1": "mars",
+          "planet2": "uranus",
+          "type": "opposition",
+          "orb": 5.9
+        },
+        {
+          "planet1": "mars",
+          "planet2": "neptune",
+          "type": "opposition",
+          "orb": 4
+        },
+        {
+          "planet1": "uranus",
+          "planet2": "neptune",
+          "type": "conjunction",
+          "orb": 1.9
+        }
+      ]
+    }
+  },
+  "events": [
+    {
+      "id": "10d500bf-e2c2-40c9-b4b5-ed5b5d196dba",
+      "createdAt": "2026-03-16T07:21:29.208Z",
+      "type": "session_created"
+    },
+    {
+      "id": "1c2e64a7-1953-45bf-8e6a-f89c5b484f48",
+      "createdAt": "2026-03-16T07:23:27.052Z",
+      "type": "answer_saved",
+      "stepId": "welcome"
+    },
+    {
+      "id": "c5ad52ca-7e77-489b-803e-a844e2d43fe1",
+      "createdAt": "2026-03-16T07:23:29.615Z",
+      "type": "step_advanced",
+      "stepId": "advisor-intro"
+    },
+    {
+      "id": "48200fe0-c9c2-4a2d-8b27-7ede4a0a581a",
+      "createdAt": "2026-03-16T07:24:01.527Z",
+      "type": "answer_saved",
+      "stepId": "birth-date"
+    },
+    {
+      "id": "4c25f498-02b1-431a-94ae-d0a17916ac5b",
+      "createdAt": "2026-03-16T07:24:35.024Z",
+      "type": "answer_saved",
+      "stepId": "birth-time"
+    },
+    {
+      "id": "e733e524-0ba5-458a-90e2-8a46363d0b43",
+      "createdAt": "2026-03-16T07:24:44.790Z",
+      "type": "answer_saved",
+      "stepId": "birth-place"
+    },
+    {
+      "id": "20f9592e-7c32-43f1-b8ed-d9bfc55daab0",
+      "createdAt": "2026-03-16T07:24:44.800Z",
+      "type": "answer_saved",
+      "stepId": "computedChart"
+    }
+  ]
+}

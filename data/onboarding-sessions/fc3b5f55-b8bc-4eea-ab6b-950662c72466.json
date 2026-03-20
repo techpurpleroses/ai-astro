@@ -1,0 +1,31 @@
+{
+  "sessionId": "fc3b5f55-b8bc-4eea-ab6b-950662c72466",
+  "category": "astrocartography",
+  "createdAt": "2026-03-16T06:58:29.087Z",
+  "updatedAt": "2026-03-16T06:59:10.309Z",
+  "status": "active",
+  "currentStep": 2,
+  "source": "public-onboarding",
+  "answers": {
+    "welcome": "male"
+  },
+  "events": [
+    {
+      "id": "48039680-8116-4ca2-80a6-bb53dc482822",
+      "createdAt": "2026-03-16T06:58:29.087Z",
+      "type": "session_created"
+    },
+    {
+      "id": "f6ba3802-5403-4655-90af-1da941f51801",
+      "createdAt": "2026-03-16T06:58:38.072Z",
+      "type": "answer_saved",
+      "stepId": "welcome"
+    },
+    {
+      "id": "56c18c95-1b1b-442f-9feb-0a6b2d2d98b8",
+      "createdAt": "2026-03-16T06:59:10.309Z",
+      "type": "step_advanced",
+      "stepId": "advisor-intro"
+    }
+  ]
+}

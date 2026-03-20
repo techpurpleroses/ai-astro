@@ -1,0 +1,51 @@
+﻿[
+    {
+        "category":  "moon",
+        "images":  213,
+        "videos":  0,
+        "audio":  0,
+        "fonts":  8
+    },
+    {
+        "category":  "compatibility",
+        "images":  136,
+        "videos":  0,
+        "audio":  0,
+        "fonts":  8
+    },
+    {
+        "category":  "numerology",
+        "images":  105,
+        "videos":  0,
+        "audio":  0,
+        "fonts":  8
+    },
+    {
+        "category":  "palm-reading",
+        "images":  104,
+        "videos":  0,
+        "audio":  0,
+        "fonts":  8
+    },
+    {
+        "category":  "past-lives",
+        "images":  106,
+        "videos":  0,
+        "audio":  0,
+        "fonts":  8
+    },
+    {
+        "category":  "astrocartography",
+        "images":  109,
+        "videos":  7,
+        "audio":  0,
+        "fonts":  4
+    },
+    {
+        "category":  "sketch",
+        "images":  115,
+        "videos":  0,
+        "audio":  0,
+        "fonts":  8
+    }
+]

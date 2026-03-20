@@ -1,0 +1,302 @@
+{
+  "sessionId": "43365727-1f4e-4c07-bd05-24c255aaf70a",
+  "category": "astrocartography",
+  "createdAt": "2026-03-16T07:00:57.018Z",
+  "updatedAt": "2026-03-16T07:02:39.240Z",
+  "status": "active",
+  "currentStep": 11,
+  "source": "public-onboarding",
+  "answers": {
+    "welcome": "male",
+    "birth-date": "March 1, 1981",
+    "birth-time": "12:00 AM",
+    "birth-place": {
+      "label": "Bharuch, India",
+      "fullName": "Bharuch, Bharuch Taluka, Bharuch, Gujarat, India",
+      "city": "Bharuch",
+      "region": "Gujarat",
+      "country": "India",
+      "countryCode": "IN",
+      "latitude": 21.7080427,
+      "longitude": 72.9956936,
+      "provider": "nominatim",
+      "providerId": "nominatim:229479366"
+    },
+    "computedChart": {
+      "sunSign": "pisces",
+      "moonSign": "sagittarius",
+      "risingSign": "sagittarius",
+      "ascendant": 240.3,
+      "midheaven": 158.3,
+      "lifePath": 4,
+      "element": "water",
+      "modality": "mutable",
+      "dominantElement": "air",
+      "planets": [
+        {
+          "planet": "sun",
+          "sign": "pisces",
+          "degree": 10.1,
+          "longitude": 340.1,
+          "house": 4,
+          "retrograde": false
+        },
+        {
+          "planet": "moon",
+          "sign": "sagittarius",
+          "degree": 29.6,
+          "longitude": 269.6,
+          "house": 1,
+          "retrograde": false
+        },
+        {
+          "planet": "mercury",
+          "sign": "aquarius",
+          "degree": 20.4,
+          "longitude": 320.4,
+          "house": 3,
+          "retrograde": false
+        },
+        {
+          "planet": "venus",
+          "sign": "aquarius",
+          "degree": 28.8,
+          "longitude": 328.8,
+          "house": 3,
+          "retrograde": false
+        },
+        {
+          "planet": "mars",
+          "sign": "pisces",
+          "degree": 16.1,
+          "longitude": 346.1,
+          "house": 4,
+          "retrograde": false
+        },
+        {
+          "planet": "jupiter",
+          "sign": "libra",
+          "degree": 8.5,
+          "longitude": 188.5,
+          "house": 11,
+          "retrograde": false
+        },
+        {
+          "planet": "saturn",
+          "sign": "libra",
+          "degree": 8.9,
+          "longitude": 188.9,
+          "house": 11,
+          "retrograde": false
+        },
+        {
+          "planet": "uranus",
+          "sign": "sagittarius",
+          "degree": 0.2,
+          "longitude": 240.2,
+          "house": 1,
+          "retrograde": false
+        },
+        {
+          "planet": "neptune",
+          "sign": "sagittarius",
+          "degree": 24.7,
+          "longitude": 264.7,
+          "house": 1,
+          "retrograde": false
+        }
+      ],
+      "houses": [
+        {
+          "house": 1,
+          "sign": "sagittarius",
+          "longitude": 240
+        },
+        {
+          "house": 2,
+          "sign": "capricorn",
+          "longitude": 270
+        },
+        {
+          "house": 3,
+          "sign": "aquarius",
+          "longitude": 300
+        },
+        {
+          "house": 4,
+          "sign": "pisces",
+          "longitude": 330
+        },
+        {
+          "house": 5,
+          "sign": "aries",
+          "longitude": 0
+        },
+        {
+          "house": 6,
+          "sign": "taurus",
+          "longitude": 30
+        },
+        {
+          "house": 7,
+          "sign": "gemini",
+          "longitude": 60
+        },
+        {
+          "house": 8,
+          "sign": "cancer",
+          "longitude": 90
+        },
+        {
+          "house": 9,
+          "sign": "leo",
+          "longitude": 120
+        },
+        {
+          "house": 10,
+          "sign": "virgo",
+          "longitude": 150
+        },
+        {
+          "house": 11,
+          "sign": "libra",
+          "longitude": 180
+        },
+        {
+          "house": 12,
+          "sign": "scorpio",
+          "longitude": 210
+        }
+      ],
+      "aspects": [
+        {
+          "planet1": "sun",
+          "planet2": "mars",
+          "type": "conjunction",
+          "orb": 6
+        },
+        {
+          "planet1": "moon",
+          "planet2": "venus",
+          "type": "sextile",
+          "orb": 0.8
+        },
+        {
+          "planet1": "moon",
+          "planet2": "neptune",
+          "type": "conjunction",
+          "orb": 4.9
+        },
+        {
+          "planet1": "venus",
+          "planet2": "uranus",
+          "type": "square",
+          "orb": 1.4
+        },
+        {
+          "planet1": "jupiter",
+          "planet2": "saturn",
+          "type": "conjunction",
+          "orb": 0.4
+        }
+      ]
+    },
+    "relationship-status": "married",
+    "goals": [
+      "career"
+    ],
+    "energy-places": "yes",
+    "life-challenges": "loneliness"
+  },
+  "events": [
+    {
+      "id": "68259afd-d971-4332-9b86-48a5657a2694",
+      "createdAt": "2026-03-16T07:00:57.018Z",
+      "type": "session_created"
+    },
+    {
+      "id": "cbbe760c-fcfd-4338-8733-1d5bddd24111",
+      "createdAt": "2026-03-16T07:01:06.339Z",
+      "type": "answer_saved",
+      "stepId": "welcome"
+    },
+    {
+      "id": "880a18e2-4992-439a-873b-a64711cf6c98",
+      "createdAt": "2026-03-16T07:01:08.283Z",
+      "type": "step_advanced",
+      "stepId": "advisor-intro"
+    },
+    {
+      "id": "3d908a2f-c42d-470c-92eb-7a9005862839",
+      "createdAt": "2026-03-16T07:01:14.198Z",
+      "type": "step_back",
+      "stepId": "birth-date"
+    },
+    {
+      "id": "9c08764a-28af-4596-b3ac-360e79ffdded",
+      "createdAt": "2026-03-16T07:01:16.825Z",
+      "type": "step_advanced",
+      "stepId": "advisor-intro"
+    },
+    {
+      "id": "954355c8-8b75-464c-885b-c52fdd053e6a",
+      "createdAt": "2026-03-16T07:01:18.106Z",
+      "type": "answer_saved",
+      "stepId": "birth-date"
+    },
+    {
+      "id": "4f62e1ce-85f4-4c82-8db6-99c5eadfab32",
+      "createdAt": "2026-03-16T07:01:25.048Z",
+      "type": "answer_saved",
+      "stepId": "birth-time"
+    },
+    {
+      "id": "2ab3b994-cc85-4161-92b1-34b99e63ab6c",
+      "createdAt": "2026-03-16T07:02:09.899Z",
+      "type": "answer_saved",
+      "stepId": "birth-place"
+    },
+    {
+      "id": "46f0f825-1523-4087-b487-ab3319894da1",
+      "createdAt": "2026-03-16T07:02:09.909Z",
+      "type": "answer_saved",
+      "stepId": "computedChart"
+    },
+    {
+      "id": "d78dc92e-806f-40fc-9c1d-4a63f131195e",
+      "createdAt": "2026-03-16T07:02:15.693Z",
+      "type": "step_advanced",
+      "stepId": "video-story-1"
+    },
+    {
+      "id": "9178d91d-6118-4d04-b82d-716acdc2b65d",
+      "createdAt": "2026-03-16T07:02:19.260Z",
+      "type": "answer_saved",
+      "stepId": "relationship-status"
+    },
+    {
+      "id": "3b075e32-9305-4ec8-98d5-24ecde34b8fd",
+      "createdAt": "2026-03-16T07:02:27.827Z",
+      "type": "answer_saved",
+      "stepId": "goals"
+    },
+    {
+      "id": "b6869d96-c781-4d93-8819-ece7cdbc9282",
+      "createdAt": "2026-03-16T07:02:32.128Z",
+      "type": "answer_saved",
+      "stepId": "energy-places"
+    },
+    {
+      "id": "b94011e8-db95-45f8-80df-1e1ddd795cc7",
+      "createdAt": "2026-03-16T07:02:36.145Z",
+      "type": "answer_saved",
+      "stepId": "life-challenges"
+    },
+    {
+      "id": "09ada70b-e4c1-4f00-8c07-1982fa4d0be3",
+      "createdAt": "2026-03-16T07:02:39.240Z",
+      "type": "step_advanced",
+      "stepId": "video-story-2"
+    }
+  ]
+}

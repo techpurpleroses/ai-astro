@@ -1,0 +1,74 @@
+{
+  "aries": {
+    "sign": "aries",
+    "title": "Moon in Aries",
+    "short": "Quick emotions, passionate reactions, needs independence",
+    "description": "Your emotional world moves fast. You feel things intensely and immediately — joy, frustration, excitement — and you rarely hide it. You need emotional freedom and quick resolution; simmering resentment isn't your style."
+  },
+  "taurus": {
+    "sign": "taurus",
+    "title": "Moon in Taurus",
+    "short": "Stable, sensual, craves comfort and security",
+    "description": "You find emotional safety in the physical world — good food, beautiful spaces, the comfort of the familiar. Your emotional nature is steady and loyal, and once you are secure, you are unshakeable. Change takes time but your love runs deep."
+  },
+  "gemini": {
+    "sign": "gemini",
+    "title": "Moon in Gemini",
+    "short": "Curious, communicative, processes emotions through words",
+    "description": "You process feelings by talking them through — with others or in your own mind. Your emotional world is highly mental; you need intellectual stimulation to feel truly at ease. Variety soothes you; sameness restless-izes you."
+  },
+  "cancer": {
+    "sign": "cancer",
+    "title": "Moon in Cancer",
+    "short": "Deeply nurturing, emotionally intuitive, home-centered",
+    "description": "Moon in Cancer is the Moon's home — this is one of the most emotionally potent placements. Your feelings run deep and your intuition is extraordinary. You feel everything the people around you feel, whether or not you're told."
+  },
+  "leo": {
+    "sign": "leo",
+    "title": "Moon in Leo",
+    "short": "Warm, expressive, needs to feel seen and celebrated",
+    "description": "Your emotional wellbeing is deeply tied to being seen, appreciated, and celebrated. You give generously from the heart and need the same generosity returned. At your best, your warmth is like sunlight — it feeds everyone around you."
+  },
+  "virgo": {
+    "sign": "virgo",
+    "title": "Moon in Virgo",
+    "short": "Analytical, service-oriented, calmed by order and routine",
+    "description": "You process emotions through analysis and action. When something feels wrong, you fix it — or you make a plan to fix it. Routine is deeply soothing to you; disorder creates anxiety. Your care for others shows up in practical, concrete ways."
+  },
+  "libra": {
+    "sign": "libra",
+    "title": "Moon in Libra",
+    "short": "Harmony-seeking, relationship-focused, unsettled by conflict",
+    "description": "You are emotionally at your best in balanced, harmonious environments. Conflict disturbs you deeply, and your instinct is to restore peace — sometimes at the cost of your own needs. You feel most yourself in beautiful, fair-minded company."
+  },
+  "scorpio": {
+    "sign": "scorpio",
+    "title": "Moon in Scorpio",
+    "short": "Intense, private, emotional depths few ever see",
+    "description": "Your emotional world is a vast, dark ocean — profoundly deep, not easily accessible, and extraordinarily powerful. You feel everything intensely and you trust almost no one with your inner world. When you do trust, your loyalty is absolute."
+  },
+  "sagittarius": {
+    "sign": "sagittarius",
+    "title": "Moon in Sagittarius",
+    "short": "Optimistic, freedom-loving, needs room to roam emotionally",
+    "description": "You process emotions by moving — physically or philosophically. You need freedom to feel safe, and the greatest emotional threat to you is feeling trapped or limited. Your natural optimism is a genuine superpower that carries you through."
+  },
+  "capricorn": {
+    "sign": "capricorn",
+    "title": "Moon in Capricorn",
+    "short": "Reserved, self-contained, finds safety in achievement",
+    "description": "You tend to keep your emotional world private — processing inwardly and expressing only what feels controlled and purposeful. Security comes from structure, accomplishment, and self-sufficiency. Beneath the composed exterior is a deeply loyal heart."
+  },
+  "aquarius": {
+    "sign": "aquarius",
+    "title": "Moon in Aquarius",
+    "short": "Detached, idealistic, emotionally independent",
+    "description": "You experience emotions somewhat intellectually — observing your feelings with a certain detachment that allows you to remain rational in crisis. Your emotional needs center around intellectual freedom and the sense of contributing to something larger than yourself."
+  },
+  "pisces": {
+    "sign": "pisces",
+    "title": "Moon in Pisces",
+    "short": "Dreamy, empathic, absorbs others' emotions like water",
+    "description": "Your emotional world has no firm edges. You absorb feelings from your environment the way water absorbs everything it touches — deeply, completely, and without resistance. Your compassion is boundless. Your sensitivity is your greatest gift and your greatest challenge."
+  }
+}

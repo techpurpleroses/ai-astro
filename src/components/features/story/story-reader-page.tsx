@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, ThumbsDown, ThumbsUp } from 'lucide-react'
-import { STORY_ARTICLES, STORY_CATEGORIES } from '@/data/stories'
+import { useStoryArticle } from '@/hooks/use-stories'
 
 interface StoryReaderClientProps {
   slug: string
@@ -11,16 +11,25 @@ interface StoryReaderClientProps {
 
 export function StoryReaderClient({ slug }: StoryReaderClientProps) {
   const router = useRouter()
-  const category = STORY_CATEGORIES.find((item) => item.id === slug)
-  const article = STORY_ARTICLES[slug]
+  const { data: article, isLoading } = useStoryArticle(slug)
 
-  if (!category || !article) {
+  if (isLoading) {
+    return (
+      <div className="px-4 py-8 flex items-center justify-center">
+        <span className="text-sm text-text-secondary">Loading…</span>
+      </div>
+    )
+  }
+
+  if (!article) {
     return (
       <div className="px-4 py-8">
         <p className="text-sm text-text-secondary">Story not found.</p>
       </div>
     )
   }
+
+  const category = article.category
 
   return (
     <div className="flex flex-col">

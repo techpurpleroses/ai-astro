@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { astroFetchJson } from "@/lib/client/astro-fetch";
+import { BRAND_NAME } from "@/lib/brand";
 
 type AuthMode = "login" | "signup";
 
@@ -24,6 +27,7 @@ function validateEmail(email: string): boolean {
 
 export function MagicLinkForm({ mode, nextPath, initialError = null }: AuthFormProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,7 +36,7 @@ export function MagicLinkForm({ mode, nextPath, initialError = null }: AuthFormP
   const [errorMessage, setErrorMessage] = useState<string | null>(initialError);
 
   const title = useMemo(() => {
-    return mode === "signup" ? "Create Your AstroAI Account" : "Log In To AstroAI";
+    return mode === "signup" ? `Create Your ${BRAND_NAME} Account` : `Log In To ${BRAND_NAME}`;
   }, [mode]);
 
   const subtitle = useMemo(() => {
@@ -64,6 +68,10 @@ export function MagicLinkForm({ mode, nextPath, initialError = null }: AuthFormP
     setSubmitting(true);
     try {
       const endpoint = mode === "signup" ? "/api/auth/magic-link" : "/api/auth/login";
+      const debugOrigin =
+        mode === "signup"
+          ? "components.auth.magic-link.signup"
+          : "components.auth.magic-link.login";
       const payload =
         mode === "signup"
           ? {
@@ -76,7 +84,8 @@ export function MagicLinkForm({ mode, nextPath, initialError = null }: AuthFormP
               password,
             };
 
-      const res = await fetch(endpoint, {
+      const body = await astroFetchJson<ApiResponse>(endpoint, {
+        debugOrigin,
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -84,8 +93,7 @@ export function MagicLinkForm({ mode, nextPath, initialError = null }: AuthFormP
         body: JSON.stringify(payload),
       });
 
-      const body = (await res.json()) as ApiResponse;
-      if (!res.ok || !body.ok) {
+      if (!body.ok) {
         throw new Error(body.error ?? "Authentication request failed.");
       }
 
@@ -95,10 +103,11 @@ export function MagicLinkForm({ mode, nextPath, initialError = null }: AuthFormP
         );
         setFullName("");
       } else {
+        queryClient.clear();
         router.replace(nextPath);
+        router.refresh();
       }
       setPassword("");
-      router.refresh();
     } catch (error) {
       setErrorMessage(
         error instanceof Error ? error.message : "Authentication request failed."
@@ -218,7 +227,7 @@ export function MagicLinkForm({ mode, nextPath, initialError = null }: AuthFormP
         <div className="mt-2 text-center text-xs text-slate-400">
           {mode === "signup" ? null : (
             <>
-              New to AstroAI?{" "}
+              New to {BRAND_NAME}?{" "}
               <Link
                 href={`/auth/signup?next=${encodeURIComponent(nextPath)}`}
                 className="text-cyan-300 hover:text-cyan-200"

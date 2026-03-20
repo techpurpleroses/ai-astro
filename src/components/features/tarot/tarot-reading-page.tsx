@@ -1,24 +1,113 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
+import Image from 'next/image'
 import { BottomSheet } from '@/components/ui/bottom-sheet'
+import { useTarotDeck } from '@/hooks/use-tarot'
+import type { TarotCard } from '@/types'
 
-// ── Mock tarot cards data ─────────────────────────────────────────────────────
+const CARD_BACK_SRC = '/assets/scraped/misc/unclassified/back-of-the-card-0c3fb8c220249b006d02251d466a327b.png'
+const CARD_DEFAULT_SRC = '/assets/scraped/misc/unclassified/card-default-949c5c3cc1ff82cb6d13e4d031149887.png'
 
-const TAROT_CARDS = [
-  { id: 'the-fool',       name: 'The Fool',       number: 0,  arcana: 'Major', meaning: 'New beginnings, spontaneity, a free spirit. The Fool invites you to leap into the unknown with childlike wonder and trust.', advice: 'Take that leap you\'ve been hesitating over. The universe supports bold new beginnings.', color: '#F59E0B' },
-  { id: 'the-magician',   name: 'The Magician',   number: 1,  arcana: 'Major', meaning: 'Willpower, desire, creation, manifestation. You have everything you need to make your vision real.', advice: 'Channel your focus. All the tools are in your hands — it\'s time to create magic.', color: '#06B6D4' },
-  { id: 'high-priestess', name: 'High Priestess', number: 2,  arcana: 'Major', meaning: 'Intuition, sacred knowledge, the unconscious. Trust the quiet voice within that knows far more than logic can explain.', advice: 'Pause and listen to your inner wisdom before taking action.', color: '#A78BFA' },
-  { id: 'the-empress',    name: 'The Empress',    number: 3,  arcana: 'Major', meaning: 'Femininity, beauty, nature, nurturing, abundance. A time of growth, creativity, and flourishing in all areas.', advice: 'Nurture your creative projects. Abundance is flowing toward you.', color: '#84CC16' },
-  { id: 'the-star',       name: 'The Star',       number: 17, arcana: 'Major', meaning: 'Hope, faith, purpose, renewal, spirituality. After difficulty comes a time of healing and inspiration.', advice: 'Trust the path unfolding before you. The stars are aligning in your favor.', color: '#06B6D4' },
-  { id: 'the-moon',       name: 'The Moon',       number: 18, arcana: 'Major', meaning: 'Illusion, fear, the unconscious, uncertainty. Things are not as they appear — trust your instincts over appearances.', advice: 'Navigate by feeling rather than fact. Your intuition will guide you through the fog.', color: '#94A3B8' },
-  { id: 'the-sun',        name: 'The Sun',        number: 19, arcana: 'Major', meaning: 'Joy, success, positivity, vitality, warmth. A period of clarity, celebration, and life-affirming energy.', advice: 'Step into the light. This is a time to celebrate, shine, and share your gifts.', color: '#F59E0B' },
-  { id: 'judgement',      name: 'Judgement',      number: 20, arcana: 'Major', meaning: 'Reflection, reckoning, awakening, absolution. A powerful call to rise — you are being called to a higher version of yourself.', advice: 'Listen to your calling. A transformation is occurring that cannot be undone.', color: '#EF4444' },
-]
+// ── Color helpers ──────────────────────────────────────────────────────────────
+const SUIT_COLORS: Record<string, string> = {
+  wands: '#F59E0B',
+  cups: '#06B6D4',
+  swords: '#94A3B8',
+  pentacles: '#22C55E',
+}
+const MAJOR_PALETTE = ['#A78BFA', '#F59E0B', '#06B6D4', '#EF4444', '#22C55E', '#F97316', '#EC4899']
 
+function getCardColor(card: TarotCard): string {
+  if (card.suit && SUIT_COLORS[card.suit]) return SUIT_COLORS[card.suit]
+  return MAJOR_PALETTE[card.number % MAJOR_PALETTE.length]
+}
+
+interface DisplayCard extends TarotCard { color: string }
+function toDisplayCard(card: TarotCard): DisplayCard {
+  return { ...card, color: getCardColor(card) }
+}
+
+// ── Phase ──────────────────────────────────────────────────────────────────────
+type Phase = 'selecting' | 'selected' | 'opening' | 'reading'
+
+// ── Fan card (back) ────────────────────────────────────────────────────────────
+function FanCard({ onClick, disabled }: { onClick: () => void; disabled: boolean }) {
+  return (
+    <motion.button
+      onClick={onClick}
+      disabled={disabled}
+      whileHover={disabled ? {} : { y: -10, scale: 1.05 }}
+      whileTap={disabled ? {} : { scale: 0.96 }}
+      className="relative shrink-0 rounded-xl overflow-hidden focus:outline-none"
+      style={{ width: 66, height: 106, boxShadow: '0 6px 20px rgba(0,0,0,0.6)' }}
+    >
+      <Image src={CARD_BACK_SRC} alt="Tarot card" fill className="object-cover" sizes="66px" />
+    </motion.button>
+  )
+}
+
+// ── Slot card (top placeholder or selected) ────────────────────────────────────
+function SlotCard({ phase, card }: { phase: Phase; card: DisplayCard | null }) {
+  const empty = phase === 'selecting'
+  const flipped = phase === 'opening' || phase === 'reading'
+
+  return (
+    <div
+      className="relative rounded-2xl overflow-hidden"
+      style={{
+        width: 120,
+        height: 188,
+        border: empty ? '1.5px dashed rgba(99,209,191,0.4)' : 'none',
+        background: empty ? 'rgba(20,40,70,0.4)' : 'transparent',
+        boxShadow: empty ? 'none' : '0 12px 40px rgba(0,0,0,0.7)',
+      }}
+    >
+      {empty ? (
+        /* placeholder glow corners */
+        <div className="w-full h-full flex items-center justify-center">
+          <span className="text-teal-400/30 text-2xl">✦</span>
+        </div>
+      ) : (
+        /* flip animation */
+        <div className="w-full h-full" style={{ perspective: 900 }}>
+          <motion.div
+            className="relative w-full h-full"
+            style={{ transformStyle: 'preserve-3d' }}
+            animate={{ rotateY: flipped ? 180 : 0 }}
+            transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            {/* back face */}
+            <div className="absolute inset-0 rounded-2xl overflow-hidden" style={{ backfaceVisibility: 'hidden' }}>
+              <Image src={CARD_BACK_SRC} alt="Card back" fill className="object-cover" sizes="120px" />
+            </div>
+            {/* front face */}
+            <div
+              className="absolute inset-0 rounded-2xl overflow-hidden flex flex-col items-center justify-end pb-4 px-2"
+              style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+            >
+              <Image src={CARD_DEFAULT_SRC} alt="Card face" fill className="object-cover" sizes="120px" />
+              <div
+                className="absolute inset-0"
+                style={{ background: 'linear-gradient(to top, rgba(6,14,28,0.9) 40%, transparent 100%)' }}
+              />
+              {card && (
+                <div className="relative z-10 text-center">
+                  <p className="font-mystical text-[11px] leading-tight" style={{ color: card.color }}>{card.name}</p>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Props ──────────────────────────────────────────────────────────────────────
 interface TarotReadingProps {
   title: string
   subtitle: string
@@ -26,138 +115,64 @@ interface TarotReadingProps {
   accentColor: string
 }
 
-// ── Card back component ───────────────────────────────────────────────────────
-
-function CardBack({ color }: { color: string }) {
-  return (
-    <div
-      className="w-full h-full rounded-2xl flex items-center justify-center"
-      style={{
-        background: `linear-gradient(135deg, ${color}20, rgba(15,30,53,0.9))`,
-        border: `1px solid ${color}30`,
-      }}
-    >
-      <div className="flex flex-col items-center gap-2">
-        <div
-          className="h-16 w-16 rounded-full flex items-center justify-center text-3xl"
-          style={{ background: `${color}20`, border: `1px solid ${color}30` }}
-        >
-          ✦
-        </div>
-        <p className="font-mystical text-[10px] tracking-widest" style={{ color }}>
-          SELECT A CARD
-        </p>
-      </div>
-    </div>
-  )
-}
-
-// ── Card front ────────────────────────────────────────────────────────────────
-
-function CardFront({ card }: { card: typeof TAROT_CARDS[0] }) {
-  return (
-    <div
-      className="w-full h-full rounded-2xl flex flex-col items-center justify-center p-4 gap-3"
-      style={{
-        background: `linear-gradient(160deg, ${card.color}25 0%, rgba(10,22,40,0.95) 60%)`,
-        border: `1px solid ${card.color}40`,
-        boxShadow: `0 0 30px ${card.color}20`,
-      }}
-    >
-      <div
-        className="h-16 w-16 rounded-full flex items-center justify-center text-4xl"
-        style={{ background: `${card.color}15`, border: `1px solid ${card.color}30` }}
-      >
-        ✦
-      </div>
-      <p className="font-mystical text-base text-center" style={{ color: card.color }}>
-        {card.name}
-      </p>
-      <p className="text-[9px] font-display text-text-muted uppercase tracking-wider">
-        {card.arcana} Arcana · {card.number}
-      </p>
-    </div>
-  )
-}
-
-// ── Flip card ─────────────────────────────────────────────────────────────────
-
-function FlipCard({
-  card,
-  isFlipped,
-  onClick,
-  accentColor,
-}: {
-  card: typeof TAROT_CARDS[0] | null
-  isFlipped: boolean
-  onClick: () => void
-  accentColor: string
-}) {
-  return (
-    <div
-      className="w-[160px] h-[248px] cursor-pointer"
-      style={{ perspective: 800 }}
-      onClick={onClick}
-    >
-      <motion.div
-        className="relative w-full h-full"
-        style={{ transformStyle: 'preserve-3d' }}
-        animate={{ rotateY: isFlipped ? 180 : 0 }}
-        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-      >
-        {/* Back face */}
-        <div className="absolute inset-0" style={{ backfaceVisibility: 'hidden' }}>
-          <CardBack color={accentColor} />
-        </div>
-        {/* Front face */}
-        <div className="absolute inset-0" style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
-          {card ? <CardFront card={card} /> : <CardBack color={accentColor} />}
-        </div>
-      </motion.div>
-    </div>
-  )
-}
-
-// ── Main reading page ─────────────────────────────────────────────────────────
-
+// ── Main reading page ──────────────────────────────────────────────────────────
 export function TarotReadingPage({ title, subtitle, promptText, accentColor }: TarotReadingProps) {
   const router = useRouter()
+  const { data: deckCards } = useTarotDeck()
+
+  const [phase, setPhase] = useState<Phase>('selecting')
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
-  const [isFlipped, setIsFlipped] = useState(false)
   const [sheetOpen, setSheetOpen] = useState(false)
-  const card = selectedIndex !== null ? TAROT_CARDS[selectedIndex % TAROT_CARDS.length] : null
+
+  const displayCards = useMemo<DisplayCard[]>(() => {
+    if (!deckCards || deckCards.length === 0) return []
+    const shuffled = [...deckCards].sort(() => Math.random() - 0.5)
+    return shuffled.slice(0, 9).map(toDisplayCard)
+  }, [deckCards])
+
+  const card = selectedIndex !== null ? (displayCards[selectedIndex] ?? null) : null
 
   const handleCardSelect = (index: number) => {
-    if (selectedIndex !== null) return // already selected
+    if (phase !== 'selecting') return
     setSelectedIndex(index)
-    setTimeout(() => {
-      setIsFlipped(true)
-      setTimeout(() => setSheetOpen(true), 700)
-    }, 100)
+    setPhase('selected')
   }
 
-  // 7 cards spread in a wide individual-positioned arc (not shared pivot)
-  const CARD_COUNT = 7
-  const SPREAD_WIDTH = 290  // total horizontal spread in px
-  const CARD_W = 78
-  const CARD_H = 124
+  const handleOpenCard = () => {
+    setPhase('opening')
+    setTimeout(() => {
+      setSheetOpen(true)
+      setPhase('reading')
+    }, 800)
+  }
 
-  // Each card gets its own x,y,rotation — cards are physically separated
-  const cardPositions = Array.from({ length: CARD_COUNT }, (_, i) => {
-    const t = i / (CARD_COUNT - 1)        // 0 → 1
-    const norm = t * 2 - 1                 // -1 → +1
-    const x = norm * (SPREAD_WIDTH / 2)   // -145 → +145 px
-    const y = norm * norm * 22            // parabola: 0 at center, 22px up at edges
-    const rotate = norm * 16             // -16° → +16°
+  const handleReset = () => {
+    setSheetOpen(false)
+    setPhase('selecting')
+    setSelectedIndex(null)
+  }
+
+  // Fan arc: 9 cards, wide spread that bleeds off screen edges
+  const CARD_COUNT = 9
+  const FAN_SPREAD = 420        // total horizontal span (wider than phone)
+  const FAN_MAX_ROTATE = 28     // degrees at edge
+
+  const fanPositions = Array.from({ length: CARD_COUNT }, (_, i) => {
+    const t = i / (CARD_COUNT - 1)   // 0 → 1
+    const norm = t * 2 - 1            // -1 → +1
+    const x = norm * (FAN_SPREAD / 2)
+    const y = norm * norm * 18        // edges drop slightly
+    const rotate = norm * FAN_MAX_ROTATE
     return { x, y, rotate }
   })
 
   return (
-    <div className="flex flex-col min-h-full">
+    <div className="flex flex-col h-full" style={{ background: 'linear-gradient(180deg, #0a1628 0%, #0d1e3a 100%)' }}>
+
       {/* Header */}
       <div
-        className="sticky top-0 z-30 px-4 py-3 flex items-center gap-3"
-        style={{ background: 'rgba(10,22,40,0.97)', backdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(255,255,255,0.04)' }}
+        className="shrink-0 px-4 py-3 flex items-center gap-3"
+        style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}
       >
         <button
           onClick={() => router.back()}
@@ -165,128 +180,146 @@ export function TarotReadingPage({ title, subtitle, promptText, accentColor }: T
         >
           <ArrowLeft size={15} className="text-text-secondary" />
         </button>
-        <div>
-          <p className="font-mystical text-[10px] text-text-muted tracking-widest">TAROT</p>
-          <h1 className="font-display text-base font-bold text-text-primary">{title}</h1>
-        </div>
+        <h1 className="font-display text-base font-bold text-text-primary">{title}</h1>
       </div>
 
-      <div className="flex-1 flex flex-col items-center px-4 pt-6 pb-6 gap-8">
-        {/* Prompt */}
-        <div className="text-center space-y-2">
-          <p className="font-mystical text-xs tracking-widest" style={{ color: accentColor }}>
-            {subtitle}
-          </p>
-          <p className="text-sm text-text-secondary leading-relaxed max-w-[260px]">
-            {promptText}
-          </p>
-        </div>
+      {/* Top section: card slot + instruction */}
+      <div className="flex-1 flex flex-col items-center justify-center gap-6 px-4">
 
-        {/* Card fan — each card positioned independently for clear separation */}
-        <div className="relative w-full flex items-center justify-center" style={{ height: 200 }}>
-          {cardPositions.map((pos, i) => {
-            const isSelected = selectedIndex === i
-            const isOther = selectedIndex !== null && !isSelected
+        {/* Card slot */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={phase === 'selecting' ? 'empty' : 'filled'}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
+          >
+            <SlotCard phase={phase} card={card} />
+          </motion.div>
+        </AnimatePresence>
 
+        {/* Instruction / CTA */}
+        <AnimatePresence mode="wait">
+          {phase === 'selecting' && (
+            <motion.div
+              key="instruction"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-center space-y-1 px-6"
+            >
+              <p className="text-sm text-white/50 leading-relaxed">{promptText}</p>
+            </motion.div>
+          )}
+          {phase === 'selected' && (
+            <motion.div
+              key="open-cta"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+            >
+              <button
+                onClick={handleOpenCard}
+                className="px-10 py-3.5 rounded-full text-sm font-bold text-white"
+                style={{ background: 'linear-gradient(90deg, #2dd4bf, #0ea5e9)', boxShadow: '0 0 20px rgba(45,212,191,0.35)' }}
+              >
+                Open the card
+              </button>
+            </motion.div>
+          )}
+          {(phase === 'opening' || phase === 'reading') && (
+            <motion.div
+              key="hint"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center"
+            >
+              <p className="text-xs text-white/30">Your reading is ready</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Bottom fan */}
+      <div className="shrink-0 pb-2">
+        {/* "Choose the card" label */}
+        <p className="text-center text-[11px] text-white/35 mb-3 tracking-wide">
+          ← Choose the card →
+        </p>
+
+        {/* Fan container — overflow visible so cards bleed off edges */}
+        <div
+          className="relative flex items-end justify-center"
+          style={{ height: 140, overflow: 'visible' }}
+        >
+          {fanPositions.map((pos, i) => {
+            const isPicked = selectedIndex === i
             return (
               <motion.div
                 key={i}
                 className="absolute"
                 style={{
                   left: '50%',
-                  top: '50%',
-                  marginLeft: -(CARD_W / 2),
-                  marginTop: -(CARD_H / 2),
-                  zIndex: isSelected ? 20 : i,
+                  bottom: 0,
+                  marginLeft: -33,   // half of card width 66px
+                  zIndex: isPicked ? 0 : i,
+                  transformOrigin: 'bottom center',
                 }}
                 initial={{ x: pos.x, y: pos.y, rotate: pos.rotate }}
-                animate={
-                  isSelected
-                    ? { x: 0, y: -18, rotate: 0, scale: 1.06, opacity: 1 }
-                    : {
-                        x: pos.x,
-                        y: isOther ? pos.y + 6 : pos.y,
-                        rotate: pos.rotate,
-                        scale: isOther ? 0.93 : 1,
-                        opacity: isOther ? 0.38 : 1,
-                      }
-                }
-                transition={{ duration: 0.38, ease: 'easeOut' }}
+                animate={{
+                  x: pos.x,
+                  y: isPicked ? pos.y - 20 : (phase !== 'selecting' ? pos.y + 30 : pos.y),
+                  rotate: isPicked ? 0 : pos.rotate,
+                  opacity: isPicked ? 0 : (phase !== 'selecting' ? 0.25 : 1),
+                  scale: isPicked ? 0 : 1,
+                }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
               >
-                {isSelected ? (
-                  <FlipCard
-                    card={card}
-                    isFlipped={isFlipped}
-                    onClick={() => {}}
-                    accentColor={accentColor}
-                  />
-                ) : (
-                  <motion.button
-                    onClick={() => handleCardSelect(i)}
-                    whileHover={{ y: -8, scale: 1.04 }}
-                    whileTap={{ scale: 0.96 }}
-                    className="rounded-2xl cursor-pointer focus:outline-none"
-                    style={{
-                      width: CARD_W,
-                      height: CARD_H,
-                      background: `linear-gradient(160deg, ${accentColor}28 0%, rgba(12,24,48,0.92) 100%)`,
-                      border: `1px solid ${accentColor}35`,
-                      boxShadow: `0 8px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06)`,
-                    }}
-                  >
-                    {/* Card back pattern */}
-                    <div className="w-full h-full rounded-2xl flex flex-col items-center justify-center gap-2 overflow-hidden relative">
-                      {/* Decorative border inset */}
-                      <div className="absolute inset-[5px] rounded-xl opacity-25"
-                        style={{ border: `1px solid ${accentColor}` }}
-                      />
-                      <span className="text-base opacity-60" style={{ color: accentColor }}>✦</span>
-                    </div>
-                  </motion.button>
-                )}
+                <FanCard
+                  onClick={() => handleCardSelect(i)}
+                  disabled={phase !== 'selecting'}
+                />
               </motion.div>
             )
           })}
         </div>
-
-        {selectedIndex === null && (
-          <p className="text-[11px] text-text-muted font-display text-center animate-pulse">
-            Tap any card to reveal your reading
-          </p>
-        )}
       </div>
 
       {/* Reveal sheet */}
       <BottomSheet
         open={sheetOpen}
-        onClose={() => { setSheetOpen(false); setIsFlipped(false); setSelectedIndex(null) }}
+        onClose={handleReset}
         title={card?.name ?? 'Your Card'}
       >
         {card && (
           <div className="space-y-4">
-            <div
-              className="rounded-2xl p-4 text-center"
+            <div className="flex gap-4 items-center rounded-2xl p-4"
               style={{ background: `${card.color}10`, border: `1px solid ${card.color}20` }}
             >
-              <div
-                className="h-16 w-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-3"
-                style={{ background: `${card.color}15`, border: `1px solid ${card.color}30` }}
-              >
-                ✦
+              <div className="relative shrink-0 rounded-xl overflow-hidden" style={{ width: 60, height: 94 }}>
+                <Image src={CARD_DEFAULT_SRC} alt={card.name} fill className="object-cover" sizes="60px" />
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(6,14,28,0.7) 30%, transparent 100%)' }} />
               </div>
-              <p className="font-mystical text-lg" style={{ color: card.color }}>{card.name}</p>
-              <p className="text-[10px] text-text-muted mt-1">{card.arcana} Arcana · {card.number}</p>
+              <div className="text-left">
+                <p className="font-mystical text-lg leading-tight" style={{ color: card.color }}>{card.name}</p>
+                <p className="text-[10px] text-text-muted mt-1">
+                  {card.arcana === 'major' ? 'Major' : 'Minor'} Arcana · {card.number}
+                  {card.suit && ` · ${card.suit.charAt(0).toUpperCase() + card.suit.slice(1)}`}
+                </p>
+              </div>
             </div>
 
             <div className="space-y-3">
               <div>
                 <p className="text-[10px] font-display font-semibold text-text-muted uppercase tracking-widest mb-1">Meaning</p>
-                <p className="text-sm text-text-secondary leading-relaxed">{card.meaning}</p>
+                <p className="text-sm text-text-secondary leading-relaxed">{card.uprightMeaning}</p>
               </div>
-              <div>
-                <p className="text-[10px] font-display font-semibold text-lime-accent uppercase tracking-widest mb-1">Guidance for You</p>
-                <p className="text-sm text-text-secondary leading-relaxed">{card.advice}</p>
-              </div>
+              {card.tipOfDay && (
+                <div>
+                  <p className="text-[10px] font-display font-semibold text-teal-400 uppercase tracking-widest mb-1">Guidance for You</p>
+                  <p className="text-sm text-text-secondary leading-relaxed">{card.tipOfDay}</p>
+                </div>
+              )}
             </div>
           </div>
         )}

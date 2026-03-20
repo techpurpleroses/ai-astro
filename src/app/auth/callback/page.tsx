@@ -4,21 +4,7 @@ import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { getBrowserSupabaseClient } from "@/lib/supabase/client";
-
-const VALID_OTP_TYPES: EmailOtpType[] = [
-  "signup",
-  "magiclink",
-  "recovery",
-  "invite",
-  "email",
-  "email_change",
-];
-
-function normalizeNext(nextPath: string | null): string {
-  if (!nextPath || !nextPath.startsWith("/")) return "/today";
-  if (nextPath.startsWith("/auth")) return "/today";
-  return nextPath;
-}
+import { normalizeNextPath, VALID_OTP_TYPES } from "@/lib/auth/flow";
 
 function toHashParams(hashValue: string): URLSearchParams {
   const normalized = hashValue.startsWith("#") ? hashValue.slice(1) : hashValue;
@@ -64,7 +50,7 @@ function AuthCallbackContent() {
   const searchParams = useSearchParams();
   const [processingError, setProcessingError] = useState<string | null>(null);
 
-  const nextPath = useMemo(() => normalizeNext(searchParams.get("next")), [searchParams]);
+  const nextPath = useMemo(() => normalizeNextPath(searchParams.get("next")), [searchParams]);
   const intent = useMemo(() => searchParams.get("intent"), [searchParams]);
 
   useEffect(() => {

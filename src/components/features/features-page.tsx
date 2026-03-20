@@ -5,7 +5,8 @@ import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { ChevronRight, Sparkles, Crown, Settings } from 'lucide-react'
 import Image from 'next/image'
-import { STORY_CATEGORIES } from '@/data/stories'
+import { useStoryCategories } from '@/hooks/use-stories'
+import { FeatureGate } from '@/components/billing/feature-gate'
 
 function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.05 })
@@ -120,6 +121,8 @@ function PalmMetricPreview() {
 
 export function FeaturesClient() {
   const router = useRouter()
+  const { data: storiesData } = useStoryCategories()
+  const storyCategories = storiesData ?? []
 
   return (
     <div className="flex flex-col">
@@ -158,26 +161,28 @@ export function FeaturesClient() {
 
         {/* Palm Reading */}
         <FadeIn delay={0}>
-          <div>
-            <FeatureCard
-              imageSrc="/assets/avatar-1.png"
-              imageAlt="Palm reading"
-              title="Palm Reading"
-              subtitle="Palmistry Analysis"
-              description="Unlock the secrets of your hand lines. Discover your sensitivity, longevity, intelligence, and ambition through ancient palmistry."
-              badge="NEW"
-              gradient="linear-gradient(135deg, rgba(244,63,94,0.12) 0%, rgba(244,63,94,0.04) 100%)"
-              borderColor="rgba(244,63,94,0.2)"
-              accentColor="#F43F5E"
-              onClick={() => router.push('/features/palm-reading')}
-            />
-            <div
-              className="rounded-b-2xl overflow-hidden"
-              style={{ background: 'rgba(15,30,53,0.7)', border: '1px solid rgba(244,63,94,0.15)', borderTop: 'none', marginTop: '-1px' }}
-            >
-              <PalmMetricPreview />
+          <FeatureGate feature="palm.scan">
+            <div>
+              <FeatureCard
+                imageSrc="/assets/avatar-1.png"
+                imageAlt="Palm reading"
+                title="Palm Reading"
+                subtitle="Palmistry Analysis"
+                description="Unlock the secrets of your hand lines. Discover your sensitivity, longevity, intelligence, and ambition through ancient palmistry."
+                badge="NEW"
+                gradient="linear-gradient(135deg, rgba(244,63,94,0.12) 0%, rgba(244,63,94,0.04) 100%)"
+                borderColor="rgba(244,63,94,0.2)"
+                accentColor="#F43F5E"
+                onClick={() => router.push('/features/palm-reading')}
+              />
+              <div
+                className="rounded-b-2xl overflow-hidden"
+                style={{ background: 'rgba(15,30,53,0.7)', border: '1px solid rgba(244,63,94,0.15)', borderTop: 'none', marginTop: '-1px' }}
+              >
+                <PalmMetricPreview />
+              </div>
             </div>
-          </div>
+          </FeatureGate>
         </FadeIn>
 
         {/* Tarot */}
@@ -197,17 +202,19 @@ export function FeaturesClient() {
 
         {/* Soulmate */}
         <FadeIn delay={0.14}>
-          <FeatureCard
-            imageSrc="/assets/soulmate-sketch.webp"
-            imageAlt="Soulmate birth chart"
-            title="Soulmate by Birth Chart"
-            subtitle="Cosmic Love Match"
-            description="Using your natal chart, discover who your cosmic soulmate is — their zodiac signature, timing of your meeting, and relationship potential."
-            gradient="linear-gradient(135deg, rgba(6,182,212,0.12) 0%, rgba(6,182,212,0.04) 100%)"
-            borderColor="rgba(6,182,212,0.2)"
-            accentColor="#06B6D4"
-            onClick={() => router.push('/features/soulmate')}
-          />
+          <FeatureGate feature="soulmate.generate">
+            <FeatureCard
+              imageSrc="/assets/soulmate-sketch.webp"
+              imageAlt="Soulmate birth chart"
+              title="Soulmate by Birth Chart"
+              subtitle="Cosmic Love Match"
+              description="Using your natal chart, discover who your cosmic soulmate is — their zodiac signature, timing of your meeting, and relationship potential."
+              gradient="linear-gradient(135deg, rgba(6,182,212,0.12) 0%, rgba(6,182,212,0.04) 100%)"
+              borderColor="rgba(6,182,212,0.2)"
+              accentColor="#06B6D4"
+              onClick={() => router.push('/features/soulmate')}
+            />
+          </FeatureGate>
         </FadeIn>
 
         {/* Magic Ball */}
@@ -242,7 +249,7 @@ export function FeaturesClient() {
 
         <FadeIn delay={0.28}>
           <div className="flex gap-3 overflow-x-auto scrollbar-hide -mx-4 px-4 pb-1">
-            {STORY_CATEGORIES.slice(0, 8).map((category) => (
+            {storyCategories.slice(0, 8).map((category) => (
               <button
                 key={category.id}
                 onClick={() => router.push(`/features/story/${category.id}`)}

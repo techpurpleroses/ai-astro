@@ -258,6 +258,42 @@ a[aria-disabled='true'] {
   border-radius: 0.5rem;
 }
 
+/* Native date/time inputs used in onboarding need explicit browser-part styling on dark UI */
+.onboarding-picker-input {
+  color: #f8fafc;
+  color-scheme: dark;
+  caret-color: #f8fafc;
+}
+
+.onboarding-picker-input::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(1.4);
+  opacity: 0.95;
+  cursor: pointer;
+}
+
+.onboarding-picker-input::-webkit-datetime-edit,
+.onboarding-picker-input::-webkit-datetime-edit-fields-wrapper,
+.onboarding-picker-input::-webkit-datetime-edit-text,
+.onboarding-picker-input::-webkit-datetime-edit-month-field,
+.onboarding-picker-input::-webkit-datetime-edit-day-field,
+.onboarding-picker-input::-webkit-datetime-edit-year-field,
+.onboarding-picker-input::-webkit-datetime-edit-hour-field,
+.onboarding-picker-input::-webkit-datetime-edit-minute-field,
+.onboarding-picker-input::-webkit-datetime-edit-ampm-field {
+  color: #f8fafc;
+}
+
+.onboarding-picker-input::-webkit-datetime-edit-ampm-field:focus,
+.onboarding-picker-input::-webkit-datetime-edit-hour-field:focus,
+.onboarding-picker-input::-webkit-datetime-edit-minute-field:focus,
+.onboarding-picker-input::-webkit-datetime-edit-day-field:focus,
+.onboarding-picker-input::-webkit-datetime-edit-month-field:focus,
+.onboarding-picker-input::-webkit-datetime-edit-year-field:focus {
+  background-color: rgba(34, 211, 238, 0.2);
+  color: #f8fafc;
+  border-radius: 0.25rem;
+}
+
 /* Swiper overrides */
 .swiper-slide { height: auto !important; }
 

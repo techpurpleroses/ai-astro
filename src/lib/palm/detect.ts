@@ -7,8 +7,11 @@ import {
   PalmConfidenceMapSchema,
   PalmLineMapSchema,
 } from '@/lib/palm/contracts'
+import { clamp01, createDebugLogger, round } from '@/lib/palm/utils'
+import { createServerLogger } from '@/server/foundation/observability/logger'
 
-const PALM_DEBUG = process.env.PALM_DEBUG !== '0'
+const debugLog = createDebugLogger('palm.detect')
+const logger = createServerLogger('palm.detect')
 const MODEL = {
   provider: 'roboflow',
   name: process.env.ROBOFLOW_MODEL_ID?.trim() || 'palm-lines-recognition-wemy5/1',
@@ -33,25 +36,6 @@ interface Candidate {
   spanY: number
   verticality: number
   curvature: number
-}
-
-function debugLog(step: string, data?: Record<string, unknown>) {
-  if (!PALM_DEBUG) return
-  if (data) {
-    console.log(`[palm.detect] ${step}`, data)
-    return
-  }
-  console.log(`[palm.detect] ${step}`)
-}
-
-function clamp01(value: number) {
-  if (!Number.isFinite(value)) return 0
-  return Math.min(1, Math.max(0, value))
-}
-
-function round(value: number, digits: number) {
-  const factor = 10 ** digits
-  return Math.round(value * factor) / factor
 }
 
 function parseJsonFromText(text: string): unknown {
@@ -518,8 +502,8 @@ export async function detectPalmLines(
     })
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error)
-    console.error('palm.detect runtime error:', message)
     const reason = detectorErrorReason(message)
+    logger.error('pipeline.error', { error, reason, durationMs: Date.now() - startedAt, outcome: 'error' })
     debugLog('pipeline.fail', { reason, ms: Date.now() - startedAt })
     return noPalm(reason)
   }

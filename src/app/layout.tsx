@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Space_Grotesk, Inter, Cinzel } from 'next/font/google'
 import { ServiceWorkerRegistration } from '@/components/pwa/service-worker-registration'
+import { BRAND_FULL, BRAND_NAME } from '@/lib/brand'
 import './globals.css'
 
 const spaceGrotesk = Space_Grotesk({
@@ -24,13 +25,13 @@ const cinzel = Cinzel({
 })
 
 export const metadata: Metadata = {
-  title: 'AstroAI – Your Cosmic Guide',
+  title: BRAND_FULL,
   description: 'Personalized astrology readings, birth charts, tarot, and cosmic guidance powered by AI.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'AstroAI',
+    title: BRAND_NAME,
   },
 }
 

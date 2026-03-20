@@ -1,0 +1,35 @@
+{
+  "sessionId": "af3ce79f-6234-45c3-8ce8-1fe931b5a521",
+  "category": "numerology",
+  "createdAt": "2026-03-14T07:50:45.318Z",
+  "updatedAt": "2026-03-14T07:50:49.436Z",
+  "status": "active",
+  "currentStep": 3,
+  "source": "public-onboarding",
+  "answers": {},
+  "events": [
+    {
+      "id": "d06a82f5-9100-4a56-807d-31b8d0123192",
+      "createdAt": "2026-03-14T07:50:45.318Z",
+      "type": "session_created"
+    },
+    {
+      "id": "103f314f-a597-4455-a482-eb9bec500248",
+      "createdAt": "2026-03-14T07:50:47.726Z",
+      "type": "step_advanced",
+      "stepId": "welcome"
+    },
+    {
+      "id": "af40cd36-863c-4b29-ace4-c99df405ce59",
+      "createdAt": "2026-03-14T07:50:48.664Z",
+      "type": "step_advanced",
+      "stepId": "birth-date"
+    },
+    {
+      "id": "5de4d6d6-883f-444d-8af4-3ee9ffda8091",
+      "createdAt": "2026-03-14T07:50:49.436Z",
+      "type": "step_advanced",
+      "stepId": "birth-time"
+    }
+  ]
+}

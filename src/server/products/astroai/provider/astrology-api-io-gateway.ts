@@ -1,4 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { BRAND_NAME } from "@/lib/brand";
+import { createServerLogger, durationMs } from "@/server/foundation/observability/logger";
 import { AstrologyApiIoClient } from "../../../integrations/astrology/astrology-api-io-client";
 import type {
   BirthChartProviderGateway,
@@ -10,6 +12,8 @@ import type {
   CompatibilityQuery,
 } from "../modules/compatibility/service";
 import type { CompatibilityDTO } from "../modules/compatibility/types";
+import type { HoroscopeProviderGateway } from "../modules/horoscope/service";
+import type { HoroscopeCategoryDTO, HoroscopeDTO, HoroscopeQuery } from "../modules/horoscope/types";
 import type { TodayProviderGateway } from "../modules/today/service";
 import type { TodayDTO } from "../modules/today/types";
 
@@ -267,8 +271,10 @@ function scoreFromDynamics(
 }
 
 export class AstrologyApiIoAstroAiGateway
-  implements TodayProviderGateway, CompatibilityProviderGateway, BirthChartProviderGateway
+  implements TodayProviderGateway, CompatibilityProviderGateway, BirthChartProviderGateway, HoroscopeProviderGateway
 {
+  private readonly logger = createServerLogger("astroai.provider.astrology-api-io");
+
   constructor(
     private readonly client: AstrologyApiIoClient,
     private readonly supabase: SupabaseClient
@@ -280,12 +286,14 @@ export class AstrologyApiIoAstroAiGateway
     ttlSeconds?: number;
     computedAt?: string;
   }> {
+    const startedAt = Date.now();
+    this.logger.info("fetchToday.start", query);
     const dateCtx = buildGlobalDateContext(query.date);
     const zodiacType = systemToZodiacType(query.systemType);
 
     const lunarBody: JsonRecord = {
       subject: {
-        name: "AstroAI Daily Context",
+        name: `${BRAND_NAME} Daily Context`,
         birth_data: {
           year: dateCtx.year,
           month: dateCtx.month,
@@ -306,7 +314,7 @@ export class AstrologyApiIoAstroAiGateway
 
     const aspectsBody: JsonRecord = {
       subject: {
-        name: "AstroAI Daily Aspects",
+        name: `${BRAND_NAME} Daily Aspects`,
         birth_data: {
           year: 1990,
           month: dateCtx.month,
@@ -359,12 +367,20 @@ export class AstrologyApiIoAstroAiGateway
       events: mapTodayEvents(eventsResp.data, query.date),
     };
 
-    return {
+    const result = {
       data: today,
       sourceProvider: "astrology_api_io",
       ttlSeconds: 6 * 60 * 60,
       computedAt: new Date().toISOString(),
     };
+    this.logger.info("fetchToday.success", {
+      durationMs: durationMs(startedAt),
+      outcome: "success",
+      transits: today.transits.length,
+      events: today.events.length,
+      sourceProvider: result.sourceProvider,
+    });
+    return result;
   }
 
   async fetchCompatibility(query: CompatibilityQuery): Promise<{
@@ -373,6 +389,8 @@ export class AstrologyApiIoAstroAiGateway
     ttlSeconds?: number;
     computedAt?: string;
   }> {
+    const startedAt = Date.now();
+    this.logger.info("fetchCompatibility.start", query);
     const payload = {
       subject1: buildCompatibilitySubject(query.signA, "Subject A"),
       subject2: buildCompatibilitySubject(query.signB, "Subject B"),
@@ -414,15 +432,24 @@ export class AstrologyApiIoAstroAiGateway
       challenges,
     };
 
-    return {
+    const result = {
       data: dto,
       sourceProvider: "astrology_api_io",
       ttlSeconds: 30 * 24 * 60 * 60,
       computedAt: new Date().toISOString(),
     };
+    this.logger.info("fetchCompatibility.success", {
+      durationMs: durationMs(startedAt),
+      outcome: "success",
+      overall: dto.overall,
+      strengths: dto.strengths.length,
+      challenges: dto.challenges.length,
+    });
+    return result;
   }
 
   private async loadSubject(query: BirthChartQuery): Promise<SubjectRow> {
+    const startedAt = Date.now();
     const { data, error } = await this.supabase
       .schema("identity")
       .from("subjects")
@@ -432,11 +459,28 @@ export class AstrologyApiIoAstroAiGateway
       .maybeSingle();
 
     if (error) {
+      this.logger.error("loadSubject.error", {
+        durationMs: durationMs(startedAt),
+        userId: query.userId,
+        subjectId: query.subjectId,
+        error,
+      });
       throw new Error(`Failed to load subject ${query.subjectId}: ${error.message}`);
     }
     if (!data) {
+      this.logger.warn("loadSubject.not_found", {
+        durationMs: durationMs(startedAt),
+        userId: query.userId,
+        subjectId: query.subjectId,
+      });
       throw new Error(`Subject ${query.subjectId} not found for user ${query.userId}.`);
     }
+    this.logger.info("loadSubject.success", {
+      durationMs: durationMs(startedAt),
+      outcome: "success",
+      userId: query.userId,
+      subjectId: query.subjectId,
+    });
     return data as SubjectRow;
   }
 
@@ -446,6 +490,13 @@ export class AstrologyApiIoAstroAiGateway
     ttlSeconds?: number;
     computedAt?: string;
   }> {
+    const startedAt = Date.now();
+    this.logger.info("fetchBirthChart.start", {
+      userId: query.userId,
+      subjectId: query.subjectId,
+      chartType: query.chartType,
+      systemType: query.systemType,
+    });
     const subject = await this.loadSubject(query);
     const dateParts = splitBirthDate(subject.birth_date);
     const timeParts = splitBirthTime(subject.birth_time);
@@ -518,12 +569,116 @@ export class AstrologyApiIoAstroAiGateway
       aspects,
     };
 
-    return {
+    const result = {
       data: dto,
       sourceProvider: "astrology_api_io",
       ttlSeconds: 180 * 24 * 60 * 60,
       computedAt: new Date().toISOString(),
     };
+    this.logger.info("fetchBirthChart.success", {
+      durationMs: durationMs(startedAt),
+      outcome: "success",
+      bodies: dto.bodies.length,
+      houses: dto.houses.length,
+      aspects: dto.aspects.length,
+      sunSign: dto.sunSign,
+    });
+    return result;
+  }
+
+  async fetchHoroscope(query: HoroscopeQuery): Promise<{
+    data: HoroscopeDTO;
+    sourceProvider: string;
+    ttlSeconds?: number;
+    computedAt?: string;
+  }> {
+    const startedAt = Date.now();
+    this.logger.info("fetchHoroscope.start", query);
+    const dateCtx = buildGlobalDateContext(query.date);
+    const zodiacType = systemToZodiacType(query.systemType);
+    const sign = normalizeSign(query.sign);
+
+    const response = await this.client.getHoroscopeSignDailyText({
+      sign,
+      date: { year: dateCtx.year, month: dateCtx.month, day: dateCtx.day },
+      options: { zodiac_type: zodiacType, language: "en" },
+    });
+
+    const payload = asRecord(response.data) ?? {};
+    const inner = asRecord(payload.data) ?? payload;
+
+    const text =
+      asString(inner.horoscope_text) ??
+      asString(inner.description) ??
+      asString(inner.text) ??
+      "The stars offer gentle guidance today.";
+
+    const title =
+      asString(inner.title) ??
+      `${SIGN_FULL_NAMES[sign] ?? query.sign} Daily Horoscope`;
+
+    const rawEnergy = asNumber(inner.energy) ?? asNumber(inner.energy_score);
+    const energy = rawEnergy != null ? Math.round(Math.min(100, Math.max(0, rawEnergy))) : 60;
+
+    const emotionalTone =
+      asString(inner.emotional_tone) ?? asString(inner.tone) ?? "balanced";
+
+    const challenges = asArray(inner.challenges)
+      .map((item) => asString(item))
+      .filter((item): item is string => item !== null)
+      .slice(0, 5);
+
+    const opportunities = asArray(inner.opportunities)
+      .map((item) => asString(item))
+      .filter((item): item is string => item !== null)
+      .slice(0, 5);
+
+    function makeCategory(key: string): HoroscopeCategoryDTO {
+      const catData = asRecord(inner[key] ?? inner[`${key}_horoscope`]);
+      const catText =
+        (catData ? asString(catData.text) ?? asString(catData.description) : null) ??
+        text;
+      const catRating = catData ? Math.round(Math.min(5, Math.max(1, asNumber(catData.rating) ?? 3))) : 3;
+      const catKeywords = catData
+        ? asArray(catData.keywords)
+            .map((item) => asString(item))
+            .filter((item): item is string => item !== null)
+        : [];
+      return { text: catText, rating: catRating, keywords: catKeywords };
+    }
+
+    const dto: HoroscopeDTO = {
+      main: {
+        date: query.date,
+        title,
+        text,
+        energy,
+        emotionalTone,
+        challenges,
+        opportunities,
+      },
+      categories: {
+        "your-day": makeCategory("your_day"),
+        love: makeCategory("love"),
+        health: makeCategory("health"),
+        career: makeCategory("career"),
+      },
+    };
+
+    const result = {
+      data: dto,
+      sourceProvider: "astrology_api_io",
+      ttlSeconds: 24 * 60 * 60,
+      computedAt: new Date().toISOString(),
+    };
+    this.logger.info("fetchHoroscope.success", {
+      durationMs: durationMs(startedAt),
+      outcome: "success",
+      sign: query.sign,
+      date: query.date,
+      challenges: dto.main.challenges.length,
+      opportunities: dto.main.opportunities.length,
+    });
+    return result;
   }
 }
-

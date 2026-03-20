@@ -11,6 +11,7 @@ import { TopInsightsStrip } from './horoscope/top-insights-strip'
 import { TopCardsStrip, type TopCardsStripItem } from './shared/top-cards-strip'
 import { TabHeroSlider } from './shared/tab-hero-slider'
 import { AskAdvisorCard } from './shared/ask-advisor-card'
+import { BirthDataPrompt } from '@/components/shared/birth-data-prompt'
 
 type TodaySection = 'horoscope' | 'events' | 'moon'
 const SECTION_ORDER: TodaySection[] = ['horoscope', 'events', 'moon']
@@ -175,6 +176,7 @@ export function TodayClient() {
           />
         )}
 
+        <BirthDataPrompt />
         <TabHeroSlider active={activeSection} />
         <AskAdvisorCard className="mt-1" />
 

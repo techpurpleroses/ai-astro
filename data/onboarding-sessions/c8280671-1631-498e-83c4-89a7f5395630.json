@@ -1,0 +1,143 @@
+{
+  "sessionId": "c8280671-1631-498e-83c4-89a7f5395630",
+  "category": "sketch",
+  "createdAt": "2026-03-14T07:30:54.935Z",
+  "updatedAt": "2026-03-14T07:32:05.919Z",
+  "status": "active",
+  "currentStep": 18,
+  "source": "public-onboarding",
+  "answers": {
+    "target-gender": "male",
+    "age-range": "25-30",
+    "appearance": "latino",
+    "hair": "short",
+    "eye-color": "hazel",
+    "dynamic": "growth",
+    "gender": "male",
+    "birth-date": "2026-03-12",
+    "birth-time-known": "yes",
+    "birth-time": "16:03",
+    "birth-place": "surat",
+    "element": "earth",
+    "upload-photo": {
+      "fileName": "360_F_264200898_C3ro16nVxeO4Lkje6RTt6wLm8N65nAQq.jpg",
+      "fileSize": 26885,
+      "mimeType": "image/jpeg"
+    }
+  },
+  "events": [
+    {
+      "id": "42f310a1-f2f5-4271-8320-eb7722f5a18e",
+      "createdAt": "2026-03-14T07:30:54.935Z",
+      "type": "session_created"
+    },
+    {
+      "id": "9112c922-4ff7-4252-a7ab-78007eaac0c5",
+      "createdAt": "2026-03-14T07:30:58.894Z",
+      "type": "step_advanced",
+      "stepId": "welcome"
+    },
+    {
+      "id": "d8ee3e69-1525-45d2-8f24-60fa419c3e45",
+      "createdAt": "2026-03-14T07:31:02.150Z",
+      "type": "answer_saved",
+      "stepId": "target-gender"
+    },
+    {
+      "id": "499365a3-1021-4680-86f5-14abe34b15c8",
+      "createdAt": "2026-03-14T07:31:04.101Z",
+      "type": "answer_saved",
+      "stepId": "age-range"
+    },
+    {
+      "id": "20883b1e-af56-4ffd-abf1-53fa7ac4e909",
+      "createdAt": "2026-03-14T07:31:07.651Z",
+      "type": "answer_saved",
+      "stepId": "appearance"
+    },
+    {
+      "id": "84440d30-e44d-4d28-a0b0-a3bdecc9c704",
+      "createdAt": "2026-03-14T07:31:10.912Z",
+      "type": "answer_saved",
+      "stepId": "hair"
+    },
+    {
+      "id": "082572d5-a00f-4e4b-ab5d-21d7d6748861",
+      "createdAt": "2026-03-14T07:31:12.620Z",
+      "type": "answer_saved",
+      "stepId": "eye-color"
+    },
+    {
+      "id": "3f4c1d10-e3d8-4756-87d6-2ccb1db71eb9",
+      "createdAt": "2026-03-14T07:31:14.804Z",
+      "type": "answer_saved",
+      "stepId": "dynamic"
+    },
+    {
+      "id": "7e533bc1-6687-4748-922c-89a2d6b41554",
+      "createdAt": "2026-03-14T07:31:17.381Z",
+      "type": "answer_saved",
+      "stepId": "gender"
+    },
+    {
+      "id": "64a89a75-7a1f-4f3a-8aa0-abb37eedad7e",
+      "createdAt": "2026-03-14T07:31:22.658Z",
+      "type": "answer_saved",
+      "stepId": "birth-date"
+    },
+    {
+      "id": "f8aa3336-70ae-45f7-8e52-b93b98cec594",
+      "createdAt": "2026-03-14T07:31:24.720Z",
+      "type": "answer_saved",
+      "stepId": "birth-time-known"
+    },
+    {
+      "id": "602df9ce-7acd-419f-ba39-5a62fff082db",
+      "createdAt": "2026-03-14T07:31:31.871Z",
+      "type": "answer_saved",
+      "stepId": "birth-time"
+    },
+    {
+      "id": "137a0cf9-be7f-4259-9378-d2d76b42ec1a",
+      "createdAt": "2026-03-14T07:31:39.710Z",
+      "type": "answer_saved",
+      "stepId": "birth-place"
+    },
+    {
+      "id": "ec36f627-8292-4d6a-81ca-ade51af9a6e1",
+      "createdAt": "2026-03-14T07:31:42.602Z",
+      "type": "answer_saved",
+      "stepId": "element"
+    },
+    {
+      "id": "6e5b98ca-980c-4a41-920e-faa0302822b4",
+      "createdAt": "2026-03-14T07:31:44.778Z",
+      "type": "step_advanced",
+      "stepId": "analysis-1"
+    },
+    {
+      "id": "4bf2ffbe-c3f1-4d86-b8e1-291a9344873b",
+      "createdAt": "2026-03-14T07:31:47.113Z",
+      "type": "step_advanced",
+      "stepId": "analysis-2"
+    },
+    {
+      "id": "b52c3890-8bf7-4903-91fb-e77a36d0cd09",
+      "createdAt": "2026-03-14T07:31:58.746Z",
+      "type": "answer_saved",
+      "stepId": "upload-photo"
+    },
+    {
+      "id": "954ee9d0-a1b0-4983-9224-2ad5aa8df310",
+      "createdAt": "2026-03-14T07:32:01.476Z",
+      "type": "step_advanced",
+      "stepId": "analysis-3"
+    },
+    {
+      "id": "0b060bd0-5b73-4234-ad54-a7adfd3c9c53",
+      "createdAt": "2026-03-14T07:32:05.919Z",
+      "type": "step_advanced",
+      "stepId": "reveal"
+    }
+  ]
+}

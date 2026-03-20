@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { createServerLogger, durationMs } from "@/server/foundation/observability/logger";
 import type { CompatibilityCacheRepository, CompatibilityQuery } from "./service";
 import type { CompatibilityDTO } from "./types";
 
@@ -98,9 +99,19 @@ export class SupabaseCompatibilityCacheRepository implements CompatibilityCacheR
     computedAt: string | null;
     expiresAt: string | null;
   } | null> {
+    const logger = createServerLogger("astroai.compatibility.cache-repository");
+    const startedAt = Date.now();
     const cached = await this.loadByQuery(query);
-    if (!cached) return null;
-    return toFreshnessStatus(cached.expiresAt, now) === "fresh" ? cached : null;
+    const fresh = cached && toFreshnessStatus(cached.expiresAt, now) === "fresh" ? cached : null;
+    logger.info("getFresh.complete", {
+      durationMs: durationMs(startedAt),
+      outcome: fresh ? "hit" : "miss",
+      signA: query.signA,
+      signB: query.signB,
+      systemType: query.systemType,
+      sourceProvider: fresh?.sourceProvider ?? cached?.sourceProvider ?? null,
+    });
+    return fresh;
   }
 
   async getStale(query: CompatibilityQuery): Promise<{
@@ -109,7 +120,18 @@ export class SupabaseCompatibilityCacheRepository implements CompatibilityCacheR
     computedAt: string | null;
     expiresAt: string | null;
   } | null> {
-    return this.loadByQuery(query);
+    const logger = createServerLogger("astroai.compatibility.cache-repository");
+    const startedAt = Date.now();
+    const cached = await this.loadByQuery(query);
+    logger.info("getStale.complete", {
+      durationMs: durationMs(startedAt),
+      outcome: cached ? "hit" : "miss",
+      signA: query.signA,
+      signB: query.signB,
+      systemType: query.systemType,
+      sourceProvider: cached?.sourceProvider ?? null,
+    });
+    return cached;
   }
 
   async save(
@@ -121,6 +143,8 @@ export class SupabaseCompatibilityCacheRepository implements CompatibilityCacheR
       expiresAt: string | null;
     }
   ): Promise<void> {
+    const logger = createServerLogger("astroai.compatibility.cache-repository");
+    const startedAt = Date.now();
     const now = new Date();
     const computedAt = entry.computedAt ?? now.toISOString();
     const freshnessStatus = toFreshnessStatus(entry.expiresAt, now);
@@ -158,6 +182,14 @@ export class SupabaseCompatibilityCacheRepository implements CompatibilityCacheR
     if (upsert.error) {
       throw new Error(`Failed saving compatibility_facts: ${upsert.error.message}`);
     }
+    logger.info("save.success", {
+      durationMs: durationMs(startedAt),
+      outcome: "success",
+      signA: query.signA,
+      signB: query.signB,
+      systemType: query.systemType,
+      overall: entry.data.overall,
+      sourceProvider: entry.sourceProvider,
+    });
   }
 }
-

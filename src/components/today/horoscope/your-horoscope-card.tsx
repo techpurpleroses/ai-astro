@@ -5,14 +5,17 @@ import { format } from 'date-fns'
 import { BottomSheet } from '@/components/ui/bottom-sheet'
 import { Button } from '@/components/ui/button'
 import { useHoroscope } from '@/hooks/use-horoscope'
+import { useUserProfile } from '@/hooks/use-profile'
 import { SkeletonCard } from '@/components/ui/skeleton'
-import { ZODIAC_NAMES, DEFAULT_SIGN } from '@/lib/constants'
+import { ZODIAC_NAMES } from '@/lib/constants'
 import { SectionHeroCard } from '@/components/today/shared/section-hero-card'
 
 export function YourHoroscopeCard() {
   const [detailOpen, setDetailOpen] = useState(false)
   const dateStr = format(new Date(), 'yyyy-MM-dd')
+  const { data: profile } = useUserProfile()
   const { data: reading, isLoading } = useHoroscope(dateStr)
+  const signName = profile?.sunSign ? (ZODIAC_NAMES[profile.sunSign as keyof typeof ZODIAC_NAMES] ?? profile.sunSign) : null
 
   if (isLoading) return <SkeletonCard className="mx-4" />
 
@@ -26,7 +29,7 @@ export function YourHoroscopeCard() {
           overlayClassName="from-[#031b32]/86 via-[#031b32]/56 to-[#031b32]/90"
           contentClassName="pb-4"
         >
-          <p className="text-[11px] text-slate-300 mb-1">{ZODIAC_NAMES[DEFAULT_SIGN]}</p>
+          <p className="text-[11px] text-slate-300 mb-1">{signName ?? 'Your Sign'}</p>
           <h3 className="font-display text-[40px] leading-none font-bold text-white mb-2">Your Horoscope</h3>
 
           <div

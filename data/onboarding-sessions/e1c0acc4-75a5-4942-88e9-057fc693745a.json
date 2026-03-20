@@ -1,0 +1,372 @@
+{
+  "sessionId": "e1c0acc4-75a5-4942-88e9-057fc693745a",
+  "category": "astrocartography",
+  "createdAt": "2026-03-16T11:36:42.994Z",
+  "updatedAt": "2026-03-16T11:47:25.236Z",
+  "status": "active",
+  "currentStep": 11,
+  "source": "public-onboarding",
+  "answers": {
+    "welcome": "male",
+    "birth-date": "May 3, 1995",
+    "birth-time": "09:03 AM",
+    "birth-place": {
+      "label": "Rourkela, India",
+      "fullName": "Rourkela, Raurkela (M), Sundargarh, Odisha, 769002, India",
+      "city": "Rourkela",
+      "region": "Odisha",
+      "country": "India",
+      "countryCode": "IN",
+      "latitude": 22.2309255,
+      "longitude": 84.8678705,
+      "provider": "nominatim",
+      "providerId": "nominatim:231437201"
+    },
+    "computedChart": {
+      "sunSign": "taurus",
+      "moonSign": "gemini",
+      "risingSign": "cancer",
+      "ascendant": 98.1,
+      "midheaven": 358.8,
+      "lifePath": 5,
+      "element": "earth",
+      "modality": "fixed",
+      "dominantElement": "earth",
+      "planets": [
+        {
+          "planet": "sun",
+          "sign": "taurus",
+          "degree": 12.3,
+          "longitude": 42.3,
+          "house": 11,
+          "retrograde": false
+        },
+        {
+          "planet": "moon",
+          "sign": "gemini",
+          "degree": 19.5,
+          "longitude": 79.5,
+          "house": 12,
+          "retrograde": false
+        },
+        {
+          "planet": "mercury",
+          "sign": "taurus",
+          "degree": 28.4,
+          "longitude": 58.4,
+          "house": 11,
+          "retrograde": false
+        },
+        {
+          "planet": "venus",
+          "sign": "aries",
+          "degree": 11.5,
+          "longitude": 11.5,
+          "house": 10,
+          "retrograde": false
+        },
+        {
+          "planet": "mars",
+          "sign": "leo",
+          "degree": 20.4,
+          "longitude": 140.4,
+          "house": 2,
+          "retrograde": false
+        },
+        {
+          "planet": "jupiter",
+          "sign": "sagittarius",
+          "degree": 13.9,
+          "longitude": 253.9,
+          "house": 6,
+          "retrograde": false
+        },
+        {
+          "planet": "saturn",
+          "sign": "pisces",
+          "degree": 21.3,
+          "longitude": 351.3,
+          "house": 9,
+          "retrograde": false
+        },
+        {
+          "planet": "uranus",
+          "sign": "aquarius",
+          "degree": 0.5,
+          "longitude": 300.5,
+          "house": 8,
+          "retrograde": false
+        },
+        {
+          "planet": "neptune",
+          "sign": "capricorn",
+          "degree": 25.5,
+          "longitude": 295.5,
+          "house": 7,
+          "retrograde": false
+        },
+        {
+          "planet": "pluto",
+          "sign": "scorpio",
+          "degree": 29.2,
+          "longitude": 239.2,
+          "house": 5,
+          "retrograde": false
+        }
+      ],
+      "houses": [
+        {
+          "house": 1,
+          "sign": "cancer",
+          "longitude": 90
+        },
+        {
+          "house": 2,
+          "sign": "leo",
+          "longitude": 120
+        },
+        {
+          "house": 3,
+          "sign": "virgo",
+          "longitude": 150
+        },
+        {
+          "house": 4,
+          "sign": "libra",
+          "longitude": 180
+        },
+        {
+          "house": 5,
+          "sign": "scorpio",
+          "longitude": 210
+        },
+        {
+          "house": 6,
+          "sign": "sagittarius",
+          "longitude": 240
+        },
+        {
+          "house": 7,
+          "sign": "capricorn",
+          "longitude": 270
+        },
+        {
+          "house": 8,
+          "sign": "aquarius",
+          "longitude": 300
+        },
+        {
+          "house": 9,
+          "sign": "pisces",
+          "longitude": 330
+        },
+        {
+          "house": 10,
+          "sign": "aries",
+          "longitude": 0
+        },
+        {
+          "house": 11,
+          "sign": "taurus",
+          "longitude": 30
+        },
+        {
+          "house": 12,
+          "sign": "gemini",
+          "longitude": 60
+        }
+      ],
+      "aspects": [
+        {
+          "planet1": "moon",
+          "planet2": "mars",
+          "type": "sextile",
+          "orb": 0.9
+        },
+        {
+          "planet1": "moon",
+          "planet2": "jupiter",
+          "type": "opposition",
+          "orb": 5.6
+        },
+        {
+          "planet1": "moon",
+          "planet2": "saturn",
+          "type": "square",
+          "orb": 1.8
+        },
+        {
+          "planet1": "mercury",
+          "planet2": "uranus",
+          "type": "trine",
+          "orb": 2.1
+        },
+        {
+          "planet1": "mercury",
+          "planet2": "neptune",
+          "type": "trine",
+          "orb": 2.9
+        },
+        {
+          "planet1": "mercury",
+          "planet2": "pluto",
+          "type": "opposition",
+          "orb": 0.8
+        },
+        {
+          "planet1": "venus",
+          "planet2": "jupiter",
+          "type": "trine",
+          "orb": 2.4
+        },
+        {
+          "planet1": "mars",
+          "planet2": "jupiter",
+          "type": "trine",
+          "orb": 6.5
+        },
+        {
+          "planet1": "uranus",
+          "planet2": "neptune",
+          "type": "conjunction",
+          "orb": 5
+        },
+        {
+          "planet1": "uranus",
+          "planet2": "pluto",
+          "type": "sextile",
+          "orb": 1.3
+        },
+        {
+          "planet1": "neptune",
+          "planet2": "pluto",
+          "type": "sextile",
+          "orb": 3.7
+        }
+      ]
+    },
+    "relationship-status": "in-relationship",
+    "goals": [
+      "friends",
+      "travel",
+      "career"
+    ],
+    "energy-places": "yes",
+    "life-challenges": "stress"
+  },
+  "events": [
+    {
+      "id": "2ffaa0bb-842e-46a1-a582-f2123e0ddb72",
+      "createdAt": "2026-03-16T11:36:42.994Z",
+      "type": "session_created"
+    },
+    {
+      "id": "5ac79b0a-c713-4ad8-8d46-e8c82478b560",
+      "createdAt": "2026-03-16T11:36:46.162Z",
+      "type": "answer_saved",
+      "stepId": "welcome"
+    },
+    {
+      "id": "ba5292fe-f6ba-4aba-b23b-2cac4fc4b013",
+      "createdAt": "2026-03-16T11:36:48.555Z",
+      "type": "step_advanced",
+      "stepId": "advisor-intro"
+    },
+    {
+      "id": "8c7b68cb-14ef-49eb-b37b-7bd0f914f8d7",
+      "createdAt": "2026-03-16T11:36:56.080Z",
+      "type": "answer_saved",
+      "stepId": "birth-date"
+    },
+    {
+      "id": "f2ab67f2-e286-42f7-8007-3a98033ab4dd",
+      "createdAt": "2026-03-16T11:37:00.365Z",
+      "type": "answer_saved",
+      "stepId": "birth-time"
+    },
+    {
+      "id": "aa5ff115-18d4-431e-b55c-cb2d409ce575",
+      "createdAt": "2026-03-16T11:37:11.020Z",
+      "type": "answer_saved",
+      "stepId": "birth-place"
+    },
+    {
+      "id": "ec1e8f30-cf47-4d41-9ffa-dd05f3589656",
+      "createdAt": "2026-03-16T11:37:11.030Z",
+      "type": "answer_saved",
+      "stepId": "computedChart"
+    },
+    {
+      "id": "3205ccd2-12d9-4342-84e2-82964388d328",
+      "createdAt": "2026-03-16T11:37:16.167Z",
+      "type": "step_advanced",
+      "stepId": "video-story-1"
+    },
+    {
+      "id": "f59f459a-5fcc-48c2-832d-bfb4ac5144f6",
+      "createdAt": "2026-03-16T11:37:21.727Z",
+      "type": "answer_saved",
+      "stepId": "relationship-status"
+    },
+    {
+      "id": "7ce84212-4c48-4882-ae4a-6c24a6424e01",
+      "createdAt": "2026-03-16T11:37:25.818Z",
+      "type": "answer_saved",
+      "stepId": "goals"
+    },
+    {
+      "id": "5d496a1a-0ecb-4942-9b78-60c724b6a8ce",
+      "createdAt": "2026-03-16T11:37:28.758Z",
+      "type": "answer_saved",
+      "stepId": "energy-places"
+    },
+    {
+      "id": "0bbb2fba-4baa-420b-8f45-f5bc56929416",
+      "createdAt": "2026-03-16T11:37:33.402Z",
+      "type": "answer_saved",
+      "stepId": "life-challenges"
+    },
+    {
+      "id": "a46e0ab8-5063-4f55-8008-5f4347a2f772",
+      "createdAt": "2026-03-16T11:37:36.885Z",
+      "type": "step_advanced",
+      "stepId": "video-story-2"
+    },
+    {
+      "id": "06dcc02e-1ad4-48cd-bfe4-a9664a5810af",
+      "createdAt": "2026-03-16T11:39:37.486Z",
+      "type": "step_back",
+      "stepId": "palm-photo-astro"
+    },
+    {
+      "id": "a50471f8-a3dd-4f7c-9faf-434638d8fe7a",
+      "createdAt": "2026-03-16T11:39:39.529Z",
+      "type": "step_advanced",
+      "stepId": "video-story-2"
+    },
+    {
+      "id": "e52d4dec-d543-4080-a659-a8ab8721fe44",
+      "createdAt": "2026-03-16T11:42:59.821Z",
+      "type": "step_back",
+      "stepId": "palm-photo-astro"
+    },
+    {
+      "id": "d1745f62-15e9-4e73-b5fd-27fc7ad0fb39",
+      "createdAt": "2026-03-16T11:43:01.780Z",
+      "type": "step_advanced",
+      "stepId": "video-story-2"
+    },
+    {
+      "id": "b51cb2ea-477d-46e2-bb6f-407a912e09b8",
+      "createdAt": "2026-03-16T11:45:56.410Z",
+      "type": "step_back",
+      "stepId": "palm-photo-astro"
+    },
+    {
+      "id": "440a9593-bab2-4478-9c0e-2a7165a433fd",
+      "createdAt": "2026-03-16T11:47:25.236Z",
+      "type": "step_advanced",
+      "stepId": "video-story-2"
+    }
+  ]
+}

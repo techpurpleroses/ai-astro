@@ -1,0 +1,45 @@
+{
+  "sessionId": "c65224a3-a14c-417b-a66c-779ed7943c49",
+  "category": "moon",
+  "createdAt": "2026-03-14T07:11:03.544Z",
+  "updatedAt": "2026-03-14T07:11:58.036Z",
+  "status": "active",
+  "currentStep": 4,
+  "source": "public-onboarding",
+  "answers": {
+    "gender": "male",
+    "birth-date": "2026-03-18",
+    "birth-time-known": "no"
+  },
+  "events": [
+    {
+      "id": "ec26f287-5864-4f72-ab39-255c288e9eb2",
+      "createdAt": "2026-03-14T07:11:03.544Z",
+      "type": "session_created"
+    },
+    {
+      "id": "d0068b2c-7198-4b06-8dc8-a0bd565f171e",
+      "createdAt": "2026-03-14T07:11:16.218Z",
+      "type": "step_advanced",
+      "stepId": "welcome"
+    },
+    {
+      "id": "71a13b74-422e-411e-bdf7-33a8343f2e58",
+      "createdAt": "2026-03-14T07:11:17.951Z",
+      "type": "answer_saved",
+      "stepId": "gender"
+    },
+    {
+      "id": "3b87deca-30d7-44a5-a2de-2b2d48d35b5b",
+      "createdAt": "2026-03-14T07:11:50.473Z",
+      "type": "answer_saved",
+      "stepId": "birth-date"
+    },
+    {
+      "id": "0a559fd2-cab8-4a47-ae56-b1df72b5c8dc",
+      "createdAt": "2026-03-14T07:11:58.036Z",
+      "type": "answer_saved",
+      "stepId": "birth-time-known"
+    }
+  ]
+}

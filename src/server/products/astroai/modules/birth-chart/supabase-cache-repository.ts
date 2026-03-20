@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { createServerLogger, durationMs } from "@/server/foundation/observability/logger";
 import type { BirthChartCacheRepository, BirthChartQuery } from "./service";
 import type { BirthChartDTO } from "./types";
 
@@ -89,9 +90,20 @@ export class SupabaseBirthChartCacheRepository implements BirthChartCacheReposit
     computedAt: string | null;
     expiresAt: string | null;
   } | null> {
+    const logger = createServerLogger("astroai.birth-chart.cache-repository");
+    const startedAt = Date.now();
     const cached = await this.loadLatest(query);
-    if (!cached) return null;
-    return toFreshnessStatus(cached.expiresAt, now) === "fresh" ? cached : null;
+    const fresh = cached && toFreshnessStatus(cached.expiresAt, now) === "fresh" ? cached : null;
+    logger.info("getFresh.complete", {
+      durationMs: durationMs(startedAt),
+      outcome: fresh ? "hit" : "miss",
+      userId: query.userId,
+      subjectId: query.subjectId,
+      chartType: query.chartType,
+      systemType: query.systemType,
+      sourceProvider: fresh?.sourceProvider ?? cached?.sourceProvider ?? null,
+    });
+    return fresh;
   }
 
   async getStale(query: BirthChartQuery): Promise<{
@@ -100,7 +112,19 @@ export class SupabaseBirthChartCacheRepository implements BirthChartCacheReposit
     computedAt: string | null;
     expiresAt: string | null;
   } | null> {
-    return this.loadLatest(query);
+    const logger = createServerLogger("astroai.birth-chart.cache-repository");
+    const startedAt = Date.now();
+    const cached = await this.loadLatest(query);
+    logger.info("getStale.complete", {
+      durationMs: durationMs(startedAt),
+      outcome: cached ? "hit" : "miss",
+      userId: query.userId,
+      subjectId: query.subjectId,
+      chartType: query.chartType,
+      systemType: query.systemType,
+      sourceProvider: cached?.sourceProvider ?? null,
+    });
+    return cached;
   }
 
   async save(
@@ -112,6 +136,8 @@ export class SupabaseBirthChartCacheRepository implements BirthChartCacheReposit
       expiresAt: string | null;
     }
   ): Promise<void> {
+    const logger = createServerLogger("astroai.birth-chart.cache-repository");
+    const startedAt = Date.now();
     const now = new Date();
     const computedAt = entry.computedAt ?? now.toISOString();
     const freshnessStatus = toFreshnessStatus(entry.expiresAt, now);
@@ -150,6 +176,16 @@ export class SupabaseBirthChartCacheRepository implements BirthChartCacheReposit
     if (insertResult.error) {
       throw new Error(`Failed saving chart_snapshots: ${insertResult.error.message}`);
     }
+    logger.info("save.success", {
+      durationMs: durationMs(startedAt),
+      outcome: "success",
+      userId: query.userId,
+      subjectId: query.subjectId,
+      chartType: query.chartType,
+      systemType: query.systemType,
+      bodies: entry.data.bodies.length,
+      aspects: entry.data.aspects.length,
+      sourceProvider: entry.sourceProvider,
+    });
   }
 }
-

@@ -1,0 +1,302 @@
+{
+  "sessionId": "a6b405a0-bbb1-4540-b240-e4e9970ac85e",
+  "category": "astrocartography",
+  "createdAt": "2026-03-16T07:38:39.923Z",
+  "updatedAt": "2026-03-16T08:20:13.224Z",
+  "status": "active",
+  "currentStep": 0,
+  "source": "public-onboarding",
+  "answers": {
+    "welcome": "male",
+    "birth-date": "December 28, 1989",
+    "birth-time": "04:48 AM",
+    "birth-place": {
+      "label": "Patna, India",
+      "fullName": "Patna, Patna Rural, Patna, Bihar, 800001, India",
+      "city": "Patna",
+      "region": "Bihar",
+      "country": "India",
+      "countryCode": "IN",
+      "latitude": 25.6093239,
+      "longitude": 85.1235252,
+      "provider": "nominatim",
+      "providerId": "nominatim:224957243"
+    },
+    "computedChart": {
+      "sunSign": "capricorn",
+      "moonSign": "capricorn",
+      "risingSign": "sagittarius",
+      "ascendant": 244.8,
+      "midheaven": 164.8,
+      "lifePath": 3,
+      "element": "earth",
+      "modality": "cardinal",
+      "dominantElement": "earth",
+      "planets": [
+        {
+          "planet": "sun",
+          "sign": "capricorn",
+          "degree": 6.2,
+          "longitude": 276.2,
+          "house": 2,
+          "retrograde": false
+        },
+        {
+          "planet": "moon",
+          "sign": "capricorn",
+          "degree": 4,
+          "longitude": 274,
+          "house": 2,
+          "retrograde": false
+        },
+        {
+          "planet": "mercury",
+          "sign": "capricorn",
+          "degree": 24.2,
+          "longitude": 294.2,
+          "house": 2,
+          "retrograde": false
+        },
+        {
+          "planet": "venus",
+          "sign": "aquarius",
+          "degree": 6.3,
+          "longitude": 306.3,
+          "house": 3,
+          "retrograde": false
+        },
+        {
+          "planet": "mars",
+          "sign": "sagittarius",
+          "degree": 5.8,
+          "longitude": 245.8,
+          "house": 1,
+          "retrograde": false
+        },
+        {
+          "planet": "jupiter",
+          "sign": "cancer",
+          "degree": 6,
+          "longitude": 96,
+          "house": 8,
+          "retrograde": false
+        },
+        {
+          "planet": "saturn",
+          "sign": "capricorn",
+          "degree": 15,
+          "longitude": 285,
+          "house": 2,
+          "retrograde": false
+        },
+        {
+          "planet": "uranus",
+          "sign": "capricorn",
+          "degree": 5.5,
+          "longitude": 275.5,
+          "house": 2,
+          "retrograde": false
+        },
+        {
+          "planet": "neptune",
+          "sign": "capricorn",
+          "degree": 11.8,
+          "longitude": 281.8,
+          "house": 2,
+          "retrograde": false
+        }
+      ],
+      "houses": [
+        {
+          "house": 1,
+          "sign": "sagittarius",
+          "longitude": 240
+        },
+        {
+          "house": 2,
+          "sign": "capricorn",
+          "longitude": 270
+        },
+        {
+          "house": 3,
+          "sign": "aquarius",
+          "longitude": 300
+        },
+        {
+          "house": 4,
+          "sign": "pisces",
+          "longitude": 330
+        },
+        {
+          "house": 5,
+          "sign": "aries",
+          "longitude": 0
+        },
+        {
+          "house": 6,
+          "sign": "taurus",
+          "longitude": 30
+        },
+        {
+          "house": 7,
+          "sign": "gemini",
+          "longitude": 60
+        },
+        {
+          "house": 8,
+          "sign": "cancer",
+          "longitude": 90
+        },
+        {
+          "house": 9,
+          "sign": "leo",
+          "longitude": 120
+        },
+        {
+          "house": 10,
+          "sign": "virgo",
+          "longitude": 150
+        },
+        {
+          "house": 11,
+          "sign": "libra",
+          "longitude": 180
+        },
+        {
+          "house": 12,
+          "sign": "scorpio",
+          "longitude": 210
+        }
+      ],
+      "aspects": [
+        {
+          "planet1": "sun",
+          "planet2": "moon",
+          "type": "conjunction",
+          "orb": 2.2
+        },
+        {
+          "planet1": "sun",
+          "planet2": "jupiter",
+          "type": "opposition",
+          "orb": 0.2
+        },
+        {
+          "planet1": "sun",
+          "planet2": "uranus",
+          "type": "conjunction",
+          "orb": 0.7
+        },
+        {
+          "planet1": "sun",
+          "planet2": "neptune",
+          "type": "conjunction",
+          "orb": 5.6
+        },
+        {
+          "planet1": "moon",
+          "planet2": "jupiter",
+          "type": "opposition",
+          "orb": 2
+        },
+        {
+          "planet1": "moon",
+          "planet2": "uranus",
+          "type": "conjunction",
+          "orb": 1.5
+        },
+        {
+          "planet1": "moon",
+          "planet2": "neptune",
+          "type": "conjunction",
+          "orb": 7.8
+        },
+        {
+          "planet1": "venus",
+          "planet2": "mars",
+          "type": "sextile",
+          "orb": 0.5
+        },
+        {
+          "planet1": "jupiter",
+          "planet2": "uranus",
+          "type": "opposition",
+          "orb": 0.5
+        },
+        {
+          "planet1": "jupiter",
+          "planet2": "neptune",
+          "type": "opposition",
+          "orb": 5.8
+        },
+        {
+          "planet1": "saturn",
+          "planet2": "neptune",
+          "type": "conjunction",
+          "orb": 3.2
+        },
+        {
+          "planet1": "uranus",
+          "planet2": "neptune",
+          "type": "conjunction",
+          "orb": 6.3
+        }
+      ]
+    }
+  },
+  "events": [
+    {
+      "id": "897c4854-5b61-4ca4-ac36-718b20875bfa",
+      "createdAt": "2026-03-16T07:38:39.923Z",
+      "type": "session_created"
+    },
+    {
+      "id": "32622ae5-7609-43c5-bc9a-3e931bb36381",
+      "createdAt": "2026-03-16T08:08:00.102Z",
+      "type": "answer_saved",
+      "stepId": "welcome"
+    },
+    {
+      "id": "7c645441-93df-4717-9e43-ec39c2b20ba9",
+      "createdAt": "2026-03-16T08:08:03.422Z",
+      "type": "step_advanced",
+      "stepId": "advisor-intro"
+    },
+    {
+      "id": "55aa5d85-b225-4ec7-8a94-f928ecfa9c9b",
+      "createdAt": "2026-03-16T08:08:10.424Z",
+      "type": "answer_saved",
+      "stepId": "birth-date"
+    },
+    {
+      "id": "f3466feb-e64a-406f-a46a-9c97f2bf360b",
+      "createdAt": "2026-03-16T08:08:17.862Z",
+      "type": "answer_saved",
+      "stepId": "birth-time"
+    },
+    {
+      "id": "f8c79d51-5bae-4622-8aa2-e6e13008c5b9",
+      "createdAt": "2026-03-16T08:08:28.645Z",
+      "type": "answer_saved",
+      "stepId": "birth-place"
+    },
+    {
+      "id": "201c57a7-b3eb-40a5-9c01-167b0ff70d8c",
+      "createdAt": "2026-03-16T08:08:28.657Z",
+      "type": "answer_saved",
+      "stepId": "computedChart"
+    },
+    {
+      "id": "0029b201-849e-41c1-a5f3-81287110e7f0",
+      "createdAt": "2026-03-16T08:20:09.931Z",
+      "type": "step_back",
+      "stepId": "video-story-1"
+    },
+    {
+      "id": "6d20efdf-e956-4810-bf5a-2661dde6232f",
+      "createdAt": "2026-03-16T08:20:13.224Z",
+      "type": "step_back",
+      "stepId": "advisor-intro"
+    }
+  ]
+}

@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { Quote, ChevronLeft, ChevronRight, Star } from 'lucide-react'
+import { BRAND_NAME } from '@/lib/brand'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -15,14 +16,14 @@ const TESTIMONIALS = [
     sign: 'Scorpio',
     file: 'scorpio',
     rating: 5,
-    text: 'The birth chart reading was eerily accurate — it described my personality, fears, and strengths better than I could myself. I\'ve tried other apps, but AstroAI is on another level.',
+    text: `The birth chart reading was eerily accurate — it described my personality, fears, and strengths better than I could myself. I've tried other apps, but ${BRAND_NAME} is on another level.`,
   },
   {
     name: 'James K.',
     sign: 'Aquarius',
     file: 'aquarius',
     rating: 5,
-    text: 'I open AstroAI every morning. The daily horoscope feels genuinely personal, not generic copy-paste. It\'s like having a cosmic advisor in my pocket.',
+    text: `I open ${BRAND_NAME} every morning. The daily horoscope feels genuinely personal, not generic copy-paste. It's like having a cosmic advisor in my pocket.`,
   },
   {
     name: 'Sofia L.',

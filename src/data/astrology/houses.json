@@ -1,0 +1,74 @@
+{
+  "1": {
+    "name": "House of Self",
+    "rules": "Identity, appearance, first impressions, the body",
+    "short": "Who you are to the world",
+    "description": "The 1st House is the lens through which you experience and are experienced by the world. It rules your physical appearance, your instinctive reactions, and the first impression you make. Planets here shape your entire personality."
+  },
+  "2": {
+    "name": "House of Value",
+    "rules": "Money, possessions, self-worth, resources",
+    "short": "What you own and what you value",
+    "description": "The 2nd House rules what you have — your material resources, your income, and your sense of self-worth. It also speaks to your relationship with pleasure and the things you consider beautiful or necessary."
+  },
+  "3": {
+    "name": "House of Communication",
+    "rules": "Communication, siblings, short journeys, early education",
+    "short": "How you think and speak",
+    "description": "The 3rd House governs the mind in motion — talking, writing, learning, and connecting with those closest to you. It rules your intellectual style, your relationship with siblings, and your local environment."
+  },
+  "4": {
+    "name": "House of Home",
+    "rules": "Home, family, roots, foundation, mother",
+    "short": "Where you come from",
+    "description": "The 4th House is your roots — the family you were born into, the home you create, and the emotional foundation that either supports or challenges everything you build. It speaks to your deepest sense of security."
+  },
+  "5": {
+    "name": "House of Pleasure",
+    "rules": "Creativity, romance, children, joy, self-expression",
+    "short": "What brings you joy",
+    "description": "The 5th House is where you play. It rules creative expression, romance, children, and everything that makes life feel abundant and alive. This is the house of your heart's delight."
+  },
+  "6": {
+    "name": "House of Service",
+    "rules": "Health, daily routines, work, service, pets",
+    "short": "How you work and serve",
+    "description": "The 6th House governs the sacred ordinary — daily routines, health habits, work, and the acts of service that keep life functioning. Planets here shape how you manage your body and how you show up in practical service to others."
+  },
+  "7": {
+    "name": "House of Partnership",
+    "rules": "Marriage, partnerships, open enemies, contracts",
+    "short": "Who you partner with",
+    "description": "The 7th House is the mirror — it reflects what you seek in others and what others see in you. It rules marriage, significant partnerships, and the qualities you attract into your closest one-on-one relationships."
+  },
+  "8": {
+    "name": "House of Transformation",
+    "rules": "Death, rebirth, sex, shared resources, deep psychology",
+    "short": "Where you transform",
+    "description": "The 8th House is where surface gives way to depth. It rules shared finances, intimacy, loss, inheritance, and the profound psychological processes of death and rebirth. This is where you go to be fundamentally changed."
+  },
+  "9": {
+    "name": "House of Philosophy",
+    "rules": "Travel, higher education, philosophy, religion, expansion",
+    "short": "What you believe",
+    "description": "The 9th House is the horizon — it rules long journeys, higher learning, philosophical beliefs, and your search for meaning. It is the part of you that needs to expand beyond the familiar into the vast and the unknown."
+  },
+  "10": {
+    "name": "House of Career",
+    "rules": "Career, public reputation, authority, father, ambition",
+    "short": "Your place in the world",
+    "description": "The 10th House is your public legacy — career, reputation, and the mark you leave on the world. It rules your relationship with authority and the role you play on the largest stage of your life."
+  },
+  "11": {
+    "name": "House of Community",
+    "rules": "Friends, groups, hopes, dreams, humanity",
+    "short": "Your tribe and your vision",
+    "description": "The 11th House governs friendship, community, and the future you dream of. It rules the groups you belong to, the causes you champion, and your relationship to collective hope and collective vision."
+  },
+  "12": {
+    "name": "House of the Unseen",
+    "rules": "Hidden matters, spirituality, solitude, unconscious, karma",
+    "short": "What lies beneath",
+    "description": "The 12th House is the realm of the unseen — the unconscious patterns, past-life karma, spiritual gifts, and hidden depths that shape you beneath the surface. It is the most mystical house, and the most transformational."
+  }
+}

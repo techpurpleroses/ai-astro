@@ -1,5 +1,6 @@
 import type { CompatibilityDTO, CompatibilityResponse } from "./types";
 import { resolveCacheFirst } from "../../cache-first";
+import { createServerLogger, durationMs } from "@/server/foundation/observability/logger";
 
 export interface CompatibilityQuery {
   systemType: string;
@@ -47,14 +48,18 @@ export class CompatibilityService {
   ) {}
 
   async getCompatibility(input: CompatibilityQuery & { traceId: string }): Promise<CompatibilityResponse> {
+    const logger = createServerLogger("astroai.compatibility.service");
+    const startedAt = Date.now();
     const now = new Date();
     const query: CompatibilityQuery = {
       systemType: input.systemType,
       signA: input.signA,
       signB: input.signB,
     };
+    logger.info("getCompatibility.start", query);
 
     const resolved = await resolveCacheFirst({
+      scope: "astroai.compatibility.cache",
       query,
       now,
       cache: this.cache,
@@ -71,7 +76,7 @@ export class CompatibilityService {
       },
     });
 
-    return {
+    const response = {
       data: resolved.entry.data,
       meta: {
         sourceProvider: resolved.entry.sourceProvider,
@@ -84,6 +89,14 @@ export class CompatibilityService {
       },
       errors: [],
     };
+    logger.info("getCompatibility.success", {
+      durationMs: durationMs(startedAt),
+      outcome: "success",
+      cacheHit: resolved.cacheHit,
+      degraded: resolved.degraded,
+      freshnessStatus: resolved.freshnessStatus,
+      sourceProvider: resolved.entry.sourceProvider,
+    });
+    return response;
   }
 }
-

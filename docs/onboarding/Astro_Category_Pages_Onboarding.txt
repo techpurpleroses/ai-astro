@@ -1,0 +1,40 @@
+Moon= https://sub.astroline.today/intro?ad_id=%7B%7Bad.id%7D%7D&ad_name=%7B%7Bad.name%7D%7D&ad_placement=%7B%7Bplacement%7D%7D&ad_subnetwork=%7B%7Bsite_source_name%7D%7D&adset_id=%7B%7Badset.id%7D%7D&adset_name=%7B%7Badset.name%7D%7D&campaign_id=%7B%7Bcampaign.id%7D%7D&campaign_name=%7B%7Bcampaign.name%7D%7D&creative_topic=moon&idfm=80cb6ec0-f885-11f0-8530-bdc4cb22a3e1&utm_source=Facebook_Weban
+
+
+Compatibility
+https://sub.astroline.today/intro?ad_id=%7B%7Bad.id%7D%7D&ad_name=%7B%7Bad.name%7D%7D&ad_placement=%7B%7Bplacement%7D%7D&ad_subnetwork=%7B%7Bsite_source_name%7D%7D&adset_id=%7B%7Badset.id%7D%7D&adset_name=%7B%7Badset.name%7D%7D&campaign_id=%7B%7Bcampaign.id%7D%7D&campaign_name=%7B%7Bcampaign.name%7D%7D&creative_topic=compatibility&idfm=80cb6ec0-f885-11f0-8530-bdc4cb22a3e1&utm_source=Facebook_Web
+
+
+past_lives
+https://sub.astroline.today/quiz-pp/?ad_id=%7B%7Bad.id%7D%7D&ad_message=pastlife&ad_name=%7B%7Bad.name%7D%7D&ad_placement=%7B%7Bplacement%7D%7D&ad_subnetwork=%7B%7Bsite_source_name%7D%7D&adset_id=%7B%7Badset.id%7D%7D&adset_name=%7B%7Badset.name%7D%7D&campaign_id=%7B%7Bcampaign.id%7D%7D&campaign_name=%7B%7Bcampaign.name%7D%7D&creative_topic=past_lives&idfm=80cb6ec0-f885-11f0-8530-bdc4cb22a3e1&utm_source=Facebook_Web
+
+
+numerology
+https://sub.astroline.today/quiz-pp/?ad_id=%7B%7Bad.id%7D%7D&ad_name=%7B%7Bad.name%7D%7D&ad_placement=%7B%7Bplacement%7D%7D&ad_subnetwork=%7B%7Bsite_source_name%7D%7D&adset_id=%7B%7Badset.id%7D%7D&adset_name=%7B%7Badset.name%7D%7D&campaign_id=%7B%7Bcampaign.id%7D%7D&campaign_name=%7B%7Bcampaign.name%7D%7D&creative_topic=numerology&idfm=80cb6ec0-f885-11f0-8530-bdc4cb22a3e1&utm_source=Facebook_Web
+
+
+
+astrocartography
+https://sub.astroline.today/quiz-pp?ad_id=%7B%7Bad.id%7D%7D&ad_name=%7B%7Bad.name%7D%7D&ad_placement=%7B%7Bplacement%7D%7D&ad_subnetwork=%7B%7Bsite_source_name%7D%7D&adset_id=%7B%7Badset.id%7D%7D&adset_name=%7B%7Badset.name%7D%7D&campaign_id=%7B%7Bcampaign.id%7D%7D&campaign_name=%7B%7Bcampaign.name%7D%7D&creative_topic=astrocartography&idfm=80cb6ec0-f885-11f0-8530-bdc4cb22a3e1&mode=astrocartography&utm_source=Facebook_Web
+
+
+sketch
+https://sub.astroline.today/quiz-pp?ad_id=%7B%7Bad.id%7D%7D&ad_name=%7B%7Bad.name%7D%7D&ad_placement=%7B%7Bplacement%7D%7D&ad_subnetwork=%7B%7Bsite_source_name%7D%7D&adset_id=%7B%7Badset.id%7D%7D&adset_name=%7B%7Badset.name%7D%7D&campaign_id=%7B%7Bcampaign.id%7D%7D&campaign_name=%7B%7Bcampaign.name%7D%7D&creative_topic=drawing&idfm=80cb6ec0-f885-11f0-8530-bdc4cb22a3e1&mode=drawing&utm_source=Facebook_Web
+
+
+palms
+https://sub.astroline.today/quiz-pp?ad_id=%7B%7Bad.id%7D%7D&ad_name=%7B%7Bad.name%7D%7D&ad_placement=%7B%7Bplacement%7D%7D&ad_subnetwork=%7B%7Bsite_source_name%7D%7D&adset_id=%7B%7Badset.id%7D%7D&adset_name=%7B%7Badset.name%7D%7D&campaign_id=%7B%7Bcampaign.id%7D%7D&campaign_name=%7B%7Bcampaign.name%7D%7D&creative_topic=hands&idfm=80cb6ec0-f885-11f0-8530-bdc4cb22a3e1&mode=welcome&utm_source=Facebook_Web
+
+
+
+Moon, compatibility, numerology, = all three same
+palm reading = only 1st image differ else rest same as Moon, compatibility, numerology.
+
+past-lives = 1st image differ + added different onboard questions.
+sketch = 1st image differ + added different onboard questions.
+
+astrocartography = differs all with same theme.
+
+
+https://quiz.atrix.guide/
+astrolog.cards

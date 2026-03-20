@@ -1,0 +1,141 @@
+{
+  "sessionId": "c7c89e42-ffe7-4729-a382-12950320494b",
+  "category": "sketch",
+  "createdAt": "2026-03-14T07:54:54.989Z",
+  "updatedAt": "2026-03-14T07:57:15.198Z",
+  "status": "active",
+  "currentStep": 18,
+  "source": "public-onboarding",
+  "answers": {
+    "welcome": "male",
+    "birth-date": "March 1, 1981",
+    "birth-time": "05:06 AM",
+    "birth-place": "ankleshwar",
+    "relationship-status": "engaged",
+    "attracted-to": "male",
+    "age-group": "35-40",
+    "appearance": "hispanic",
+    "biggest-struggle": "past",
+    "connection-type": "adventure",
+    "energy-type": "similar",
+    "love-signal": "gestures",
+    "relationship-feel": "harmonious",
+    "love-worry": "commitment",
+    "future-together": "financial"
+  },
+  "events": [
+    {
+      "id": "deb42086-2aca-4582-98bf-eb733935dc1c",
+      "createdAt": "2026-03-14T07:54:54.989Z",
+      "type": "session_created"
+    },
+    {
+      "id": "5da0f38d-431e-4992-b41e-8b9c57340ed5",
+      "createdAt": "2026-03-14T07:55:56.312Z",
+      "type": "answer_saved",
+      "stepId": "welcome"
+    },
+    {
+      "id": "e1456eb4-1ef6-4ce8-b552-dac6349579ea",
+      "createdAt": "2026-03-14T07:56:04.772Z",
+      "type": "answer_saved",
+      "stepId": "birth-date"
+    },
+    {
+      "id": "8ae03fed-e1db-42e7-ac8b-e60d0390a1a0",
+      "createdAt": "2026-03-14T07:56:18.454Z",
+      "type": "answer_saved",
+      "stepId": "birth-time"
+    },
+    {
+      "id": "6822aaac-bd10-4780-94e6-be883981b7af",
+      "createdAt": "2026-03-14T07:56:30.229Z",
+      "type": "answer_saved",
+      "stepId": "birth-place"
+    },
+    {
+      "id": "7819e668-1782-40e2-97ca-344c07e57b3a",
+      "createdAt": "2026-03-14T07:56:39.035Z",
+      "type": "step_advanced",
+      "stepId": "social-proof"
+    },
+    {
+      "id": "10846702-305a-4a85-ab97-6e66533b594d",
+      "createdAt": "2026-03-14T07:56:42.345Z",
+      "type": "answer_saved",
+      "stepId": "relationship-status"
+    },
+    {
+      "id": "5763e509-cf9f-424e-9486-56910e81b846",
+      "createdAt": "2026-03-14T07:56:44.838Z",
+      "type": "answer_saved",
+      "stepId": "attracted-to"
+    },
+    {
+      "id": "8cd157d2-444c-4b7b-bac4-28eb39772bbf",
+      "createdAt": "2026-03-14T07:56:48.511Z",
+      "type": "answer_saved",
+      "stepId": "age-group"
+    },
+    {
+      "id": "240f68cc-5ad3-42e4-8cee-35a7d627ba8d",
+      "createdAt": "2026-03-14T07:56:50.980Z",
+      "type": "answer_saved",
+      "stepId": "appearance"
+    },
+    {
+      "id": "485d2443-f4c2-48c0-8678-e68c567a7c71",
+      "createdAt": "2026-03-14T07:56:55.852Z",
+      "type": "step_advanced",
+      "stepId": "forecast-1"
+    },
+    {
+      "id": "5562c0f6-a661-4083-9f8d-f7589348ee50",
+      "createdAt": "2026-03-14T07:56:58.193Z",
+      "type": "answer_saved",
+      "stepId": "biggest-struggle"
+    },
+    {
+      "id": "36983ccc-d7fd-4c22-8957-a55d538f1c18",
+      "createdAt": "2026-03-14T07:57:01.009Z",
+      "type": "answer_saved",
+      "stepId": "connection-type"
+    },
+    {
+      "id": "d91aa85d-48b5-46f6-8ede-e50b6585b37e",
+      "createdAt": "2026-03-14T07:57:04.353Z",
+      "type": "answer_saved",
+      "stepId": "energy-type"
+    },
+    {
+      "id": "38b0f5c6-41b6-4167-8478-a283f98fded0",
+      "createdAt": "2026-03-14T07:57:06.291Z",
+      "type": "answer_saved",
+      "stepId": "love-signal"
+    },
+    {
+      "id": "2cc70f8a-0d16-473d-a468-4af545685c76",
+      "createdAt": "2026-03-14T07:57:08.491Z",
+      "type": "answer_saved",
+      "stepId": "relationship-feel"
+    },
+    {
+      "id": "5e340b98-9d1a-4571-9055-707eb28a6666",
+      "createdAt": "2026-03-14T07:57:10.811Z",
+      "type": "answer_saved",
+      "stepId": "love-worry"
+    },
+    {
+      "id": "8419e51b-5c47-4a17-a0ee-d4bf33a2cc58",
+      "createdAt": "2026-03-14T07:57:12.677Z",
+      "type": "answer_saved",
+      "stepId": "future-together"
+    },
+    {
+      "id": "8eb9e9bf-065c-4fc8-b221-2c870f428f94",
+      "createdAt": "2026-03-14T07:57:15.198Z",
+      "type": "step_advanced",
+      "stepId": "forecast-2"
+    }
+  ]
+}

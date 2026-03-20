@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation'
 import { Sparkles, Menu, X } from 'lucide-react'
 
 const PAGE_LINKS = [
+  { label: 'Onboarding',   href: '/onboarding' },
   { label: 'Zodiac',       href: '/zodiac' },
   { label: 'Horoscope',   href: '/horoscope' },
   { label: 'Palm Reading', href: '/palm' },

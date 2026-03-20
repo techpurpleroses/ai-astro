@@ -3,21 +3,62 @@
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight, Globe, LogOut, Shield, CreditCard, HelpCircle, FileText } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Globe, LogOut, Shield, CreditCard, HelpCircle, FileText, Zap, Crown, Coins } from 'lucide-react'
 import { ReportsFromAdvisors } from '@/components/reports/reports-from-advisors'
-import { SETTINGS_BENEFITS } from '@/data/reports'
+import { astroFetch } from '@/lib/client/astro-fetch'
+import { useQueryClient } from '@tanstack/react-query'
+
+const PLAN_BENEFITS: Record<string, string[]> = {
+  free: [
+    'Daily sign horoscope',
+    'Moon phase & events',
+    'Big Three birth chart',
+    'Tarot card of the day',
+    'Magic ball',
+    'Story articles',
+  ],
+  pro: [
+    'Full personalized horoscope + transits',
+    'Complete birth chart',
+    'Palm reading (3/month)',
+    'All tarot modes',
+    'Soulmate sketch (1/month)',
+    'Deep compatibility (3/month)',
+  ],
+  premium: [
+    'Everything in Pro',
+    '50 advisor credits/month included',
+    'Unlimited palm & soulmate',
+    'Priority generation',
+  ],
+}
+
+const PLAN_ICONS: Record<string, React.ReactNode> = {
+  free: null,
+  pro: <Zap size={13} className="text-cyan-400" />,
+  premium: <Crown size={13} className="text-amber-400" />,
+}
+
+const PLAN_LABELS: Record<string, string> = {
+  free: 'Free',
+  pro: 'Pro',
+  premium: 'Premium',
+}
 
 function SettingsRow({
   icon,
   label,
   value,
+  onClick,
 }: {
   icon: React.ReactNode
   label: string
   value?: string
+  onClick?: () => void
 }) {
   return (
     <button
+      onClick={onClick}
       className="w-full rounded-xl px-4 py-3.5 flex items-center gap-3 text-left transition-colors active:bg-white/10"
       style={{
         background: 'rgba(15,30,53,0.82)',
@@ -34,15 +75,28 @@ function SettingsRow({
   )
 }
 
-export function SettingsClient({ userEmail }: { userEmail: string | null }) {
+export function SettingsClient({
+  userEmail,
+  activePlanCode = 'free',
+  creditBalance = 0,
+}: {
+  userEmail: string | null
+  activePlanCode?: string
+  creditBalance?: number
+}) {
   const router = useRouter()
+  const queryClient = useQueryClient()
   const [loggingOut, setLoggingOut] = useState(false)
 
   async function handleLogout() {
     if (loggingOut) return
     setLoggingOut(true)
     try {
-      await fetch('/api/auth/logout', { method: 'POST' })
+      await astroFetch('/api/auth/logout', {
+        debugOrigin: 'components.settings.logout',
+        method: 'POST',
+      })
+      queryClient.clear()
       router.replace('/auth/login')
       router.refresh()
     } finally {
@@ -80,15 +134,39 @@ export function SettingsClient({ userEmail }: { userEmail: string | null }) {
             border: '1px solid rgba(245,158,11,0.2)',
           }}
         >
-          <h2 className="font-mystical text-3xl leading-none text-[#F4E2B4]">Your Benefits</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="font-mystical text-3xl leading-none text-[#F4E2B4]">Your Benefits</h2>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
+              style={{ background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.2)' }}>
+              {PLAN_ICONS[activePlanCode]}
+              <span className="text-xs font-bold text-amber-300">
+                {PLAN_LABELS[activePlanCode] ?? 'Free'}
+              </span>
+            </div>
+          </div>
+          {creditBalance > 0 && (
+            <div className="flex items-center gap-1.5 text-xs text-amber-300/80">
+              <Coins size={11} />
+              <span>{creditBalance} advisor credits available</span>
+            </div>
+          )}
           <ul className="space-y-1.5 pt-1">
-            {SETTINGS_BENEFITS.map((benefit) => (
+            {(PLAN_BENEFITS[activePlanCode] ?? PLAN_BENEFITS.free).map((benefit) => (
               <li key={benefit} className="flex items-center justify-between text-sm">
                 <span className="text-text-secondary">{benefit}</span>
                 <span className="text-lime-accent">✓</span>
               </li>
             ))}
           </ul>
+          {activePlanCode === 'free' && (
+            <button
+              onClick={() => router.push('/settings/billing')}
+              className="mt-2 w-full text-center text-xs font-bold py-2 rounded-lg"
+              style={{ background: 'rgba(34,211,238,0.12)', color: '#22d3ee' }}
+            >
+              Upgrade to Pro →
+            </button>
+          )}
         </section>
 
         <ReportsFromAdvisors onOpenReport={(id) => router.push(`/settings/reports/${id}`)} />
@@ -118,10 +196,14 @@ export function SettingsClient({ userEmail }: { userEmail: string | null }) {
           <div className="text-xs text-text-muted text-center">{userEmail ?? 'Signed in user'}</div>
         </button>
 
-        <SettingsRow icon={<CreditCard size={16} className="text-text-secondary" />} label="Payment Methods" />
+        <SettingsRow
+          icon={<CreditCard size={16} className="text-text-secondary" />}
+          label={activePlanCode !== 'free' ? 'Manage Subscription' : 'Upgrade Plan'}
+          value={activePlanCode !== 'free' ? PLAN_LABELS[activePlanCode] : undefined}
+          onClick={() => router.push('/settings/billing')}
+        />
         <div className="h-2" />
       </div>
     </div>
   )
 }
-

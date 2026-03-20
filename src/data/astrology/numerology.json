@@ -1,0 +1,98 @@
+{
+  "1": {
+    "number": 1,
+    "title": "The Leader",
+    "tagline": "Independent, pioneering, built to forge your own path",
+    "description": "Life Path 1 means you are here to lead. You have an innate drive for independence and originality — you don't follow trends, you set them. Your willpower is extraordinary and your ability to begin new chapters is your greatest gift.",
+    "strengths": ["Self-reliant", "Ambitious", "Creative", "Determined"],
+    "challenge": "Learning to collaborate without losing your sense of self"
+  },
+  "2": {
+    "number": 2,
+    "title": "The Diplomat",
+    "tagline": "Sensitive, cooperative, and deeply attuned to others",
+    "description": "Life Path 2 is the path of partnership. You are a natural peacemaker with extraordinary sensitivity — you feel the energy of a room before you enter it. Your greatest power lies in your ability to bring people together.",
+    "strengths": ["Empathetic", "Diplomatic", "Intuitive", "Cooperative"],
+    "challenge": "Building boundaries while remaining open-hearted"
+  },
+  "3": {
+    "number": 3,
+    "title": "The Creator",
+    "tagline": "Expressive, joyful, and magnetically creative",
+    "description": "Life Path 3 is the path of creative expression. You are here to communicate your inner world — through words, art, music, or sheer presence. Your optimism lights up rooms and your imagination knows no limits.",
+    "strengths": ["Creative", "Expressive", "Optimistic", "Social"],
+    "challenge": "Channeling creative energy without scattering it"
+  },
+  "4": {
+    "number": 4,
+    "title": "The Builder",
+    "tagline": "Disciplined, loyal, and foundation-focused",
+    "description": "Life Path 4 is the path of the master builder. You create stability where others see chaos. Your reliability, work ethic, and attention to detail make you the person others lean on — the architect of lasting things.",
+    "strengths": ["Reliable", "Disciplined", "Honest", "Patient"],
+    "challenge": "Embracing flexibility and allowing yourself to dream beyond the plan"
+  },
+  "5": {
+    "number": 5,
+    "title": "The Adventurer",
+    "tagline": "Free-spirited, versatile, and magnetically alive",
+    "description": "Life Path 5 is the path of freedom and experience. You are here to live life fully — to taste every flavor, travel every road, and gather the kind of wisdom that only comes from truly living. Change is your fuel.",
+    "strengths": ["Adaptable", "Curious", "Charismatic", "Courageous"],
+    "challenge": "Finding depth and commitment without losing your freedom"
+  },
+  "6": {
+    "number": 6,
+    "title": "The Nurturer",
+    "tagline": "Responsible, loving, and devoted to harmony",
+    "description": "Life Path 6 is the path of the healer and the heart. You are here to care — for family, for community, for beauty in the world. Your love runs deep and your sense of responsibility is one of your defining qualities.",
+    "strengths": ["Compassionate", "Responsible", "Harmonious", "Artistic"],
+    "challenge": "Caring for yourself as fiercely as you care for others"
+  },
+  "7": {
+    "number": 7,
+    "title": "The Seeker",
+    "tagline": "Analytical, spiritual, always searching for deeper truth",
+    "description": "Life Path 7 is the path of the mystic and the analyst. You have a penetrating mind that sees through surface appearances to the truth beneath. Solitude is not loneliness to you — it is where you find your deepest insights.",
+    "strengths": ["Intuitive", "Analytical", "Spiritual", "Introspective"],
+    "challenge": "Opening up emotionally and trusting others with your inner world"
+  },
+  "8": {
+    "number": 8,
+    "title": "The Powerhouse",
+    "tagline": "Ambitious, executive, and destined for mastery",
+    "description": "Life Path 8 is the path of authority and achievement. You have a natural understanding of power — how to earn it, how to use it, and how to use it well. Your ability to manifest in the material world is extraordinary.",
+    "strengths": ["Ambitious", "Strategic", "Authoritative", "Resilient"],
+    "challenge": "Balancing material success with emotional and spiritual depth"
+  },
+  "9": {
+    "number": 9,
+    "title": "The Humanitarian",
+    "tagline": "Compassionate, wise, and here to serve the greater good",
+    "description": "Life Path 9 is the path of completion and compassion. You carry the wisdom of lifetimes and the heart of a humanitarian. You are here to serve — not from a place of sacrifice, but from an abundance of understanding.",
+    "strengths": ["Compassionate", "Wise", "Creative", "Visionary"],
+    "challenge": "Learning to let go, complete cycles, and receive as well as give"
+  },
+  "11": {
+    "number": 11,
+    "title": "The Illuminator",
+    "tagline": "Intuitive visionary, spiritual channel, master of inspiration",
+    "description": "Master Number 11 is one of the most spiritually significant paths. You are a natural conduit for higher wisdom — your intuition borders on psychic, and your sensitivity to others is extraordinary. You are here to inspire by being exactly who you are.",
+    "strengths": ["Highly intuitive", "Inspiring", "Idealistic", "Spiritual"],
+    "challenge": "Grounding your gifts without dimming your light"
+  },
+  "22": {
+    "number": 22,
+    "title": "The Master Builder",
+    "tagline": "Visionary practicality — the one who makes the impossible real",
+    "description": "Master Number 22 combines the vision of 11 with the discipline of 4. You have the rare ability to take the biggest, most impossible-seeming dreams and build them into reality. The scale of what you can create is almost without limit.",
+    "strengths": ["Visionary", "Disciplined", "Highly capable", "Transformational"],
+    "challenge": "Managing the weight of your own potential without burning out"
+  },
+  "33": {
+    "number": 33,
+    "title": "The Master Teacher",
+    "tagline": "Pure compassion, universal healer, embodied wisdom",
+    "description": "Master Number 33 is the rarest life path — the Master Teacher. You are here to elevate consciousness through pure, unconditional love and service. When you live in your highest expression, you heal and inspire simply by being present.",
+    "strengths": ["Deeply compassionate", "Wise", "Selfless", "Healing"],
+    "challenge": "Accepting your own humanity while holding such a high calling"
+  }
+}

@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { ChevronLeft } from 'lucide-react'
-import { REPORT_DETAILS, REPORT_PRODUCTS } from '@/data/reports'
+import { useReportDetail } from '@/hooks/use-reports'
 
 interface ReportPageClientProps {
   slug: string
@@ -11,10 +11,17 @@ interface ReportPageClientProps {
 
 export function ReportPageClient({ slug }: ReportPageClientProps) {
   const router = useRouter()
-  const report = REPORT_DETAILS[slug]
-  const product = REPORT_PRODUCTS.find((item) => item.id === slug)
+  const { data, isLoading } = useReportDetail(slug)
 
-  if (!report) {
+  if (isLoading) {
+    return (
+      <div className="px-4 py-8 flex items-center justify-center">
+        <span className="text-sm text-text-secondary">Loading…</span>
+      </div>
+    )
+  }
+
+  if (!data) {
     return (
       <div className="px-4 py-8">
         <p className="text-sm text-text-secondary">Report not found.</p>
@@ -22,8 +29,9 @@ export function ReportPageClient({ slug }: ReportPageClientProps) {
     )
   }
 
-  const heroImage = product?.icon ?? '/assets/features/horoscope.png'
-  const accent = product?.accent ?? '#22D3EE'
+  const { product, detail: report } = data
+  const heroImage = product.icon || '/features/horoscope.png'
+  const accent = product.accent || '#22D3EE'
 
   return (
     <div className="flex flex-col">
@@ -117,4 +125,3 @@ export function ReportPageClient({ slug }: ReportPageClientProps) {
     </div>
   )
 }
-

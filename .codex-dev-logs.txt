@@ -1,0 +1,266 @@
+
+> astro-ai-repo@0.1.0 dev:logs
+> cross-env ASTRO_DEBUG_LOGS=1 next dev --port 3001
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3001
+- Network:       http://192.168.0.145:3001
+- Environments: .env.local
+
+✓ Starting...
+Creating turbopack project {
+  dir: 'C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo',
+  testMode: true
+}
+✓ Ready in 21.2s
+○ Compiling / ...
+ GET / 200 in 905ms (compile: 36ms, render: 869ms)
+○ Compiling /auth/login ...
+ GET /auth/login 200 in 12.3s (compile: 11.6s, render: 640ms)
+ GET /manifest.webmanifest 200 in 1220ms (compile: 1115ms, render: 105ms)
+⚠ Cross origin request detected from 127.0.0.1 to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+[astro-debug] 2026-03-19T09:04:46.956Z INFO api.auth.login.POST request.start traceId=9b9ba101-1211-465b-b050-83cef93a286e requestId=410868b8-7e79-4c51-859c-6907f9dafac4 {"method":"POST","pathname":"/api/auth/login","origin":"components.auth.magic-link.login"}
+[astro-debug] 2026-03-19T09:04:46.967Z INFO api.auth.login request.validated traceId=9b9ba101-1211-465b-b050-83cef93a286e requestId=410868b8-7e79-4c51-859c-6907f9dafac4 {"email":"pi***@gmail.com"}
+[astro-debug] 2026-03-19T09:04:48.662Z INFO api.auth.login.POST request.end traceId=9b9ba101-1211-465b-b050-83cef93a286e requestId=410868b8-7e79-4c51-859c-6907f9dafac4 durationMs=1711 outcome=success {"status":200,"durationMs":1711,"outcome":"success"}
+ POST /api/auth/login 200 in 5.7s (compile: 3.9s, render: 1757ms)
+○ Compiling /today ...
+ GET /today 200 in 24.0s (compile: 23.2s, render: 737ms)
+ GET /today 200 in 1123ms (compile: 24ms, render: 1099ms)
+ GET /manifest.webmanifest 200 in 337ms (compile: 64ms, render: 274ms)
+[astro-debug] 2026-03-19T09:05:18.392Z INFO api.dashboard.profile.GET request.start traceId=f591088c-a70d-4dd5-b8e7-1333fe5ba9b1 requestId=811fa8d3-8bc9-4dc4-9d00-e1d68dc646d4 {"method":"GET","pathname":"/api/dashboard/profile","origin":"hooks.use-profile.get"}
+○ Compiling /api/dashboard/profile ...
+[astro-debug] 2026-03-19T09:05:20.595Z INFO api.dashboard.profile request.success_meta traceId=f591088c-a70d-4dd5-b8e7-1333fe5ba9b1 requestId=811fa8d3-8bc9-4dc4-9d00-e1d68dc646d4 {"userId":"c2453404-7896-4db3-9a90-8a8482772d38","isPlaceholder":true,"hasBirthDate":true,"hasTimezone":true}
+[astro-debug] 2026-03-19T09:05:20.604Z INFO api.dashboard.profile.GET request.end traceId=f591088c-a70d-4dd5-b8e7-1333fe5ba9b1 requestId=811fa8d3-8bc9-4dc4-9d00-e1d68dc646d4 durationMs=2212 outcome=success {"status":200,"durationMs":2212,"outcome":"success"}
+ GET /api/dashboard/profile 200 in 4.6s (compile: 2.2s, render: 2.3s)
+[astro-debug] 2026-03-19T09:05:30.529Z INFO api.astro.today.GET request.start traceId=9d5fe230-b615-4f96-918a-81d9ea236666 requestId=8c589af4-2b9e-44e0-9ec8-15488a93b372 {"method":"GET","pathname":"/api/astro/today","origin":"hooks.use-transits.today"}
+[astro-debug] 2026-03-19T09:05:30.553Z INFO api.astro.today request.validated traceId=9d5fe230-b615-4f96-918a-81d9ea236666 requestId=8c589af4-2b9e-44e0-9ec8-15488a93b372 {"date":"2026-03-19","systemType":"western"}
+[astro-debug] 2026-03-19T09:05:30.559Z INFO astroai.today.service getToday.start traceId=9d5fe230-b615-4f96-918a-81d9ea236666 requestId=8c589af4-2b9e-44e0-9ec8-15488a93b372 {"date":"2026-03-19","systemType":"western"}
+[astro-debug] 2026-03-19T09:05:31.523Z INFO api.dashboard.features.reports.GET request.start traceId=b535b475-4f33-4e11-96dc-1814511c454d requestId=1f095fb5-75d3-47f7-9466-d72e357e123b {"method":"GET","pathname":"/api/dashboard/features/reports","origin":"hooks.use-reports.products"}
+[astro-debug] 2026-03-19T09:05:31.526Z INFO astroai.reports.service listProducts.start traceId=b535b475-4f33-4e11-96dc-1814511c454d requestId=1f095fb5-75d3-47f7-9466-d72e357e123b
+[astro-debug] 2026-03-19T09:05:32.052Z INFO api.dashboard.features.magic-ball.GET request.start traceId=4636e536-a077-45d7-86be-62db8d878fcb requestId=1402ce23-5258-424c-aa94-a22fc10a3400 {"method":"GET","pathname":"/api/dashboard/features/magic-ball","origin":"hooks.use-horoscope.daily.magic-ball"}
+[astro-debug] 2026-03-19T09:05:32.172Z INFO astroai.tarot.service getMagicBallPool.start traceId=4636e536-a077-45d7-86be-62db8d878fcb requestId=1402ce23-5258-424c-aa94-a22fc10a3400
+[astro-debug] 2026-03-19T09:05:32.923Z INFO api.dashboard.features.tarot.GET request.start traceId=9d53350a-ea2f-4bfd-9b07-c16991c64855 requestId=dd9c20f4-4313-4911-a36e-8b910f710de7 {"method":"GET","pathname":"/api/dashboard/features/tarot","origin":"hooks.use-horoscope.daily.tarot"}
+[astro-debug] 2026-03-19T09:05:32.926Z INFO astroai.tarot.service getDeck.start traceId=9d53350a-ea2f-4bfd-9b07-c16991c64855 requestId=dd9c20f4-4313-4911-a36e-8b910f710de7
+[astro-debug] 2026-03-19T09:05:33.723Z INFO astroai.today.cache-repository getFresh.complete traceId=9d5fe230-b615-4f96-918a-81d9ea236666 requestId=8c589af4-2b9e-44e0-9ec8-15488a93b372 durationMs=3163 outcome=miss {"durationMs":3163,"outcome":"miss","date":"2026-03-19","systemType":"western","hasCached":false,"sourceProvider":null}
+[astro-debug] 2026-03-19T09:05:33.725Z INFO astroai.today.cache cache.miss.fresh traceId=9d5fe230-b615-4f96-918a-81d9ea236666 requestId=8c589af4-2b9e-44e0-9ec8-15488a93b372 durationMs=3165 outcome=miss {"durationMs":3165,"outcome":"miss","query":{"date":"2026-03-19","systemType":"western"}}
+[astro-debug] 2026-03-19T09:05:33.726Z INFO astroai.provider.astrology-api-io fetchToday.start traceId=9d5fe230-b615-4f96-918a-81d9ea236666 requestId=8c589af4-2b9e-44e0-9ec8-15488a93b372 {"date":"2026-03-19","systemType":"western"}
+[astro-debug] 2026-03-19T09:05:33.728Z INFO integrations.astrology-api-io.client request.start traceId=9d5fe230-b615-4f96-918a-81d9ea236666 requestId=8c589af4-2b9e-44e0-9ec8-15488a93b372 {"method":"POST","path":"/api/v3/data/lunar-metrics","featureKey":"today.moon","bodyKeys":["subject","options"]}
+[astro-debug] 2026-03-19T09:05:33.732Z INFO integrations.astrology-api-io.client request.start traceId=9d5fe230-b615-4f96-918a-81d9ea236666 requestId=8c589af4-2b9e-44e0-9ec8-15488a93b372 {"method":"POST","path":"/api/v3/data/aspects","featureKey":"today.transits","bodyKeys":["subject","options"]}
+[astro-debug] 2026-03-19T09:05:33.734Z INFO integrations.astrology-api-io.client request.start traceId=9d5fe230-b615-4f96-918a-81d9ea236666 requestId=8c589af4-2b9e-44e0-9ec8-15488a93b372 {"method":"POST","path":"/api/v3/lunar/events","featureKey":"today.moon-events","bodyKeys":["datetime_location","days_ahead"]}
+[astro-debug] 2026-03-19T09:05:34.766Z INFO astroai.tarot.service getMagicBallPool.success traceId=4636e536-a077-45d7-86be-62db8d878fcb requestId=1402ce23-5258-424c-aa94-a22fc10a3400 durationMs=2594 outcome=success {"durationMs":2594,"outcome":"success","count":26}
+[astro-debug] 2026-03-19T09:05:34.768Z INFO api.dashboard.features.magic-ball.GET request.end traceId=4636e536-a077-45d7-86be-62db8d878fcb requestId=1402ce23-5258-424c-aa94-a22fc10a3400 durationMs=2716 outcome=success {"status":200,"durationMs":2716,"outcome":"success"}
+ GET /api/dashboard/features/magic-ball 200 in 13.2s (compile: 10.5s, render: 2.7s)
+[astro-debug] 2026-03-19T09:05:34.785Z INFO astroai.reports.service listProducts.success traceId=b535b475-4f33-4e11-96dc-1814511c454d requestId=1f095fb5-75d3-47f7-9466-d72e357e123b durationMs=3259 outcome=success {"durationMs":3259,"outcome":"success","count":6}
+[astro-debug] 2026-03-19T09:05:34.787Z INFO api.dashboard.features.reports.GET request.end traceId=b535b475-4f33-4e11-96dc-1814511c454d requestId=1f095fb5-75d3-47f7-9466-d72e357e123b durationMs=3264 outcome=success {"status":200,"durationMs":3264,"outcome":"success"}
+ GET /api/dashboard/features/reports 200 in 18.3s (compile: 14.9s, render: 3.4s)
+[astro-debug] 2026-03-19T09:05:34.824Z INFO astroai.tarot.service getDeck.success traceId=9d53350a-ea2f-4bfd-9b07-c16991c64855 requestId=dd9c20f4-4313-4911-a36e-8b910f710de7 durationMs=1898 outcome=success {"durationMs":1898,"outcome":"success","count":78}
+[astro-debug] 2026-03-19T09:05:34.826Z INFO api.dashboard.features.tarot.GET request.end traceId=9d53350a-ea2f-4bfd-9b07-c16991c64855 requestId=dd9c20f4-4313-4911-a36e-8b910f710de7 durationMs=1903 outcome=success {"status":200,"durationMs":1903,"outcome":"success"}
+ GET /api/dashboard/features/tarot 200 in 13.3s (compile: 11.3s, render: 2.0s)
+[astro-debug] 2026-03-19T09:05:36.070Z INFO integrations.astrology-api-io.client request.success traceId=9d5fe230-b615-4f96-918a-81d9ea236666 requestId=8c589af4-2b9e-44e0-9ec8-15488a93b372 durationMs=2342 outcome=success {"durationMs":2342,"outcome":"success","method":"POST","path":"/api/v3/data/lunar-metrics","featureKey":"today.moon","status":200,"remainingQuota":6967}
+[astro-debug] 2026-03-19T09:05:36.289Z INFO api.astro.today.GET request.start traceId=f067e196-cfc7-4afd-a17f-e0719a121204 requestId=6c33f103-3c2b-466d-b84c-b12180c79faa {"method":"GET","pathname":"/api/astro/today","origin":"hooks.use-moon-phase.today"}
+[astro-debug] 2026-03-19T09:05:36.290Z INFO api.astro.today request.validated traceId=f067e196-cfc7-4afd-a17f-e0719a121204 requestId=6c33f103-3c2b-466d-b84c-b12180c79faa {"date":"2026-03-19","systemType":"western"}
+[astro-debug] 2026-03-19T09:05:36.291Z INFO astroai.today.service getToday.start traceId=f067e196-cfc7-4afd-a17f-e0719a121204 requestId=6c33f103-3c2b-466d-b84c-b12180c79faa {"date":"2026-03-19","systemType":"western"}
+[astro-debug] 2026-03-19T09:05:36.641Z INFO astroai.today.cache-repository getFresh.complete traceId=f067e196-cfc7-4afd-a17f-e0719a121204 requestId=6c33f103-3c2b-466d-b84c-b12180c79faa durationMs=349 outcome=miss {"durationMs":349,"outcome":"miss","date":"2026-03-19","systemType":"western","hasCached":false,"sourceProvider":null}
+[astro-debug] 2026-03-19T09:05:36.642Z INFO astroai.today.cache cache.miss.fresh traceId=f067e196-cfc7-4afd-a17f-e0719a121204 requestId=6c33f103-3c2b-466d-b84c-b12180c79faa durationMs=350 outcome=miss {"durationMs":350,"outcome":"miss","query":{"date":"2026-03-19","systemType":"western"}}
+[astro-debug] 2026-03-19T09:05:36.642Z INFO astroai.provider.astrology-api-io fetchToday.start traceId=f067e196-cfc7-4afd-a17f-e0719a121204 requestId=6c33f103-3c2b-466d-b84c-b12180c79faa {"date":"2026-03-19","systemType":"western"}
+[astro-debug] 2026-03-19T09:05:36.643Z INFO integrations.astrology-api-io.client request.start traceId=f067e196-cfc7-4afd-a17f-e0719a121204 requestId=6c33f103-3c2b-466d-b84c-b12180c79faa {"method":"POST","path":"/api/v3/data/lunar-metrics","featureKey":"today.moon","bodyKeys":["subject","options"]}
+[astro-debug] 2026-03-19T09:05:36.648Z INFO integrations.astrology-api-io.client request.start traceId=f067e196-cfc7-4afd-a17f-e0719a121204 requestId=6c33f103-3c2b-466d-b84c-b12180c79faa {"method":"POST","path":"/api/v3/data/aspects","featureKey":"today.transits","bodyKeys":["subject","options"]}
+[astro-debug] 2026-03-19T09:05:36.650Z INFO integrations.astrology-api-io.client request.start traceId=f067e196-cfc7-4afd-a17f-e0719a121204 requestId=6c33f103-3c2b-466d-b84c-b12180c79faa {"method":"POST","path":"/api/v3/lunar/events","featureKey":"today.moon-events","bodyKeys":["datetime_location","days_ahead"]}
+[astro-debug] 2026-03-19T09:05:43.855Z INFO integrations.astrology-api-io.client request.success traceId=9d5fe230-b615-4f96-918a-81d9ea236666 requestId=8c589af4-2b9e-44e0-9ec8-15488a93b372 durationMs=10123 outcome=success {"durationMs":10123,"outcome":"success","method":"POST","path":"/api/v3/data/aspects","featureKey":"today.transits","status":200,"remainingQuota":6966}
+[astro-debug] 2026-03-19T09:05:43.876Z INFO integrations.astrology-api-io.client request.success traceId=9d5fe230-b615-4f96-918a-81d9ea236666 requestId=8c589af4-2b9e-44e0-9ec8-15488a93b372 durationMs=10142 outcome=success {"durationMs":10142,"outcome":"success","method":"POST","path":"/api/v3/lunar/events","featureKey":"today.moon-events","status":200,"remainingQuota":6965}
+[astro-debug] 2026-03-19T09:05:43.891Z INFO astroai.provider.astrology-api-io fetchToday.success traceId=9d5fe230-b615-4f96-918a-81d9ea236666 requestId=8c589af4-2b9e-44e0-9ec8-15488a93b372 durationMs=10165 outcome=success {"durationMs":10165,"outcome":"success","transits":20,"events":0,"sourceProvider":"astrology_api_io"}
+[astro-debug] 2026-03-19T09:05:43.894Z INFO astroai.today.cache provider.fetch.success traceId=9d5fe230-b615-4f96-918a-81d9ea236666 requestId=8c589af4-2b9e-44e0-9ec8-15488a93b372 durationMs=10168 outcome=success {"durationMs":10168,"outcome":"success","sourceProvider":"astrology_api_io","ttlSeconds":21600}
+ GET /features/birth-chart.png 404 in 8.2s (compile: 3.9s, render: 4.3s)
+ GET /features/horoscope.png 404 in 8.8s (compile: 4.9s, render: 3.9s)
+ GET /features/moon.png 404 in 8.7s (compile: 5.4s, render: 3.3s)
+ GET /features/compatibility.png 404 in 8.7s (compile: 6.1s, render: 2.6s)
+⨯ The requested resource isn't a valid image for /features/birth-chart.png received null
+⨯ The requested resource isn't a valid image for /features/horoscope.png received null
+⨯ The requested resource isn't a valid image for /features/moon.png received null
+⨯ The requested resource isn't a valid image for /features/compatibility.png received null
+Error: The requested resource isn't a valid image.
+    at ignore-listed frames {
+  statusCode: 400
+}
+Error: The requested resource isn't a valid image.
+    at ignore-listed frames {
+  statusCode: 400
+}
+Error: The requested resource isn't a valid image.
+    at ignore-listed frames {
+  statusCode: 400
+}
+Error: The requested resource isn't a valid image.
+    at ignore-listed frames {
+  statusCode: 400
+}
+[astro-debug] 2026-03-19T09:05:46.745Z INFO integrations.astrology-api-io.client request.success traceId=f067e196-cfc7-4afd-a17f-e0719a121204 requestId=6c33f103-3c2b-466d-b84c-b12180c79faa durationMs=10095 outcome=success {"durationMs":10095,"outcome":"success","method":"POST","path":"/api/v3/lunar/events","featureKey":"today.moon-events","status":200,"remainingQuota":6964}
+[astro-debug] 2026-03-19T09:05:46.783Z INFO integrations.astrology-api-io.client request.success traceId=f067e196-cfc7-4afd-a17f-e0719a121204 requestId=6c33f103-3c2b-466d-b84c-b12180c79faa durationMs=10140 outcome=success {"durationMs":10140,"outcome":"success","method":"POST","path":"/api/v3/data/lunar-metrics","featureKey":"today.moon","status":200,"remainingQuota":6962}
+[astro-debug] 2026-03-19T09:05:46.843Z ERROR astroai.today.cache provider.fetch.error traceId=9d5fe230-b615-4f96-918a-81d9ea236666 requestId=8c589af4-2b9e-44e0-9ec8-15488a93b372 outcome=error {"outcome":"error","error":{"name":"Error","message":"Failed inserting transit_facts_daily: Could not find the 'interpretation' column of 'transit_facts_daily' in the schema cache","stack":"Error: Failed inserting transit_facts_daily: Could not find the 'interpretation' column of 'transit_facts_daily' in the schema cache\n    at SupabaseTodayCacheRepository.save (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:2426:23)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async resolveCacheFirst (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:1132:9)\n    at async TodayService.getToday (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:2218:26)\n    at async handler (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:3277:34)"}}
+[astro-debug] 2026-03-19T09:05:47.001Z INFO integrations.astrology-api-io.client request.success traceId=f067e196-cfc7-4afd-a17f-e0719a121204 requestId=6c33f103-3c2b-466d-b84c-b12180c79faa durationMs=10353 outcome=success {"durationMs":10353,"outcome":"success","method":"POST","path":"/api/v3/data/aspects","featureKey":"today.transits","status":200,"remainingQuota":6963}
+[astro-debug] 2026-03-19T09:05:47.002Z INFO astroai.provider.astrology-api-io fetchToday.success traceId=f067e196-cfc7-4afd-a17f-e0719a121204 requestId=6c33f103-3c2b-466d-b84c-b12180c79faa durationMs=10360 outcome=success {"durationMs":10360,"outcome":"success","transits":20,"events":0,"sourceProvider":"astrology_api_io"}
+[astro-debug] 2026-03-19T09:05:47.003Z INFO astroai.today.cache provider.fetch.success traceId=f067e196-cfc7-4afd-a17f-e0719a121204 requestId=6c33f103-3c2b-466d-b84c-b12180c79faa durationMs=10361 outcome=success {"durationMs":10361,"outcome":"success","sourceProvider":"astrology_api_io","ttlSeconds":21600}
+[astro-debug] 2026-03-19T09:05:47.608Z ERROR api.astro.today request.error traceId=9d5fe230-b615-4f96-918a-81d9ea236666 requestId=8c589af4-2b9e-44e0-9ec8-15488a93b372 {"error":{"name":"Error","message":"Failed loading transit_facts_daily: column transit_facts_daily.interpretation does not exist","stack":"Error: Failed loading transit_facts_daily: column transit_facts_daily.interpretation does not exist\n    at SupabaseTodayCacheRepository.loadByDate (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:2308:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async SupabaseTodayCacheRepository.getStale (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:2362:24)\n    at async resolveCacheFirst (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:1151:47)\n    at async TodayService.getToday (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:2218:26)"}}
+[astro-debug] 2026-03-19T09:05:47.615Z INFO api.astro.today.GET request.end traceId=9d5fe230-b615-4f96-918a-81d9ea236666 requestId=8c589af4-2b9e-44e0-9ec8-15488a93b372 durationMs=17086 outcome=failure {"status":500,"durationMs":17086,"outcome":"failure"}
+ GET /api/astro/today?date=2026-03-19 500 in 31.1s (compile: 13.8s, render: 17.3s)
+[astro-debug] 2026-03-19T09:05:48.540Z ERROR astroai.today.cache provider.fetch.error traceId=f067e196-cfc7-4afd-a17f-e0719a121204 requestId=6c33f103-3c2b-466d-b84c-b12180c79faa outcome=error {"outcome":"error","error":{"name":"Error","message":"Failed inserting transit_facts_daily: Could not find the 'interpretation' column of 'transit_facts_daily' in the schema cache","stack":"Error: Failed inserting transit_facts_daily: Could not find the 'interpretation' column of 'transit_facts_daily' in the schema cache\n    at SupabaseTodayCacheRepository.save (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:2426:23)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async resolveCacheFirst (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:1132:9)\n    at async TodayService.getToday (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:2218:26)\n    at async handler (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:3277:34)"}}
+[astro-debug] 2026-03-19T09:05:49.258Z ERROR api.astro.today request.error traceId=f067e196-cfc7-4afd-a17f-e0719a121204 requestId=6c33f103-3c2b-466d-b84c-b12180c79faa {"error":{"name":"Error","message":"Failed loading transit_facts_daily: column transit_facts_daily.interpretation does not exist","stack":"Error: Failed loading transit_facts_daily: column transit_facts_daily.interpretation does not exist\n    at SupabaseTodayCacheRepository.loadByDate (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:2308:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async SupabaseTodayCacheRepository.getStale (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:2362:24)\n    at async resolveCacheFirst (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:1151:47)\n    at async TodayService.getToday (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:2218:26)"}}
+[astro-debug] 2026-03-19T09:05:49.310Z INFO api.astro.today.GET request.end traceId=f067e196-cfc7-4afd-a17f-e0719a121204 requestId=6c33f103-3c2b-466d-b84c-b12180c79faa durationMs=13021 outcome=failure {"status":500,"durationMs":13021,"outcome":"failure"}
+ GET /api/astro/today?date=2026-03-19 500 in 13.3s (compile: 194ms, render: 13.1s)
+✓ Finished filesystem cache database compaction in 20.6s
+✓ Finished writing to filesystem cache in 18.6s
+ GET /advisors 200 in 1571ms (compile: 1488ms, render: 84ms)
+ GET /manifest.webmanifest 200 in 50ms (compile: 19ms, render: 31ms)
+[astro-debug] 2026-03-19T09:06:32.318Z INFO api.dashboard.advisors.GET request.start traceId=99f5f613-569c-41dd-886b-8347eab043f4 requestId=e3cb65eb-5803-4197-a5ea-93710297035b {"method":"GET","pathname":"/api/dashboard/advisors","origin":"hooks.use-advisors.list"}
+[astro-debug] 2026-03-19T09:06:32.319Z INFO astroai.advisors.service listAdvisors.start traceId=99f5f613-569c-41dd-886b-8347eab043f4 requestId=e3cb65eb-5803-4197-a5ea-93710297035b
+[astro-debug] 2026-03-19T09:06:33.032Z INFO astroai.advisors.service listAdvisors.success traceId=99f5f613-569c-41dd-886b-8347eab043f4 requestId=e3cb65eb-5803-4197-a5ea-93710297035b durationMs=713 outcome=success {"durationMs":713,"outcome":"success","count":5}
+[astro-debug] 2026-03-19T09:06:33.034Z INFO api.dashboard.advisors.GET request.end traceId=99f5f613-569c-41dd-886b-8347eab043f4 requestId=e3cb65eb-5803-4197-a5ea-93710297035b durationMs=716 outcome=success {"status":200,"durationMs":716,"outcome":"success"}
+ GET /api/dashboard/advisors 200 in 1136ms (compile: 400ms, render: 736ms)
+ GET /advisors/luna-rose 200 in 2.6s (compile: 2.6s, render: 81ms)
+ GET /manifest.webmanifest 200 in 34ms (compile: 19ms, render: 14ms)
+[astro-debug] 2026-03-19T09:06:42.314Z INFO api.dashboard.features.magic-ball.GET request.start traceId=97cb6701-f74a-4e14-8b64-38bba0c95527 requestId=d5616e44-240b-4086-b210-9851e9c53ae9 {"method":"GET","pathname":"/api/dashboard/features/magic-ball","origin":"hooks.use-advisors.suggested-questions"}
+[astro-debug] 2026-03-19T09:06:42.316Z INFO astroai.tarot.service getMagicBallPool.start traceId=97cb6701-f74a-4e14-8b64-38bba0c95527 requestId=d5616e44-240b-4086-b210-9851e9c53ae9
+[astro-debug] 2026-03-19T09:06:43.067Z INFO astroai.tarot.service getMagicBallPool.success traceId=97cb6701-f74a-4e14-8b64-38bba0c95527 requestId=d5616e44-240b-4086-b210-9851e9c53ae9 durationMs=751 outcome=success {"durationMs":751,"outcome":"success","count":26}
+[astro-debug] 2026-03-19T09:06:43.068Z INFO api.dashboard.features.magic-ball.GET request.end traceId=97cb6701-f74a-4e14-8b64-38bba0c95527 requestId=d5616e44-240b-4086-b210-9851e9c53ae9 durationMs=754 outcome=success {"status":200,"durationMs":754,"outcome":"success"}
+ GET /api/dashboard/features/magic-ball 200 in 898ms (compile: 44ms, render: 854ms)
+[astro-debug] 2026-03-19T09:06:45.623Z INFO api.dashboard.advisors.messages.GET request.start traceId=628df31e-ad27-4553-a7f0-2852ca5297fb requestId=816dfe3e-8850-45cc-bebf-36f6ef719285 {"method":"GET","pathname":"/api/dashboard/advisors/luna-rose/messages","origin":"hooks.use-advisors.chat-history"}
+[astro-debug] 2026-03-19T09:06:46.031Z INFO api.dashboard.advisors.messages request.params traceId=628df31e-ad27-4553-a7f0-2852ca5297fb requestId=816dfe3e-8850-45cc-bebf-36f6ef719285 {"userId":"c2453404-7896-4db3-9a90-8a8482772d38","slug":"luna-rose"}
+[astro-debug] 2026-03-19T09:06:46.034Z INFO astroai.chat.service getHistory.start traceId=628df31e-ad27-4553-a7f0-2852ca5297fb requestId=816dfe3e-8850-45cc-bebf-36f6ef719285 {"userId":"c2453404-7896-4db3-9a90-8a8482772d38","advisorSlug":"luna-rose"}
+[astro-debug] 2026-03-19T09:06:46.816Z INFO astroai.chat.service getHistory.success traceId=628df31e-ad27-4553-a7f0-2852ca5297fb requestId=816dfe3e-8850-45cc-bebf-36f6ef719285 durationMs=782 outcome=success {"durationMs":782,"outcome":"success","advisorSlug":"luna-rose","sessionId":"[REDACTED]","messageCount":4}
+[astro-debug] 2026-03-19T09:06:46.817Z INFO api.dashboard.advisors.messages.GET request.end traceId=628df31e-ad27-4553-a7f0-2852ca5297fb requestId=816dfe3e-8850-45cc-bebf-36f6ef719285 durationMs=1194 outcome=success {"status":200,"durationMs":1194,"outcome":"success"}
+ GET /api/dashboard/advisors/luna-rose/messages 200 in 4.6s (compile: 3.4s, render: 1217ms)
+[astro-debug] 2026-03-19T09:06:51.144Z INFO api.dashboard.advisors.messages.POST request.start traceId=15113f6f-e493-4093-a59e-eeacf0fd6869 requestId=839d1278-5132-4703-927b-d6136cae02ee {"method":"POST","pathname":"/api/dashboard/advisors/luna-rose/messages","origin":"components.advisors.chat.send-message"}
+[astro-debug] 2026-03-19T09:06:51.767Z INFO api.dashboard.advisors.messages request.validated traceId=15113f6f-e493-4093-a59e-eeacf0fd6869 requestId=839d1278-5132-4703-927b-d6136cae02ee {"userId":"c2453404-7896-4db3-9a90-8a8482772d38","slug":"luna-rose","hasSessionId":"[REDACTED]","contentChars":47}
+[astro-debug] 2026-03-19T09:06:51.769Z INFO astroai.chat.service sendMessage.start traceId=15113f6f-e493-4093-a59e-eeacf0fd6869 requestId=839d1278-5132-4703-927b-d6136cae02ee {"userId":"c2453404-7896-4db3-9a90-8a8482772d38","advisorSlug":"luna-rose","hasSessionId":"[REDACTED]","contentChars":47}
+[astro-debug] 2026-03-19T09:06:52.507Z INFO integrations.openai.advisor-chat request.start traceId=15113f6f-e493-4093-a59e-eeacf0fd6869 requestId=839d1278-5132-4703-927b-d6136cae02ee {"sessionId":"[REDACTED]","model":"gpt-4o-mini","userMessageChars":47}
+[astro-debug] 2026-03-19T09:06:59.116Z INFO integrations.openai.advisor-chat request.success traceId=15113f6f-e493-4093-a59e-eeacf0fd6869 requestId=839d1278-5132-4703-927b-d6136cae02ee durationMs=6616 outcome=success {"durationMs":6616,"outcome":"success","sessionId":"[REDACTED]","model":"gpt-4o-mini","totalTokens":"[REDACTED]"}
+[astro-debug] 2026-03-19T09:06:59.810Z INFO astroai.chat.service sendMessage.success traceId=15113f6f-e493-4093-a59e-eeacf0fd6869 requestId=839d1278-5132-4703-927b-d6136cae02ee durationMs=8041 outcome=success {"durationMs":8041,"outcome":"success","sessionId":"[REDACTED]","model":"gpt-4o-mini","totalTokens":"[REDACTED]"}
+[astro-debug] 2026-03-19T09:06:59.811Z INFO api.dashboard.advisors.messages.POST request.end traceId=15113f6f-e493-4093-a59e-eeacf0fd6869 requestId=839d1278-5132-4703-927b-d6136cae02ee durationMs=8668 outcome=success {"status":200,"durationMs":8668,"outcome":"success"}
+ POST /api/dashboard/advisors/luna-rose/messages 200 in 8.8s (compile: 72ms, render: 8.7s)
+ GET /features 200 in 1914ms (compile: 1783ms, render: 132ms)
+ GET /manifest.webmanifest 200 in 24ms (compile: 8ms, render: 16ms)
+[astro-debug] 2026-03-19T09:07:15.392Z INFO api.dashboard.features.stories.GET request.start traceId=fbda4273-f4db-412e-8517-5701252fc0f8 requestId=5862c4ac-a93d-474e-9cee-0265ef3a589c {"method":"GET","pathname":"/api/dashboard/features/stories","origin":"hooks.use-stories.categories"}
+[astro-debug] 2026-03-19T09:07:15.394Z INFO astroai.stories.service listCategories.start traceId=fbda4273-f4db-412e-8517-5701252fc0f8 requestId=5862c4ac-a93d-474e-9cee-0265ef3a589c
+[astro-debug] 2026-03-19T09:07:15.776Z INFO astroai.stories.service listCategories.success traceId=fbda4273-f4db-412e-8517-5701252fc0f8 requestId=5862c4ac-a93d-474e-9cee-0265ef3a589c durationMs=382 outcome=success {"durationMs":382,"outcome":"success","count":16}
+[astro-debug] 2026-03-19T09:07:15.778Z INFO api.dashboard.features.stories.GET request.end traceId=fbda4273-f4db-412e-8517-5701252fc0f8 requestId=5862c4ac-a93d-474e-9cee-0265ef3a589c durationMs=386 outcome=success {"status":200,"durationMs":386,"outcome":"success"}
+ GET /api/dashboard/features/stories 200 in 1214ms (compile: 811ms, render: 403ms)
+ GET /moon/moon-rituals.webp 404 in 374ms (compile: 65ms, render: 309ms)
+⨯ The requested resource isn't a valid image for /moon/moon-rituals.webp received null
+ GET /features/birth-chart.png 404 in 500ms (compile: 177ms, render: 323ms)
+⨯ The requested resource isn't a valid image for /features/birth-chart.png received null
+ GET /features/compatibility.png 404 in 551ms (compile: 157ms, render: 394ms)
+⨯ The requested resource isn't a valid image for /features/compatibility.png received null
+ GET /features/horoscope.png 404 in 505ms (compile: 221ms, render: 284ms)
+ GET /zodiac/capricorn.png 404 in 518ms (compile: 278ms, render: 240ms)
+ GET /features/magic-ball.png 404 in 515ms (compile: 313ms, render: 202ms)
+⨯ The requested resource isn't a valid image for /features/horoscope.png received null
+⨯ The requested resource isn't a valid image for /zodiac/capricorn.png received null
+⨯ The requested resource isn't a valid image for /features/magic-ball.png received null
+ GET /moon/full-moon.webp 404 in 127ms (compile: 42ms, render: 85ms)
+⨯ The requested resource isn't a valid image for /moon/full-moon.webp received null
+Error: The requested resource isn't a valid image.
+    at ignore-listed frames {
+  statusCode: 400
+}
+Error: The requested resource isn't a valid image.
+    at ignore-listed frames {
+  statusCode: 400
+}
+Error: The requested resource isn't a valid image.
+    at ignore-listed frames {
+  statusCode: 400
+}
+Error: The requested resource isn't a valid image.
+    at ignore-listed frames {
+  statusCode: 400
+}
+Error: The requested resource isn't a valid image.
+    at ignore-listed frames {
+  statusCode: 400
+}
+ GET /features/tarot 200 in 403ms (compile: 326ms, render: 76ms)
+ GET /manifest.webmanifest 200 in 29ms (compile: 14ms, render: 15ms)
+ GET /features/tarot/card-of-the-day 200 in 1303ms (compile: 1203ms, render: 100ms)
+[astro-debug] 2026-03-19T09:07:33.419Z INFO api.dashboard.features.tarot.GET request.start traceId=c0c004f4-92bd-4d02-a4b1-dec1f1da40dc requestId=4211f88f-232b-42ed-98d5-c21ce20987e6 {"method":"GET","pathname":"/api/dashboard/features/tarot","origin":"hooks.use-tarot.deck"}
+[astro-debug] 2026-03-19T09:07:33.420Z INFO astroai.tarot.service getDeck.start traceId=c0c004f4-92bd-4d02-a4b1-dec1f1da40dc requestId=4211f88f-232b-42ed-98d5-c21ce20987e6
+ GET /manifest.webmanifest 200 in 32ms (compile: 22ms, render: 10ms)
+[astro-debug] 2026-03-19T09:07:33.879Z INFO astroai.tarot.service getDeck.success traceId=c0c004f4-92bd-4d02-a4b1-dec1f1da40dc requestId=4211f88f-232b-42ed-98d5-c21ce20987e6 durationMs=459 outcome=success {"durationMs":459,"outcome":"success","count":78}
+[astro-debug] 2026-03-19T09:07:33.880Z INFO api.dashboard.features.tarot.GET request.end traceId=c0c004f4-92bd-4d02-a4b1-dec1f1da40dc requestId=4211f88f-232b-42ed-98d5-c21ce20987e6 durationMs=461 outcome=success {"status":200,"durationMs":461,"outcome":"success"}
+ GET /api/dashboard/features/tarot 200 in 480ms (compile: 5ms, render: 475ms)
+ GET /compatibility 200 in 2.3s (compile: 2.1s, render: 135ms)
+ GET /manifest.webmanifest 200 in 98ms (compile: 52ms, render: 46ms)
+[astro-debug] 2026-03-19T09:08:20.632Z INFO api.astro.compatibility.GET request.start traceId=fa583613-bf1a-45c6-92f5-8191a2a62e10 requestId=14a0289a-d716-49d1-865e-2eb2f11bc9a4 {"method":"GET","pathname":"/api/astro/compatibility","origin":"hooks.use-compatibility.pair"}
+[astro-debug] 2026-03-19T09:08:20.634Z INFO api.astro.compatibility request.validated traceId=fa583613-bf1a-45c6-92f5-8191a2a62e10 requestId=14a0289a-d716-49d1-865e-2eb2f11bc9a4 {"signA":"scorpio","signB":"cancer","systemType":"western"}
+[astro-debug] 2026-03-19T09:08:20.635Z INFO astroai.compatibility.service getCompatibility.start traceId=fa583613-bf1a-45c6-92f5-8191a2a62e10 requestId=14a0289a-d716-49d1-865e-2eb2f11bc9a4 {"systemType":"western","signA":"scorpio","signB":"cancer"}
+✓ Finished filesystem cache database compaction in 10.4s
+[astro-debug] 2026-03-19T09:08:21.367Z INFO astroai.compatibility.cache-repository getFresh.complete traceId=fa583613-bf1a-45c6-92f5-8191a2a62e10 requestId=14a0289a-d716-49d1-865e-2eb2f11bc9a4 durationMs=731 outcome=miss {"durationMs":731,"outcome":"miss","signA":"scorpio","signB":"cancer","systemType":"western","sourceProvider":null}
+[astro-debug] 2026-03-19T09:08:21.368Z INFO astroai.compatibility.cache cache.miss.fresh traceId=fa583613-bf1a-45c6-92f5-8191a2a62e10 requestId=14a0289a-d716-49d1-865e-2eb2f11bc9a4 durationMs=733 outcome=miss {"durationMs":733,"outcome":"miss","query":{"systemType":"western","signA":"scorpio","signB":"cancer"}}
+[astro-debug] 2026-03-19T09:08:21.369Z INFO astroai.provider.astrology-api-io fetchCompatibility.start traceId=fa583613-bf1a-45c6-92f5-8191a2a62e10 requestId=14a0289a-d716-49d1-865e-2eb2f11bc9a4 {"systemType":"western","signA":"scorpio","signB":"cancer"}
+[astro-debug] 2026-03-19T09:08:21.369Z INFO integrations.astrology-api-io.client request.start traceId=fa583613-bf1a-45c6-92f5-8191a2a62e10 requestId=14a0289a-d716-49d1-865e-2eb2f11bc9a4 {"method":"POST","path":"/api/v3/analysis/compatibility-score","featureKey":"compatibility.score","bodyKeys":["subject1","subject2","options","report_options"]}
+[astro-debug] 2026-03-19T09:08:23.783Z INFO integrations.astrology-api-io.client request.success traceId=fa583613-bf1a-45c6-92f5-8191a2a62e10 requestId=14a0289a-d716-49d1-865e-2eb2f11bc9a4 durationMs=2414 outcome=success {"durationMs":2414,"outcome":"success","method":"POST","path":"/api/v3/analysis/compatibility-score","featureKey":"compatibility.score","status":200,"remainingQuota":6961}
+[astro-debug] 2026-03-19T09:08:23.785Z INFO astroai.provider.astrology-api-io fetchCompatibility.success traceId=fa583613-bf1a-45c6-92f5-8191a2a62e10 requestId=14a0289a-d716-49d1-865e-2eb2f11bc9a4 durationMs=2416 outcome=success {"durationMs":2416,"outcome":"success","overall":16,"strengths":2,"challenges":2}
+[astro-debug] 2026-03-19T09:08:23.786Z INFO astroai.compatibility.cache provider.fetch.success traceId=fa583613-bf1a-45c6-92f5-8191a2a62e10 requestId=14a0289a-d716-49d1-865e-2eb2f11bc9a4 durationMs=2418 outcome=success {"durationMs":2418,"outcome":"success","sourceProvider":"astrology_api_io","ttlSeconds":2592000}
+[astro-debug] 2026-03-19T09:08:24.151Z ERROR astroai.compatibility.cache provider.fetch.error traceId=fa583613-bf1a-45c6-92f5-8191a2a62e10 requestId=14a0289a-d716-49d1-865e-2eb2f11bc9a4 outcome=error {"outcome":"error","error":{"name":"Error","message":"Failed saving compatibility_facts: new row for relation \"compatibility_facts\" violates check constraint \"compatibility_facts_sign_order_chk\"","stack":"Error: Failed saving compatibility_facts: new row for relation \"compatibility_facts\" violates check constraint \"compatibility_facts_sign_order_chk\"\n    at SupabaseCompatibilityCacheRepository.save (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:1570:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async resolveCacheFirst (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:1132:9)\n    at async CompatibilityService.getCompatibility (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:1412:26)\n    at async handler (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__f0135280._.js:3277:34)"}}
+[astro-debug] 2026-03-19T09:08:24.486Z INFO astroai.compatibility.cache-repository getStale.complete traceId=fa583613-bf1a-45c6-92f5-8191a2a62e10 requestId=14a0289a-d716-49d1-865e-2eb2f11bc9a4 durationMs=335 outcome=miss {"durationMs":335,"outcome":"miss","signA":"scorpio","signB":"cancer","systemType":"western","sourceProvider":null}
+[astro-debug] 2026-03-19T09:08:24.486Z ERROR astroai.compatibility.cache cache.miss.stale traceId=fa583613-bf1a-45c6-92f5-8191a2a62e10 requestId=14a0289a-d716-49d1-865e-2eb2f11bc9a4 durationMs=335 outcome=miss {"durationMs":335,"outcome":"miss","query":{"systemType":"western","signA":"scorpio","signB":"cancer"},"error":{"name":"Error","message":"Failed saving compatibility_facts: new row for relation \"compatibility_facts\" violates check constraint \"compatibility_facts_sign_order_chk\"","stack":"Error: Failed saving compatibility_facts: new row for relation \"compatibility_facts\" violates check constraint \"compatibility_facts_sign_order_chk\"\n    at SupabaseCompatibilityCacheRepository.save (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:1570:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async resolveCacheFirst (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:1132:9)\n    at async CompatibilityService.getCompatibility (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:1412:26)\n    at async handler (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__f0135280._.js:3277:34)"}}
+[astro-debug] 2026-03-19T09:08:24.487Z ERROR api.astro.compatibility request.error traceId=fa583613-bf1a-45c6-92f5-8191a2a62e10 requestId=14a0289a-d716-49d1-865e-2eb2f11bc9a4 {"error":{"name":"Error","message":"Failed saving compatibility_facts: new row for relation \"compatibility_facts\" violates check constraint \"compatibility_facts_sign_order_chk\"","stack":"Error: Failed saving compatibility_facts: new row for relation \"compatibility_facts\" violates check constraint \"compatibility_facts_sign_order_chk\"\n    at SupabaseCompatibilityCacheRepository.save (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:1570:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async resolveCacheFirst (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:1132:9)\n    at async CompatibilityService.getCompatibility (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__80e2ee8e._.js:1412:26)\n    at async handler (C:\\Purple Roses Technology\\SaaS Projects\\Astro-AI\\astro-ai-repo\\.next\\dev\\server\\chunks\\[root-of-the-server]__f0135280._.js:3277:34)"}}
+[astro-debug] 2026-03-19T09:08:24.488Z INFO api.astro.compatibility.GET request.end traceId=fa583613-bf1a-45c6-92f5-8191a2a62e10 requestId=14a0289a-d716-49d1-865e-2eb2f11bc9a4 durationMs=3856 outcome=failure {"status":500,"durationMs":3856,"outcome":"failure"}
+ GET /api/astro/compatibility?signA=scorpio&signB=cancer 500 in 5.2s (compile: 1315ms, render: 3.9s)
+○ Compiling /birth-chart ...
+ GET /birth-chart 200 in 5.0s (compile: 4.8s, render: 136ms)
+ GET /manifest.webmanifest 200 in 111ms (compile: 79ms, render: 31ms)
+○ Compiling /features/story ...
+ GET /manifest.webmanifest 200 in 140ms (compile: 13ms, render: 126ms)
+ GET /features/story 200 in 5.7s (compile: 4.2s, render: 1530ms)
+[astro-debug] 2026-03-19T09:08:47.821Z INFO api.dashboard.features.stories.GET request.start traceId=a1cfe9b1-311d-482e-a8f0-1ee43d376dc3 requestId=6b6665ed-babf-4dfa-b9c3-beda235615d2 {"method":"GET","pathname":"/api/dashboard/features/stories","origin":"hooks.use-stories.categories"}
+[astro-debug] 2026-03-19T09:08:47.828Z INFO astroai.stories.service listCategories.start traceId=a1cfe9b1-311d-482e-a8f0-1ee43d376dc3 requestId=6b6665ed-babf-4dfa-b9c3-beda235615d2
+[astro-debug] 2026-03-19T09:08:48.342Z INFO astroai.stories.service listCategories.success traceId=a1cfe9b1-311d-482e-a8f0-1ee43d376dc3 requestId=6b6665ed-babf-4dfa-b9c3-beda235615d2 durationMs=514 outcome=success {"durationMs":514,"outcome":"success","count":16}
+[astro-debug] 2026-03-19T09:08:48.343Z INFO api.dashboard.features.stories.GET request.end traceId=a1cfe9b1-311d-482e-a8f0-1ee43d376dc3 requestId=6b6665ed-babf-4dfa-b9c3-beda235615d2 durationMs=522 outcome=success {"status":200,"durationMs":522,"outcome":"success"}
+ GET /api/dashboard/features/stories 200 in 580ms (compile: 50ms, render: 530ms)
+ GET /moon/moon-rituals.webp 404 in 174ms (compile: 20ms, render: 154ms)
+⨯ The requested resource isn't a valid image for /moon/moon-rituals.webp received null
+ GET /features/magic-ball.png 404 in 285ms (compile: 62ms, render: 223ms)
+⨯ The requested resource isn't a valid image for /features/magic-ball.png received null
+ GET /zodiac/capricorn.png 404 in 305ms (compile: 106ms, render: 199ms)
+⨯ The requested resource isn't a valid image for /zodiac/capricorn.png received null
+ GET /moon/full-moon.webp 404 in 385ms (compile: 103ms, render: 282ms)
+⨯ The requested resource isn't a valid image for /moon/full-moon.webp received null
+ GET /moon/moon-icon.png 404 in 348ms (compile: 129ms, render: 219ms)
+ GET /moon/moon-phase-bg.webp 404 in 347ms (compile: 156ms, render: 191ms)
+⨯ The requested resource isn't a valid image for /moon/moon-icon.png received null
+⨯ The requested resource isn't a valid image for /moon/moon-phase-bg.webp received null
+ GET /moon/new-moon.webp 404 in 289ms (compile: 156ms, render: 133ms)
+⨯ The requested resource isn't a valid image for /moon/new-moon.webp received null
+ GET /features/tarot-cards.webp 404 in 94ms (compile: 21ms, render: 73ms)
+Error: The requested resource isn't a valid image.
+    at ignore-listed frames {
+  statusCode: 400
+}
+⨯ The requested resource isn't a valid image for /features/tarot-cards.webp received null
+ GET /features/story/affirmations 200 in 3.2s (compile: 3.1s, render: 95ms)
+ GET /manifest.webmanifest 200 in 19ms (compile: 10ms, render: 9ms)
+[astro-debug] 2026-03-19T09:09:03.039Z INFO api.dashboard.features.stories.slug.GET request.start traceId=c3ee28bb-96d4-4a87-8f02-bebcc1d15f42 requestId=51ac2bed-6cd3-4f68-b83c-b109a739eb05 {"method":"GET","pathname":"/api/dashboard/features/stories/affirmations","origin":"hooks.use-stories.article"}
+[astro-debug] 2026-03-19T09:09:03.041Z INFO api.dashboard.features.stories.slug request.params traceId=c3ee28bb-96d4-4a87-8f02-bebcc1d15f42 requestId=51ac2bed-6cd3-4f68-b83c-b109a739eb05 {"slug":"affirmations"}
+[astro-debug] 2026-03-19T09:09:03.043Z INFO astroai.stories.service getArticle.start traceId=c3ee28bb-96d4-4a87-8f02-bebcc1d15f42 requestId=51ac2bed-6cd3-4f68-b83c-b109a739eb05 {"slug":"affirmations"}
+[astro-debug] 2026-03-19T09:09:04.211Z INFO astroai.stories.service getArticle.success traceId=c3ee28bb-96d4-4a87-8f02-bebcc1d15f42 requestId=51ac2bed-6cd3-4f68-b83c-b109a739eb05 durationMs=1168 outcome=success {"durationMs":1168,"outcome":"success","slug":"affirmations","sectionCount":3}
+[astro-debug] 2026-03-19T09:09:04.212Z INFO api.dashboard.features.stories.slug.GET request.end traceId=c3ee28bb-96d4-4a87-8f02-bebcc1d15f42 requestId=51ac2bed-6cd3-4f68-b83c-b109a739eb05 durationMs=1173 outcome=success {"status":200,"durationMs":1173,"outcome":"success"}
+ GET /api/dashboard/features/stories/affirmations 200 in 3.7s (compile: 2.5s, render: 1185ms)
+ GET /moon/moon-rituals.webp 404 in 113ms (compile: 23ms, render: 90ms)
+⨯ The requested resource isn't a valid image for /moon/moon-rituals.webp received null
+ GET /manifest.webmanifest 200 in 83ms (compile: 61ms, render: 21ms)
+ GET /features/palm-reading 200 in 3.6s (compile: 2.8s, render: 735ms)
+○ Compiling /settings ...
+ GET /manifest.webmanifest 200 in 80ms (compile: 23ms, render: 57ms)
+ GET /settings 200 in 6.2s (compile: 3.8s, render: 2.4s)
+[astro-debug] 2026-03-19T09:10:09.088Z INFO api.dashboard.features.reports.GET request.start traceId=7b673eb8-4eb5-4fe6-8fde-a619e9ed8a51 requestId=11bf1e41-47dc-499a-b63f-40358e54aeab {"method":"GET","pathname":"/api/dashboard/features/reports","origin":"hooks.use-reports.products"}
+[astro-debug] 2026-03-19T09:10:09.089Z INFO astroai.reports.service listProducts.start traceId=7b673eb8-4eb5-4fe6-8fde-a619e9ed8a51 requestId=11bf1e41-47dc-499a-b63f-40358e54aeab
+[astro-debug] 2026-03-19T09:10:09.434Z INFO astroai.reports.service listProducts.success traceId=7b673eb8-4eb5-4fe6-8fde-a619e9ed8a51 requestId=11bf1e41-47dc-499a-b63f-40358e54aeab durationMs=345 outcome=success {"durationMs":345,"outcome":"success","count":6}
+[astro-debug] 2026-03-19T09:10:09.436Z INFO api.dashboard.features.reports.GET request.end traceId=7b673eb8-4eb5-4fe6-8fde-a619e9ed8a51 requestId=11bf1e41-47dc-499a-b63f-40358e54aeab durationMs=348 outcome=success {"status":200,"durationMs":348,"outcome":"success"}
+ GET /api/dashboard/features/reports 200 in 415ms (compile: 52ms, render: 364ms)
+[astro-debug] 2026-03-19T09:10:27.739Z INFO api.auth.logout.POST request.start traceId=a1572ed6-8f0e-47fa-a44d-79c899d23c07 requestId=4a26ae4e-41eb-422d-82ef-e9b2da755cfc {"method":"POST","pathname":"/api/auth/logout","origin":"components.settings.logout"}
+[astro-debug] 2026-03-19T09:10:28.517Z INFO api.auth.logout.POST request.end traceId=a1572ed6-8f0e-47fa-a44d-79c899d23c07 requestId=4a26ae4e-41eb-422d-82ef-e9b2da755cfc durationMs=778 outcome=success {"status":200,"durationMs":778,"outcome":"success"}
+ POST /api/auth/logout 200 in 1888ms (compile: 1080ms, render: 808ms)
+ GET /auth/login 200 in 129ms (compile: 23ms, render: 106ms)
+ GET /auth/login 200 in 365ms (compile: 40ms, render: 325ms)
+ GET /manifest.webmanifest 200 in 20ms (compile: 9ms, render: 11ms)

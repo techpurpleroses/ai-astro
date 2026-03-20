@@ -1,4 +1,5 @@
 import { PasswordUpdateForm } from "@/components/auth/password-update-form";
+import { normalizeNextPath } from "@/lib/auth/flow";
 
 interface ResetPasswordPageProps {
   searchParams: Promise<{
@@ -7,15 +8,9 @@ interface ResetPasswordPageProps {
   }>;
 }
 
-function normalizeNext(next: string | undefined): string {
-  if (!next || !next.startsWith("/")) return "/today";
-  if (next.startsWith("/auth")) return "/today";
-  return next;
-}
-
 export default async function ResetPasswordPage({ searchParams }: ResetPasswordPageProps) {
   const params = await searchParams;
-  const nextPath = normalizeNext(params.next);
+  const nextPath = normalizeNextPath(params.next);
   const errorMessage = params.error ?? null;
 
   return <PasswordUpdateForm mode="reset" nextPath={nextPath} initialError={errorMessage} />;

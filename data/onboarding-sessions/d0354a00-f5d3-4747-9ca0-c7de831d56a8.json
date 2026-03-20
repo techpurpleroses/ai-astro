@@ -1,0 +1,114 @@
+{
+  "sessionId": "d0354a00-f5d3-4747-9ca0-c7de831d56a8",
+  "category": "moon",
+  "createdAt": "2026-03-14T06:32:47.948Z",
+  "updatedAt": "2026-03-14T07:11:00.696Z",
+  "status": "completed",
+  "currentStep": 13,
+  "source": "public-onboarding",
+  "answers": {
+    "gender": "male",
+    "birth-date": "5222-12-05",
+    "birth-time-known": "approx",
+    "birth-time": "00:55",
+    "birth-place": "Ankleshwar",
+    "life-status": "new-love",
+    "element": "earth",
+    "focus": "love",
+    "photo-upload": {
+      "fileName": "always-fascinated-by-what-different-readers-notice-in-palms-v0-35jvllg0fimg1.jpg",
+      "fileSize": 1481322,
+      "mimeType": "image/jpeg"
+    }
+  },
+  "events": [
+    {
+      "id": "fe32a2d1-7b80-4068-bdd7-f0509d835330",
+      "createdAt": "2026-03-14T06:32:47.948Z",
+      "type": "session_created"
+    },
+    {
+      "id": "4c25bbfe-b97c-41a8-a32c-880b0c961751",
+      "createdAt": "2026-03-14T07:10:00.478Z",
+      "type": "step_advanced",
+      "stepId": "welcome"
+    },
+    {
+      "id": "eb150dba-729a-46dc-80f0-52d5a0e6dfef",
+      "createdAt": "2026-03-14T07:10:02.767Z",
+      "type": "answer_saved",
+      "stepId": "gender"
+    },
+    {
+      "id": "d8750e72-fa15-4763-99d9-4852321fd2ec",
+      "createdAt": "2026-03-14T07:10:10.235Z",
+      "type": "answer_saved",
+      "stepId": "birth-date"
+    },
+    {
+      "id": "d9a852d3-2d31-472e-854d-e6f17d569aa8",
+      "createdAt": "2026-03-14T07:10:12.256Z",
+      "type": "answer_saved",
+      "stepId": "birth-time-known"
+    },
+    {
+      "id": "27a1d2a6-77ad-4dbd-86c2-81256f6eb9bb",
+      "createdAt": "2026-03-14T07:10:18.805Z",
+      "type": "answer_saved",
+      "stepId": "birth-time"
+    },
+    {
+      "id": "c605b183-6f1e-49e2-9e2c-2d32c72fb6cf",
+      "createdAt": "2026-03-14T07:10:37.939Z",
+      "type": "answer_saved",
+      "stepId": "birth-place"
+    },
+    {
+      "id": "c4523bb1-9712-4ca1-b037-d840a8e97198",
+      "createdAt": "2026-03-14T07:10:40.606Z",
+      "type": "answer_saved",
+      "stepId": "life-status"
+    },
+    {
+      "id": "4a6ab5e4-81b1-4a0c-ab10-c623843e2763",
+      "createdAt": "2026-03-14T07:10:42.940Z",
+      "type": "answer_saved",
+      "stepId": "element"
+    },
+    {
+      "id": "5b08795f-20a1-4845-a258-fe6541bef53c",
+      "createdAt": "2026-03-14T07:10:46.164Z",
+      "type": "answer_saved",
+      "stepId": "focus"
+    },
+    {
+      "id": "6080a407-0b7c-4a3d-8d8f-37747a57b8c0",
+      "createdAt": "2026-03-14T07:10:48.048Z",
+      "type": "step_advanced",
+      "stepId": "analysis-1"
+    },
+    {
+      "id": "69204eb8-2906-454c-82c2-82cc78854f6d",
+      "createdAt": "2026-03-14T07:10:54.894Z",
+      "type": "answer_saved",
+      "stepId": "photo-upload"
+    },
+    {
+      "id": "4e01dc97-16a7-43ed-bbf9-0cccd061d6cf",
+      "createdAt": "2026-03-14T07:10:57.169Z",
+      "type": "step_advanced",
+      "stepId": "analysis-2"
+    },
+    {
+      "id": "8225a619-a946-4891-b01d-d3f76807e4ce",
+      "createdAt": "2026-03-14T07:10:58.978Z",
+      "type": "step_advanced",
+      "stepId": "teaser"
+    },
+    {
+      "id": "ce13cba4-8653-46f7-a617-93747858017b",
+      "createdAt": "2026-03-14T07:11:00.696Z",
+      "type": "session_completed"
+    }
+  ]
+}

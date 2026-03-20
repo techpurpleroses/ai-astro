@@ -3,10 +3,12 @@
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, ChevronRight } from 'lucide-react'
-import { STORY_CATEGORIES } from '@/data/stories'
+import { useStoryCategories } from '@/hooks/use-stories'
 
 export function StoryHubClient() {
   const router = useRouter()
+  const { data: storiesData } = useStoryCategories()
+  const categories = storiesData ?? []
 
   return (
     <div className="flex flex-col">
@@ -31,7 +33,7 @@ export function StoryHubClient() {
       </div>
 
       <div className="px-4 pt-4 pb-6 space-y-3">
-        {STORY_CATEGORIES.map((category) => (
+        {categories.map((category) => (
           <button
             key={category.id}
             onClick={() => router.push(`/features/story/${category.id}`)}

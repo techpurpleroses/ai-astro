@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { Telescope, HelpCircle, Crown, Settings } from 'lucide-react'
 import { useBirthChart } from '@/hooks/use-birth-chart'
+import { BirthDataPrompt } from '@/components/shared/birth-data-prompt'
+import { FeatureGate } from '@/components/billing/feature-gate'
 import { ChartWheelSVG } from './chart-wheel-svg'
 import { BigThreeCard } from './big-three-card'
 import { StellarCompositionCard } from './stellar-composition'
@@ -98,12 +100,6 @@ function ChartView() {
       </FadeIn>
 
       <FadeIn delay={0.06}>
-        <div className="px-4">
-          <PlanetTable planets={data.planets} />
-        </div>
-      </FadeIn>
-
-      <FadeIn delay={0.12}>
         <div className="px-4 space-y-3">
           <div>
             <h2 className="font-display text-sm font-bold text-text-primary">Your Core Personality</h2>
@@ -115,16 +111,23 @@ function ChartView() {
         </div>
       </FadeIn>
 
-      <FadeIn delay={0.18}>
-        <div className="px-4 space-y-3">
-          <div>
-            <h2 className="font-display text-sm font-bold text-text-primary">Your Stellar Composition</h2>
-            <p className="text-[10px] text-text-muted mt-0.5 leading-snug">
-              Personal and social planets make a unique layer to your multifaceted being
-            </p>
+      <FadeIn delay={0.12}>
+        <FeatureGate feature="birth_chart.full">
+          <div className="space-y-5">
+            <div className="px-4">
+              <PlanetTable planets={data.planets} />
+            </div>
+            <div className="px-4 space-y-3">
+              <div>
+                <h2 className="font-display text-sm font-bold text-text-primary">Your Stellar Composition</h2>
+                <p className="text-[10px] text-text-muted mt-0.5 leading-snug">
+                  Personal and social planets make a unique layer to your multifaceted being
+                </p>
+              </div>
+              <StellarCompositionCard planets={data.planets} />
+            </div>
           </div>
-          <StellarCompositionCard planets={data.planets} />
-        </div>
+        </FeatureGate>
       </FadeIn>
 
       <BottomSheet open={learnOpen} onClose={() => setLearnOpen(false)} title="Birth Chart Basics">
@@ -291,6 +294,7 @@ export function BirthChartClient() {
       </div>
 
       <div className="pt-3">
+        <BirthDataPrompt />
         <ViewTabs active={activeView} onChange={handleViewChange} />
       </div>
 
@@ -302,7 +306,11 @@ export function BirthChartClient() {
           transition={{ duration: 0.22, ease: 'easeOut' }}
         >
           {activeView === 'chart' && <ChartView />}
-          {activeView === 'transits' && <TransitsView />}
+          {activeView === 'transits' && (
+            <FeatureGate feature="birth_chart.full">
+              <TransitsView />
+            </FeatureGate>
+          )}
         </motion.div>
       </AnimatePresence>
     </div>

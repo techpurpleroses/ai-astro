@@ -1,0 +1,672 @@
+{
+  "sessionId": "44a9fa70-c4c9-4355-b105-338bc2552da9",
+  "category": "sketch",
+  "createdAt": "2026-03-14T09:47:21.278Z",
+  "updatedAt": "2026-03-14T11:49:53.095Z",
+  "status": "active",
+  "currentStep": 18,
+  "source": "public-onboarding",
+  "answers": {
+    "welcome": "male",
+    "birth-date": "November 1, 1994",
+    "birth-time": "07:15 AM",
+    "birth-place": {
+      "label": "Salangpur, India",
+      "fullName": "Salangpur, Barwala Taluka, Botad, Gujarat, 382450, India",
+      "city": "Salangpur",
+      "region": "Gujarat",
+      "country": "India",
+      "countryCode": "IN",
+      "latitude": 22.1594764,
+      "longitude": 71.7692224,
+      "provider": "nominatim",
+      "providerId": "nominatim:229082718"
+    },
+    "computedChart": {
+      "sunSign": "scorpio",
+      "moonSign": "libra",
+      "risingSign": "scorpio",
+      "ascendant": 230.5,
+      "midheaven": 147.9,
+      "lifePath": 8,
+      "element": "water",
+      "modality": "fixed",
+      "dominantElement": "water",
+      "planets": [
+        {
+          "planet": "sun",
+          "sign": "scorpio",
+          "degree": 8.4,
+          "longitude": 218.4,
+          "house": 1,
+          "retrograde": false
+        },
+        {
+          "planet": "moon",
+          "sign": "libra",
+          "degree": 3.9,
+          "longitude": 183.9,
+          "house": 12,
+          "retrograde": false
+        },
+        {
+          "planet": "mercury",
+          "sign": "libra",
+          "degree": 20.8,
+          "longitude": 200.8,
+          "house": 12,
+          "retrograde": false
+        },
+        {
+          "planet": "venus",
+          "sign": "scorpio",
+          "degree": 12.3,
+          "longitude": 222.3,
+          "house": 1,
+          "retrograde": false
+        },
+        {
+          "planet": "mars",
+          "sign": "leo",
+          "degree": 13.7,
+          "longitude": 133.7,
+          "house": 10,
+          "retrograde": false
+        },
+        {
+          "planet": "jupiter",
+          "sign": "scorpio",
+          "degree": 21.1,
+          "longitude": 231.1,
+          "house": 1,
+          "retrograde": false
+        },
+        {
+          "planet": "saturn",
+          "sign": "pisces",
+          "degree": 5.6,
+          "longitude": 335.6,
+          "house": 5,
+          "retrograde": false
+        },
+        {
+          "planet": "uranus",
+          "sign": "capricorn",
+          "degree": 22.8,
+          "longitude": 292.8,
+          "house": 3,
+          "retrograde": false
+        },
+        {
+          "planet": "neptune",
+          "sign": "capricorn",
+          "degree": 20.8,
+          "longitude": 290.8,
+          "house": 3,
+          "retrograde": false
+        }
+      ],
+      "houses": [
+        {
+          "house": 1,
+          "sign": "scorpio",
+          "longitude": 210
+        },
+        {
+          "house": 2,
+          "sign": "sagittarius",
+          "longitude": 240
+        },
+        {
+          "house": 3,
+          "sign": "capricorn",
+          "longitude": 270
+        },
+        {
+          "house": 4,
+          "sign": "aquarius",
+          "longitude": 300
+        },
+        {
+          "house": 5,
+          "sign": "pisces",
+          "longitude": 330
+        },
+        {
+          "house": 6,
+          "sign": "aries",
+          "longitude": 0
+        },
+        {
+          "house": 7,
+          "sign": "taurus",
+          "longitude": 30
+        },
+        {
+          "house": 8,
+          "sign": "gemini",
+          "longitude": 60
+        },
+        {
+          "house": 9,
+          "sign": "cancer",
+          "longitude": 90
+        },
+        {
+          "house": 10,
+          "sign": "leo",
+          "longitude": 120
+        },
+        {
+          "house": 11,
+          "sign": "virgo",
+          "longitude": 150
+        },
+        {
+          "house": 12,
+          "sign": "libra",
+          "longitude": 180
+        }
+      ],
+      "aspects": [
+        {
+          "planet1": "sun",
+          "planet2": "venus",
+          "type": "conjunction",
+          "orb": 3.9
+        },
+        {
+          "planet1": "sun",
+          "planet2": "mars",
+          "type": "square",
+          "orb": 5.3
+        },
+        {
+          "planet1": "sun",
+          "planet2": "saturn",
+          "type": "trine",
+          "orb": 2.8
+        },
+        {
+          "planet1": "mercury",
+          "planet2": "uranus",
+          "type": "square",
+          "orb": 2
+        },
+        {
+          "planet1": "mercury",
+          "planet2": "neptune",
+          "type": "square",
+          "orb": 0
+        },
+        {
+          "planet1": "venus",
+          "planet2": "mars",
+          "type": "square",
+          "orb": 1.4
+        },
+        {
+          "planet1": "venus",
+          "planet2": "saturn",
+          "type": "trine",
+          "orb": 6.7
+        },
+        {
+          "planet1": "jupiter",
+          "planet2": "uranus",
+          "type": "sextile",
+          "orb": 1.7
+        },
+        {
+          "planet1": "jupiter",
+          "planet2": "neptune",
+          "type": "sextile",
+          "orb": 0.3
+        },
+        {
+          "planet1": "uranus",
+          "planet2": "neptune",
+          "type": "conjunction",
+          "orb": 2
+        }
+      ]
+    },
+    "relationship-status": "just-broke-up",
+    "attracted-to": "male",
+    "age-group": "20-25",
+    "appearance": "white",
+    "biggest-struggle": "past",
+    "connection-type": "friendship",
+    "energy-type": "similar",
+    "love-signal": "gestures",
+    "relationship-feel": "passionate",
+    "love-worry": "opening-up",
+    "future-together": "growing",
+    "palm-photo": {
+      "fileName": "360_F_264200898_C3ro16nVxeO4Lkje6RTt6wLm8N65nAQq.jpg",
+      "fileSize": 26885,
+      "mimeType": "image/jpeg"
+    }
+  },
+  "events": [
+    {
+      "id": "21d935a1-1c3b-45e9-86f4-9b906c5d2f83",
+      "createdAt": "2026-03-14T09:47:21.278Z",
+      "type": "session_created"
+    },
+    {
+      "id": "6b033041-ecaa-4e46-9cb9-cbea34449387",
+      "createdAt": "2026-03-14T10:51:25.104Z",
+      "type": "answer_saved",
+      "stepId": "welcome"
+    },
+    {
+      "id": "15cdeed6-881a-4185-8059-89208562c3d4",
+      "createdAt": "2026-03-14T10:51:30.300Z",
+      "type": "answer_saved",
+      "stepId": "birth-date"
+    },
+    {
+      "id": "4b0da5be-87de-4333-b7de-fe2bb3b9b58b",
+      "createdAt": "2026-03-14T10:51:33.663Z",
+      "type": "answer_saved",
+      "stepId": "birth-time"
+    },
+    {
+      "id": "5ca2abb5-9096-4b0a-b6f6-bd027096ea86",
+      "createdAt": "2026-03-14T10:57:01.374Z",
+      "type": "answer_saved",
+      "stepId": "birth-place"
+    },
+    {
+      "id": "34c4d37e-5477-4e81-95e4-695f1c850b6c",
+      "createdAt": "2026-03-14T10:57:01.383Z",
+      "type": "answer_saved",
+      "stepId": "computedChart"
+    },
+    {
+      "id": "34a93b00-f4f0-473d-9146-76f40eeb4aa3",
+      "createdAt": "2026-03-14T10:57:06.135Z",
+      "type": "step_advanced",
+      "stepId": "social-proof"
+    },
+    {
+      "id": "3a679ed9-0b20-4ae7-a196-c9c83cce85a2",
+      "createdAt": "2026-03-14T10:57:11.326Z",
+      "type": "answer_saved",
+      "stepId": "relationship-status"
+    },
+    {
+      "id": "74325744-79e0-4ac2-a4d1-2699b0a4346c",
+      "createdAt": "2026-03-14T10:57:14.128Z",
+      "type": "answer_saved",
+      "stepId": "attracted-to"
+    },
+    {
+      "id": "19c73cd3-27a9-4dcf-8fe6-544e33cce7ae",
+      "createdAt": "2026-03-14T10:57:16.770Z",
+      "type": "answer_saved",
+      "stepId": "age-group"
+    },
+    {
+      "id": "b11dd867-dd82-4a3d-8976-bf31bfa6db03",
+      "createdAt": "2026-03-14T10:57:20.722Z",
+      "type": "answer_saved",
+      "stepId": "appearance"
+    },
+    {
+      "id": "9c781f40-e171-4ea8-95c0-97339176e86c",
+      "createdAt": "2026-03-14T10:57:29.390Z",
+      "type": "step_advanced",
+      "stepId": "forecast-1"
+    },
+    {
+      "id": "b16d60e9-722d-4b50-ba56-9b1c38650cfc",
+      "createdAt": "2026-03-14T10:57:33.018Z",
+      "type": "answer_saved",
+      "stepId": "biggest-struggle"
+    },
+    {
+      "id": "83829431-df75-4132-aae5-84e9c8f5f420",
+      "createdAt": "2026-03-14T10:57:36.103Z",
+      "type": "answer_saved",
+      "stepId": "connection-type"
+    },
+    {
+      "id": "d044ff70-d00a-4e9f-ab65-117974f6ef4e",
+      "createdAt": "2026-03-14T10:57:42.868Z",
+      "type": "answer_saved",
+      "stepId": "energy-type"
+    },
+    {
+      "id": "a970915f-1c4c-46f3-b0d5-576d9a4d437b",
+      "createdAt": "2026-03-14T10:57:46.453Z",
+      "type": "answer_saved",
+      "stepId": "love-signal"
+    },
+    {
+      "id": "e8ee1d7a-ec17-4e83-b3ba-8ae8797df29c",
+      "createdAt": "2026-03-14T10:57:48.810Z",
+      "type": "answer_saved",
+      "stepId": "relationship-feel"
+    },
+    {
+      "id": "28053799-aa1f-4c49-a7aa-e16a482d4688",
+      "createdAt": "2026-03-14T10:57:52.237Z",
+      "type": "answer_saved",
+      "stepId": "love-worry"
+    },
+    {
+      "id": "f28c74a2-646f-42a2-b4db-3b337dcabd71",
+      "createdAt": "2026-03-14T10:57:54.873Z",
+      "type": "answer_saved",
+      "stepId": "future-together"
+    },
+    {
+      "id": "f81648bb-c217-4566-a4da-a64dc94c1c9a",
+      "createdAt": "2026-03-14T10:58:01.335Z",
+      "type": "step_advanced",
+      "stepId": "forecast-2"
+    },
+    {
+      "id": "4f5ae5e3-22b6-4ad2-b183-5522553de093",
+      "createdAt": "2026-03-14T10:58:13.064Z",
+      "type": "answer_saved",
+      "stepId": "palm-photo"
+    },
+    {
+      "id": "5c96e1c1-0b6b-4d2b-aaa1-1ea57f7b8be1",
+      "createdAt": "2026-03-14T10:58:21.022Z",
+      "type": "step_advanced",
+      "stepId": "forecast-3"
+    },
+    {
+      "id": "90219265-f66f-4052-8eeb-0f0075f7ca4d",
+      "createdAt": "2026-03-14T10:58:27.319Z",
+      "type": "step_back",
+      "stepId": "complete"
+    },
+    {
+      "id": "aa8e1f70-dfd1-44d8-b7d5-16044f2f0084",
+      "createdAt": "2026-03-14T10:58:27.776Z",
+      "type": "step_back",
+      "stepId": "forecast-3"
+    },
+    {
+      "id": "6c0a049d-ab17-4855-be23-deb02f17ae8d",
+      "createdAt": "2026-03-14T10:58:28.373Z",
+      "type": "step_back",
+      "stepId": "palm-photo"
+    },
+    {
+      "id": "d7d6ad35-e160-4bf5-af48-64d1ccd3cb44",
+      "createdAt": "2026-03-14T10:58:28.942Z",
+      "type": "step_back",
+      "stepId": "forecast-2"
+    },
+    {
+      "id": "55c992b3-c02c-444c-945f-87246aa2d347",
+      "createdAt": "2026-03-14T10:58:29.217Z",
+      "type": "step_back",
+      "stepId": "future-together"
+    },
+    {
+      "id": "c9d27f56-6848-47e0-837c-c1edacdc4e11",
+      "createdAt": "2026-03-14T10:58:29.603Z",
+      "type": "step_back",
+      "stepId": "love-worry"
+    },
+    {
+      "id": "bef57e61-9e24-47ae-85d6-3eaad8737b25",
+      "createdAt": "2026-03-14T10:58:29.896Z",
+      "type": "step_back",
+      "stepId": "relationship-feel"
+    },
+    {
+      "id": "0fd61512-71f2-444c-9e91-f8becad6b973",
+      "createdAt": "2026-03-14T10:58:30.337Z",
+      "type": "step_back",
+      "stepId": "love-signal"
+    },
+    {
+      "id": "b93a776e-3518-496c-8d7d-f57df42adbe0",
+      "createdAt": "2026-03-14T10:58:30.944Z",
+      "type": "step_back",
+      "stepId": "energy-type"
+    },
+    {
+      "id": "6ef4e445-6de8-4d9a-b644-b72859ef637f",
+      "createdAt": "2026-03-14T10:58:31.347Z",
+      "type": "step_back",
+      "stepId": "connection-type"
+    },
+    {
+      "id": "feabfa35-a4f1-4e99-9c57-d8c4dcb26400",
+      "createdAt": "2026-03-14T10:58:31.733Z",
+      "type": "step_back",
+      "stepId": "biggest-struggle"
+    },
+    {
+      "id": "86ec5c1e-a322-4dde-8012-5547cb7b3f4e",
+      "createdAt": "2026-03-14T10:58:31.941Z",
+      "type": "step_back",
+      "stepId": "forecast-1"
+    },
+    {
+      "id": "6c177cc1-9da3-4537-b7d5-48220c9e4972",
+      "createdAt": "2026-03-14T10:58:32.138Z",
+      "type": "step_back",
+      "stepId": "appearance"
+    },
+    {
+      "id": "d073fabc-b105-4f53-bc7a-f1bce2e769e1",
+      "createdAt": "2026-03-14T10:58:32.720Z",
+      "type": "step_back",
+      "stepId": "age-group"
+    },
+    {
+      "id": "9418557c-8e98-4f31-ac54-9cb6f59ad77d",
+      "createdAt": "2026-03-14T10:58:32.982Z",
+      "type": "step_back",
+      "stepId": "attracted-to"
+    },
+    {
+      "id": "8c0ceb95-3646-491e-b3d0-55b385dad727",
+      "createdAt": "2026-03-14T10:58:33.452Z",
+      "type": "step_back",
+      "stepId": "relationship-status"
+    },
+    {
+      "id": "e7dea517-919b-41f5-a0b9-7ac700c4ffbe",
+      "createdAt": "2026-03-14T10:58:33.715Z",
+      "type": "step_back",
+      "stepId": "social-proof"
+    },
+    {
+      "id": "c1ec2df9-9eea-4866-9309-206fec10e564",
+      "createdAt": "2026-03-14T10:58:34.443Z",
+      "type": "step_back",
+      "stepId": "birth-place"
+    },
+    {
+      "id": "8f8c6d68-e9e2-4671-874c-42dee9e97b14",
+      "createdAt": "2026-03-14T10:58:35.913Z",
+      "type": "step_back",
+      "stepId": "birth-time"
+    },
+    {
+      "id": "9ca4fcee-2836-4b48-aec5-a49d1420fab1",
+      "createdAt": "2026-03-14T10:58:37.525Z",
+      "type": "step_back",
+      "stepId": "birth-date"
+    },
+    {
+      "id": "c3177f47-3505-4e5a-854c-fa5e36139dd4",
+      "createdAt": "2026-03-14T10:58:39.509Z",
+      "type": "answer_saved",
+      "stepId": "welcome"
+    },
+    {
+      "id": "36ea5f21-9c88-4d2a-9ec2-3a48e979a51b",
+      "createdAt": "2026-03-14T10:59:01.375Z",
+      "type": "answer_saved",
+      "stepId": "birth-date"
+    },
+    {
+      "id": "eb4a3ed1-da13-4fc2-aef9-788e869742d1",
+      "createdAt": "2026-03-14T10:59:19.958Z",
+      "type": "answer_saved",
+      "stepId": "birth-time"
+    },
+    {
+      "id": "69b91c30-a3a8-4c8c-a084-91ad5f66712b",
+      "createdAt": "2026-03-14T10:59:30.404Z",
+      "type": "answer_saved",
+      "stepId": "birth-place"
+    },
+    {
+      "id": "d405d2e2-2598-494a-954b-6e4820948442",
+      "createdAt": "2026-03-14T10:59:30.414Z",
+      "type": "answer_saved",
+      "stepId": "computedChart"
+    },
+    {
+      "id": "9ece6fd4-cc37-454d-a8d6-c2e6e5b26f7d",
+      "createdAt": "2026-03-14T10:59:46.742Z",
+      "type": "step_advanced",
+      "stepId": "social-proof"
+    },
+    {
+      "id": "89a6427b-915d-4e2c-a9b2-cb65beffefbf",
+      "createdAt": "2026-03-14T11:46:59.009Z",
+      "type": "answer_saved",
+      "stepId": "relationship-status"
+    },
+    {
+      "id": "961ba339-a58f-4026-9cef-124d9eade495",
+      "createdAt": "2026-03-14T11:47:04.660Z",
+      "type": "step_back",
+      "stepId": "attracted-to"
+    },
+    {
+      "id": "514f021a-3741-4a10-981f-7389f5396a91",
+      "createdAt": "2026-03-14T11:47:04.835Z",
+      "type": "step_back",
+      "stepId": "relationship-status"
+    },
+    {
+      "id": "fff299cb-27d1-4d2e-ac37-b017bf5d07fa",
+      "createdAt": "2026-03-14T11:47:04.966Z",
+      "type": "step_back",
+      "stepId": "social-proof"
+    },
+    {
+      "id": "6bd8583b-c08e-4626-abe4-8c403558c456",
+      "createdAt": "2026-03-14T11:47:05.128Z",
+      "type": "step_back",
+      "stepId": "birth-place"
+    },
+    {
+      "id": "eccfff05-ed12-46e3-9be2-515dd6400236",
+      "createdAt": "2026-03-14T11:48:42.282Z",
+      "type": "answer_saved",
+      "stepId": "birth-time"
+    },
+    {
+      "id": "fe772b2a-b99c-4592-92c4-9eb36f890b92",
+      "createdAt": "2026-03-14T11:48:47.347Z",
+      "type": "answer_saved",
+      "stepId": "birth-place"
+    },
+    {
+      "id": "9a839fee-7d0b-4b28-9e91-c74d6d31b474",
+      "createdAt": "2026-03-14T11:48:47.358Z",
+      "type": "answer_saved",
+      "stepId": "computedChart"
+    },
+    {
+      "id": "ea4553a5-c1d2-431c-925a-4dbb1991724b",
+      "createdAt": "2026-03-14T11:48:51.369Z",
+      "type": "step_advanced",
+      "stepId": "social-proof"
+    },
+    {
+      "id": "7d1e4996-ad24-4837-a2a5-51c22c389aa1",
+      "createdAt": "2026-03-14T11:48:57.375Z",
+      "type": "answer_saved",
+      "stepId": "relationship-status"
+    },
+    {
+      "id": "86192aa3-197b-4565-b8f9-1e03e1dbaacd",
+      "createdAt": "2026-03-14T11:49:00.045Z",
+      "type": "answer_saved",
+      "stepId": "attracted-to"
+    },
+    {
+      "id": "635af59b-9d04-4836-a2b6-baa492014fd1",
+      "createdAt": "2026-03-14T11:49:03.342Z",
+      "type": "answer_saved",
+      "stepId": "age-group"
+    },
+    {
+      "id": "179403bc-7867-4130-bf1f-dddf7b5ec142",
+      "createdAt": "2026-03-14T11:49:06.858Z",
+      "type": "answer_saved",
+      "stepId": "appearance"
+    },
+    {
+      "id": "7cca79f6-f111-42e6-8eb5-52e4014a0b4a",
+      "createdAt": "2026-03-14T11:49:16.276Z",
+      "type": "step_advanced",
+      "stepId": "forecast-1"
+    },
+    {
+      "id": "3d5d9f74-fc55-4032-9e33-7c95ce304a67",
+      "createdAt": "2026-03-14T11:49:20.898Z",
+      "type": "answer_saved",
+      "stepId": "biggest-struggle"
+    },
+    {
+      "id": "0c137a40-2ef6-4ec0-9de8-da483ac33a4a",
+      "createdAt": "2026-03-14T11:49:24.798Z",
+      "type": "answer_saved",
+      "stepId": "connection-type"
+    },
+    {
+      "id": "4ab7673f-c12f-4047-90d8-3fe853b567d9",
+      "createdAt": "2026-03-14T11:49:28.142Z",
+      "type": "answer_saved",
+      "stepId": "energy-type"
+    },
+    {
+      "id": "1ba3d340-9e05-4e11-9e6f-be54fb1af2d3",
+      "createdAt": "2026-03-14T11:49:30.682Z",
+      "type": "answer_saved",
+      "stepId": "love-signal"
+    },
+    {
+      "id": "43194534-f893-4c43-908a-1d17f1a46bda",
+      "createdAt": "2026-03-14T11:49:36.990Z",
+      "type": "answer_saved",
+      "stepId": "relationship-feel"
+    },
+    {
+      "id": "ee7c1686-5162-4ba7-b202-bc9b98d50236",
+      "createdAt": "2026-03-14T11:49:41.566Z",
+      "type": "answer_saved",
+      "stepId": "love-worry"
+    },
+    {
+      "id": "73ecc608-b858-4e5c-b641-39a9ba8eabd5",
+      "createdAt": "2026-03-14T11:49:47.540Z",
+      "type": "answer_saved",
+      "stepId": "future-together"
+    },
+    {
+      "id": "db0d095f-a8c1-4148-87ea-f44725a3f56b",
+      "createdAt": "2026-03-14T11:49:53.095Z",
+      "type": "step_advanced",
+      "stepId": "forecast-2"
+    }
+  ]
+}

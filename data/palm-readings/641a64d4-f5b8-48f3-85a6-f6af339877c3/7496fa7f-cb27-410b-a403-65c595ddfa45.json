@@ -1,0 +1,208 @@
+{
+  "scanId": "7496fa7f-cb27-410b-a403-65c595ddfa45",
+  "clientId": "641a64d4-f5b8-48f3-85a6-f6af339877c3",
+  "side": "left",
+  "createdAt": "2026-03-16T11:47:49.308Z",
+  "detect": {
+    "hasPalm": true,
+    "lines": {
+      "heart": [
+        [
+          0.5397,
+          0.5263
+        ],
+        [
+          0.5677,
+          0.5506
+        ],
+        [
+          0.6,
+          0.5719
+        ],
+        [
+          0.6376,
+          0.5906
+        ],
+        [
+          0.6769,
+          0.6063
+        ],
+        [
+          0.7153,
+          0.6188
+        ],
+        [
+          0.7555,
+          0.6281
+        ],
+        [
+          0.7983,
+          0.6344
+        ],
+        [
+          0.8376,
+          0.6381
+        ],
+        [
+          0.8769,
+          0.6419
+        ]
+      ],
+      "head": [
+        [
+          0.3956,
+          0.5588
+        ],
+        [
+          0.4253,
+          0.565
+        ],
+        [
+          0.4629,
+          0.57
+        ],
+        [
+          0.4996,
+          0.5813
+        ],
+        [
+          0.5371,
+          0.5981
+        ],
+        [
+          0.5747,
+          0.615
+        ],
+        [
+          0.6079,
+          0.635
+        ],
+        [
+          0.641,
+          0.6569
+        ],
+        [
+          0.6786,
+          0.6806
+        ],
+        [
+          0.7118,
+          0.7056
+        ]
+      ],
+      "life": [
+        [
+          0.3581,
+          0.5425
+        ],
+        [
+          0.393,
+          0.5588
+        ],
+        [
+          0.4288,
+          0.5806
+        ],
+        [
+          0.4611,
+          0.6119
+        ],
+        [
+          0.4891,
+          0.6481
+        ],
+        [
+          0.5092,
+          0.6856
+        ],
+        [
+          0.5258,
+          0.7262
+        ],
+        [
+          0.5371,
+          0.7669
+        ],
+        [
+          0.5432,
+          0.8075
+        ],
+        [
+          0.545,
+          0.85
+        ]
+      ],
+      "fate": []
+    },
+    "confidence": {
+      "heart": 0.572,
+      "head": 0.68,
+      "life": 0.632,
+      "fate": 0.25
+    },
+    "model": {
+      "provider": "roboflow",
+      "name": "palm-lines-recognition-wemy5/1"
+    }
+  },
+  "interpret": {
+    "core": {
+      "lineScore": {
+        "heart": 72,
+        "head": 74,
+        "life": 72,
+        "fate": 0
+      },
+      "lineSuggestion": {
+        "heart": "Your heart line is moderately long and slightly curved, indicating balanced emotional expression.",
+        "head": "The head line shows good depth and length, suggesting clear thinking and strong cognitive abilities.",
+        "life": "A well-defined life line with moderate curvature points to steady vitality and resilience.",
+        "fate": "Line not clearly visible in this scan."
+      }
+    },
+    "insights": {
+      "emotionalType": "Balanced and moderately expressive emotions.",
+      "cognitiveStyle": "Clear, logical, and thoughtful.",
+      "vitality": "Steady and resilient physical energy.",
+      "careerFocus": "Self-directed with emphasis on personal decisions rather than external fate."
+    },
+    "lines": {
+      "heart": {
+        "score": 72,
+        "summary": "Your heart line is moderately long and slightly curved, indicating balanced emotional expression.",
+        "metrics": {
+          "length": 3.64,
+          "depth": 0.57,
+          "curvature": 0.31
+        }
+      },
+      "head": {
+        "score": 74,
+        "summary": "The head line shows good depth and length, suggesting clear thinking and strong cognitive abilities.",
+        "metrics": {
+          "length": 3.53,
+          "depth": 0.68,
+          "curvature": 0.24
+        }
+      },
+      "life": {
+        "score": 72,
+        "summary": "A well-defined life line with moderate curvature points to steady vitality and resilience.",
+        "metrics": {
+          "length": 3.83,
+          "depth": 0.63,
+          "curvature": 0.55
+        }
+      },
+      "fate": {
+        "score": 0,
+        "summary": "Line not clearly visible in this scan.",
+        "metrics": {
+          "length": 0,
+          "depth": 0.25,
+          "curvature": 0
+        }
+      }
+    }
+  }
+}

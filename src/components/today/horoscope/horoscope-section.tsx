@@ -9,6 +9,7 @@ import { DailyReadingsGrid } from './daily-readings-grid'
 import { TrendingsCard } from './trendings-card'
 import { TopInsightsStrip } from './top-insights-strip'
 import { ReportsFromAdvisors } from '@/components/reports/reports-from-advisors'
+import { FeatureGate } from '@/components/billing/feature-gate'
 import { useDailyReadings } from '@/hooks/use-horoscope'
 import { SkeletonCard } from '@/components/ui/skeleton'
 import { TabSectionBlock } from '@/components/today/shared/tab-section-block'
@@ -78,7 +79,9 @@ export function HoroscopeSection({ showTopStrip = true, showHeroCard = true }: H
       </FadeInSection>
 
       <FadeInSection delay={0.2}>
-        <AlternativeHoroscope />
+        <FeatureGate feature="horoscope.personal">
+          <AlternativeHoroscope />
+        </FeatureGate>
       </FadeInSection>
     </div>
   )

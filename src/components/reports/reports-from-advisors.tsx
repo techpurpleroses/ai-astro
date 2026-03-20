@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { ChevronRight } from 'lucide-react'
-import { REPORT_PRODUCTS } from '@/data/reports'
+import { useReportProducts } from '@/hooks/use-reports'
 import { cn } from '@/lib/utils'
 
 interface ReportsFromAdvisorsProps {
@@ -18,6 +18,8 @@ export function ReportsFromAdvisors({
   title = 'Reports from Advisors',
   compact = false,
 }: ReportsFromAdvisorsProps) {
+  const { data: products = [] } = useReportProducts()
+
   return (
     <section
       className={cn(
@@ -32,7 +34,7 @@ export function ReportsFromAdvisors({
       </h3>
 
       <div className={cn(compact ? 'space-y-2' : 'space-y-2.5')}>
-        {REPORT_PRODUCTS.map((report) => (
+        {products.map((report) => (
           <button
             key={report.id}
             onClick={() => onOpenReport(report.id)}

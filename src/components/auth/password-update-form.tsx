@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { astroFetchJson } from "@/lib/client/astro-fetch";
 
 interface PasswordUpdateFormProps {
   mode: "set" | "reset";
@@ -47,7 +48,8 @@ export function PasswordUpdateForm({
 
     setSubmitting(true);
     try {
-      const res = await fetch("/api/auth/update-password", {
+      const body = await astroFetchJson<ApiResponse>("/api/auth/update-password", {
+        debugOrigin: "components.auth.password-update",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -55,8 +57,7 @@ export function PasswordUpdateForm({
         body: JSON.stringify({ password }),
       });
 
-      const body = (await res.json()) as ApiResponse;
-      if (!res.ok || !body.ok) {
+      if (!body.ok) {
         throw new Error(body.error ?? "Unable to update password.");
       }
 
@@ -135,4 +136,3 @@ export function PasswordUpdateForm({
     </div>
   );
 }
-

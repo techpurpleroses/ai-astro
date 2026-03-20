@@ -1,0 +1,47 @@
+{
+  "conjunction": {
+    "name": "Conjunction",
+    "angle": 0,
+    "orb": 8,
+    "nature": "intense",
+    "symbol": "☌",
+    "short": "Fusion and intensity",
+    "description": "A conjunction merges two planetary energies into a single, potent force. The planets become inseparable in their expression — amplifying, blending, and intensifying each other. This is one of the most powerful aspects in the chart."
+  },
+  "sextile": {
+    "name": "Sextile",
+    "angle": 60,
+    "orb": 4,
+    "nature": "harmonious",
+    "symbol": "⚹",
+    "short": "Opportunity and ease",
+    "description": "A sextile creates a channel of easy communication between two planets. It represents talent and opportunity — gifts that come naturally but still require action to activate. This aspect says: the door is open."
+  },
+  "square": {
+    "name": "Square",
+    "angle": 90,
+    "orb": 7,
+    "nature": "challenging",
+    "symbol": "□",
+    "short": "Tension and growth",
+    "description": "A square creates friction between two planetary energies. This tension demands action — it cannot be ignored. Squares represent the challenges that force the most growth, the obstacles that, overcome, become your greatest strengths."
+  },
+  "trine": {
+    "name": "Trine",
+    "angle": 120,
+    "orb": 7,
+    "nature": "harmonious",
+    "symbol": "△",
+    "short": "Natural gifts and flow",
+    "description": "A trine is pure harmony between two planets sharing the same element. Energy flows effortlessly — these are your natural talents, the areas where things seem to just work. The trine is a deep reservoir of strength."
+  },
+  "opposition": {
+    "name": "Opposition",
+    "angle": 180,
+    "orb": 8,
+    "nature": "polarizing",
+    "symbol": "☍",
+    "short": "Polarity and integration",
+    "description": "An opposition places two planetary energies in direct tension across the chart axis. You are pulled between two equally compelling forces. The work is integration — finding the middle path that honors both without being ruled by either."
+  }
+}

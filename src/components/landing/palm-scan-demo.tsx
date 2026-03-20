@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useCallback, useEffect } from 'react'
+import { BRAND_NAME } from '@/lib/brand'
 import { gsap } from 'gsap'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
@@ -627,7 +628,7 @@ export function PalmScanDemo() {
 
                     {/* Disclaimer */}
                     <p className="text-slate-600 text-xs mt-4 leading-relaxed">
-                      This is a visual demo. For a full AI-powered palm reading with detailed interpretations, open the AstroAI app.
+                      This is a visual demo. For a full AI-powered palm reading with detailed interpretations, open the {BRAND_NAME} app.
                     </p>
                   </motion.div>
                 ) : (

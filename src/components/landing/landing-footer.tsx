@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Sparkles } from 'lucide-react'
+import { BRAND_NAME, brandCopyright } from '@/lib/brand'
 
 const FOOTER_LINKS = {
   Product: [
@@ -107,7 +108,7 @@ export function LandingFooter() {
 
         {/* Bottom bar */}
         <div className="mt-14 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-600 text-xs">
-          <p>© 2026 AstroAI. All rights reserved.</p>
+          <p>{brandCopyright()}</p>
           <p className="flex items-center gap-1.5">
             Made with
             <span className="text-rose-500">♥</span>

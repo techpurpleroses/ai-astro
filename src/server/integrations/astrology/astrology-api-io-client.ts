@@ -1,4 +1,5 @@
 import type { ProviderCreditGuard } from "../../foundation/modules/usage/provider-credit-guard";
+import { createServerLogger, durationMs } from "../../foundation/observability/logger";
 
 export interface AstrologyApiIoClientConfig {
   baseUrl: string;
@@ -16,6 +17,7 @@ export class AstrologyApiIoClient {
   private readonly baseUrl: string;
   private readonly apiKey: string;
   private readonly creditGuard?: ProviderCreditGuard;
+  private readonly logger = createServerLogger("integrations.astrology-api-io.client");
 
   constructor(config: AstrologyApiIoClientConfig) {
     this.baseUrl = config.baseUrl.replace(/\/+$/, "");
@@ -29,6 +31,13 @@ export class AstrologyApiIoClient {
     featureKey: string;
     body?: Record<string, unknown>;
   }): Promise<AstrologyApiIoResponse<T>> {
+    const startedAt = Date.now();
+    this.logger.info("request.start", {
+      method: params.method,
+      path: params.path,
+      featureKey: params.featureKey,
+      bodyKeys: params.body ? Object.keys(params.body) : [],
+    });
     if (this.creditGuard) {
       await this.creditGuard.consume({ featureKey: params.featureKey, credits: 1 });
     }
@@ -41,36 +50,57 @@ export class AstrologyApiIoClient {
       headers["Content-Type"] = "application/json";
     }
 
-    const res = await fetch(`${this.baseUrl}${params.path}`, {
-      method: params.method,
-      headers,
-      body: params.method === "POST" ? JSON.stringify(params.body ?? {}) : undefined,
-    });
-
-    const text = await res.text();
-    let data: unknown = null;
     try {
-      data = text ? JSON.parse(text) : null;
-    } catch {
-      data = text;
+      const res = await fetch(`${this.baseUrl}${params.path}`, {
+        method: params.method,
+        headers,
+        body: params.method === "POST" ? JSON.stringify(params.body ?? {}) : undefined,
+      });
+
+      const text = await res.text();
+      let data: unknown = null;
+      try {
+        data = text ? JSON.parse(text) : null;
+      } catch {
+        data = text;
+      }
+
+      if (!res.ok) {
+        throw new Error(
+          `astrology_api_io ${params.path} failed (${res.status}): ${
+            typeof data === "string" ? data : JSON.stringify(data)
+          }`
+        );
+      }
+
+      const quotaHeader = res.headers.get("x-remaining-quota");
+      const remainingQuota = quotaHeader ? Number(quotaHeader) : null;
+      const response = {
+        status: res.status,
+        remainingQuota: Number.isFinite(remainingQuota) ? remainingQuota : null,
+        data: data as T,
+      };
+
+      this.logger.info("request.success", {
+        durationMs: durationMs(startedAt),
+        outcome: "success",
+        method: params.method,
+        path: params.path,
+        featureKey: params.featureKey,
+        status: response.status,
+        remainingQuota: response.remainingQuota,
+      });
+      return response;
+    } catch (error) {
+      this.logger.error("request.error", {
+        durationMs: durationMs(startedAt),
+        method: params.method,
+        path: params.path,
+        featureKey: params.featureKey,
+        error,
+      });
+      throw error;
     }
-
-    if (!res.ok) {
-      throw new Error(
-        `astrology_api_io ${params.path} failed (${res.status}): ${
-          typeof data === "string" ? data : JSON.stringify(data)
-        }`
-      );
-    }
-
-    const quotaHeader = res.headers.get("x-remaining-quota");
-    const remainingQuota = quotaHeader ? Number(quotaHeader) : null;
-
-    return {
-      status: res.status,
-      remainingQuota: Number.isFinite(remainingQuota) ? remainingQuota : null,
-      data: data as T,
-    };
   }
 
   getDataNow<T = unknown>(): Promise<AstrologyApiIoResponse<T>> {
@@ -194,4 +224,3 @@ export class AstrologyApiIoClient {
     });
   }
 }
-
