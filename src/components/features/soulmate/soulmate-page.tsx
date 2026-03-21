@@ -6,6 +6,8 @@ import { useInView } from 'react-intersection-observer'
 import { ArrowLeft, Heart, Sparkles } from 'lucide-react'
 import Image from 'next/image'
 import { FeatureGate } from '@/components/billing/feature-gate'
+import { useBirthChart } from '@/hooks/use-birth-chart'
+import { useUserProfile } from '@/hooks/use-profile'
 
 function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.05 })
@@ -20,9 +22,56 @@ function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
   )
 }
 
+// ── Soulmate compatibility lookup ─────────────────────────────────────────────
+
+const SIGN_GLYPHS: Record<string, string> = {
+  aries: '♈', taurus: '♉', gemini: '♊', cancer: '♋',
+  leo: '♌', virgo: '♍', libra: '♎', scorpio: '♏',
+  sagittarius: '♐', capricorn: '♑', aquarius: '♒', pisces: '♓',
+}
+
+const SIGN_COLORS: Record<string, string> = {
+  aries: '#F43F5E', taurus: '#84CC16', gemini: '#FACC15', cancer: '#06B6D4',
+  leo: '#F59E0B', virgo: '#84CC16', libra: '#A78BFA', scorpio: '#EF4444',
+  sagittarius: '#F59E0B', capricorn: '#78716C', aquarius: '#06B6D4', pisces: '#6366F1',
+}
+
+interface SoulmateProfile {
+  sun: string; moon: string; rising: string
+}
+
+const SOULMATE_BY_SUN: Record<string, SoulmateProfile> = {
+  aries:       { sun: 'Leo',         moon: 'Sagittarius', rising: 'Aries'       },
+  taurus:      { sun: 'Virgo',       moon: 'Capricorn',   rising: 'Taurus'      },
+  gemini:      { sun: 'Libra',       moon: 'Aquarius',    rising: 'Gemini'      },
+  cancer:      { sun: 'Scorpio',     moon: 'Pisces',      rising: 'Cancer'      },
+  leo:         { sun: 'Aries',       moon: 'Sagittarius', rising: 'Leo'         },
+  virgo:       { sun: 'Taurus',      moon: 'Capricorn',   rising: 'Virgo'       },
+  libra:       { sun: 'Gemini',      moon: 'Aquarius',    rising: 'Libra'       },
+  scorpio:     { sun: 'Capricorn',   moon: 'Pisces',      rising: 'Libra'       },
+  sagittarius: { sun: 'Aries',       moon: 'Leo',         rising: 'Sagittarius' },
+  capricorn:   { sun: 'Taurus',      moon: 'Virgo',       rising: 'Capricorn'   },
+  aquarius:    { sun: 'Gemini',      moon: 'Libra',       rising: 'Aquarius'    },
+  pisces:      { sun: 'Cancer',      moon: 'Scorpio',     rising: 'Pisces'      },
+}
+
+const FALLBACK_PROFILE: SoulmateProfile = { sun: 'Capricorn', moon: 'Pisces', rising: 'Libra' }
+
+function capitalize(s: string) {
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
+
+function soulmateGlyph(sign: string) {
+  return SIGN_GLYPHS[sign.toLowerCase()] ?? '✦'
+}
+
+function soulmateColor(sign: string) {
+  return SIGN_COLORS[sign.toLowerCase()] ?? '#A78BFA'
+}
+
 // ── Soulmate sketch portrait ───────────────────────────────────────────────────
 
-function SoulmatePortrait() {
+function SoulmatePortrait({ subtitle }: { subtitle: string }) {
   return (
     <div
       className="rounded-3xl overflow-hidden flex flex-col items-center gap-4"
@@ -53,7 +102,7 @@ function SoulmatePortrait() {
       </div>
       <div className="text-center px-4 pb-4">
         <p className="font-mystical text-sm text-cyan-glow mb-1">Your Cosmic Soulmate</p>
-        <p className="text-xs text-text-muted">Based on your Scorpio Sun · Cancer Moon · Aquarius Rising</p>
+        <p className="text-xs text-text-muted">{subtitle}</p>
       </div>
     </div>
   )
@@ -87,6 +136,18 @@ function SectionBlock({
 
 export function SoulmateClient() {
   const router = useRouter()
+  const { data: profile } = useUserProfile()
+  const { data: chart } = useBirthChart()
+
+  // Derive user Big Three
+  const userSun       = chart?.bigThree.sun.sign       ?? profile?.sunSign       ?? 'scorpio'
+  const userMoon      = chart?.bigThree.moon.sign      ?? 'cancer'
+  const userAscendant = chart?.bigThree.ascendant.sign ?? 'aquarius'
+
+  const sunKey = userSun.toLowerCase()
+  const soulmate = SOULMATE_BY_SUN[sunKey] ?? FALLBACK_PROFILE
+
+  const subtitle = `Based on your ${capitalize(userSun)} Sun · ${capitalize(userMoon)} Moon · ${capitalize(userAscendant)} Rising`
 
   return (
     <div className="flex flex-col">
@@ -110,7 +171,7 @@ export function SoulmateClient() {
       <div className="px-4 pt-4 pb-8 space-y-4">
 
         <FadeIn delay={0}>
-          <SoulmatePortrait />
+          <SoulmatePortrait subtitle={subtitle} />
         </FadeIn>
 
         <FadeIn delay={0.08}>
@@ -119,9 +180,9 @@ export function SoulmateClient() {
               <SectionBlock title="Their Zodiac Profile" accentColor="#06B6D4">
                 <div className="grid grid-cols-3 gap-2 mt-1">
                   {[
-                    { label: 'Sun Sign',    value: 'Capricorn', glyph: '♑', color: '#78716C' },
-                    { label: 'Moon Sign',   value: 'Pisces',    glyph: '♓', color: '#6366F1' },
-                    { label: 'Rising Sign', value: 'Libra',     glyph: '♎', color: '#A78BFA' },
+                    { label: 'Sun Sign',    value: soulmate.sun,    glyph: soulmateGlyph(soulmate.sun),    color: soulmateColor(soulmate.sun)    },
+                    { label: 'Moon Sign',   value: soulmate.moon,   glyph: soulmateGlyph(soulmate.moon),   color: soulmateColor(soulmate.moon)   },
+                    { label: 'Rising Sign', value: soulmate.rising, glyph: soulmateGlyph(soulmate.rising), color: soulmateColor(soulmate.rising) },
                   ].map(({ label, value, glyph, color }) => (
                     <div key={label}
                       className="rounded-xl p-2.5 flex flex-col items-center gap-1 text-center"
@@ -176,7 +237,7 @@ export function SoulmateClient() {
 
               <SectionBlock title="Compatibility Aspects" accentColor="#A78BFA">
                 <p className="text-sm text-text-secondary leading-relaxed">
-                  Your Scorpio-Capricorn Venus synastry creates profound sexual and emotional compatibility. Their Pisces Moon will harmonize deeply with your Cancer Moon — you'll feel immediately understood in ways that surprise both of you.
+                  Your {capitalize(userSun)}-{soulmate.sun} Venus synastry creates profound emotional compatibility. Their {soulmate.moon} Moon will harmonize with your {capitalize(userMoon)} Moon — you'll feel understood in ways that surprise both of you.
                 </p>
               </SectionBlock>
             </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
@@ -12,6 +12,7 @@ import { BottomSheet } from '@/components/ui/bottom-sheet'
 import { SkeletonCard } from '@/components/ui/skeleton'
 import { FeatureGate } from '@/components/billing/feature-gate'
 import { useCompatibility, useCompatibilityPair } from '@/hooks/use-compatibility'
+import { useUserProfile } from '@/hooks/use-profile'
 import type { CompatibilityScore } from '@/types'
 
 const SIGN_COLORS: Record<string, string> = {
@@ -227,12 +228,24 @@ function TodaysMatchesSection() {
 
 export function CompatibilityClient() {
   const router = useRouter()
-  const [sign1, setSign1] = useState<string | null>('Scorpio')
+  const { data: profile } = useUserProfile()
+
+  // Default sign1 to the user's own sun sign; fall back to Scorpio if profile not loaded yet
+  const defaultSign1 = useMemo(() => {
+    if (!profile?.sunSign || profile.isPlaceholder) return 'Scorpio'
+    return profile.sunSign.charAt(0).toUpperCase() + profile.sunSign.slice(1)
+  }, [profile?.sunSign, profile?.isPlaceholder])
+
+  // sign1 is null until the user explicitly picks a different sign
+  const [sign1, setSign1] = useState<string | null>(null)
   const [sign2, setSign2] = useState<string | null>(null)
   const [selectingSlot, setSelectingSlot] = useState<1 | 2 | null>(null)
 
+  // effectiveSign1 is the user's sun sign until overridden by an explicit selection
+  const effectiveSign1 = sign1 ?? defaultSign1
+
   // Live per-pair report from provider
-  const { data: report, isLoading: isReportLoading } = useCompatibilityPair(sign1, sign2)
+  const { data: report, isLoading: isReportLoading } = useCompatibilityPair(effectiveSign1, sign2)
 
   const handleSelect = (sign: string) => {
     if (selectingSlot === 1) setSign1(sign)
@@ -300,7 +313,7 @@ export function CompatibilityClient() {
             <h2 className="font-display text-sm font-bold text-text-primary">Zodiac Sign Compatibility</h2>
             <div className="glass-card rounded-2xl p-4 space-y-3">
               <div className="flex items-center gap-3">
-                <SignSelectorButton label="Your Sign" sign={sign1} onClick={() => setSelectingSlot(1)} />
+                <SignSelectorButton label="Your Sign" sign={effectiveSign1} onClick={() => setSelectingSlot(1)} />
                 <span className="text-xl text-text-muted font-display shrink-0">+</span>
                 <SignSelectorButton label="Their Sign" sign={sign2} onClick={() => setSelectingSlot(2)} />
               </div>
@@ -308,17 +321,17 @@ export function CompatibilityClient() {
                 <Users size={10} className="text-text-muted" />
                 <span className="text-[10px] text-text-muted font-display">505 Reports delivered today</span>
               </div>
-              {sign1 && sign2 && isReportLoading && (
+              {effectiveSign1 && sign2 && isReportLoading && (
                 <p className="text-center text-[10px] text-cyan-glow animate-pulse">Loading compatibility…</p>
               )}
-              {sign1 && sign2 && !isReportLoading && !report && (
-                <p className="text-center text-[10px] text-text-muted">No report available for {sign1} and {sign2} yet.</p>
+              {effectiveSign1 && sign2 && !isReportLoading && !report && (
+                <p className="text-center text-[10px] text-text-muted">No report available for {effectiveSign1} and {sign2} yet.</p>
               )}
             </div>
           </div>
         </FadeIn>
 
-        {report && sign1 && sign2 && (
+        {report && effectiveSign1 && sign2 && (
           <FadeIn delay={0.1}>
             <FeatureGate feature="compatibility.deep">
               <CompatibilityReport report={report} />

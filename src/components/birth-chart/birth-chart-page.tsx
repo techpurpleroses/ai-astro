@@ -107,7 +107,11 @@ function ChartView() {
               The big 3 of your birth chart encompasses your self expression, emotions and motivation
             </p>
           </div>
-          <BigThreeCard sun={data.bigThree.sun} moon={data.bigThree.moon} ascendant={data.bigThree.ascendant} />
+          <BigThreeCard
+            sun={{ ...data.bigThree.sun, house: data.planets.find((p) => p.name === 'Sun')?.house ?? 0 }}
+            moon={{ ...data.bigThree.moon, house: data.planets.find((p) => p.name === 'Moon')?.house ?? 0 }}
+            ascendant={{ ...data.bigThree.ascendant, house: 1 }}
+          />
         </div>
       </FadeIn>
 

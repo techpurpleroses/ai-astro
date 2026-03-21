@@ -695,13 +695,22 @@ function HandGuideOverlay({ hand }: { hand: 'left' | 'right' }) {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
+export interface PalmScanScores {
+  heart: number
+  head: number
+  life: number
+  fate: number
+  suggestions: { heart: string; head: string; life: string; fate: string }
+}
+
 interface Props {
   hand: 'left' | 'right'
   onClose: () => void
   onboardingComplete?: (result: PalmScanRecord, email: string) => void
+  onScanComplete?: (scores: PalmScanScores) => void
 }
 
-export function PalmCameraScanner({ hand, onClose, onboardingComplete }: Props) {
+export function PalmCameraScanner({ hand, onClose, onboardingComplete, onScanComplete }: Props) {
   const videoRef      = useRef<HTMLVideoElement>(null)
   const captureCanvas = useRef<HTMLCanvasElement>(null)
   const overlayRef    = useRef<HTMLCanvasElement>(null)
@@ -835,6 +844,19 @@ export function PalmCameraScanner({ hand, onClose, onboardingComplete }: Props) 
           score: data.interpret!.core.lineScore[line.id],
           trait: data.interpret!.core.lineSuggestion[line.id],
         })))
+
+        onScanComplete?.({
+          heart: data.interpret!.core.lineScore.heart,
+          head:  data.interpret!.core.lineScore.head,
+          life:  data.interpret!.core.lineScore.life,
+          fate:  data.interpret!.core.lineScore.fate,
+          suggestions: {
+            heart: data.interpret!.core.lineSuggestion.heart,
+            head:  data.interpret!.core.lineSuggestion.head,
+            life:  data.interpret!.core.lineSuggestion.life,
+            fate:  data.interpret!.core.lineSuggestion.fate,
+          },
+        })
 
         if (data.scanId && data.clientId && data.createdAt && data.detect && data.interpret) {
           scanRecordRef.current = data as PalmScanRecord

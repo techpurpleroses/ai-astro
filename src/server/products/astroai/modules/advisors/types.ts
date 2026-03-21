@@ -20,4 +20,5 @@ export interface AdvisorDTO {
 
 export interface AdvisorsListDTO {
   advisors: AdvisorDTO[];
+  recentChats: string[]; // advisor slugs ordered by most recently chatted
 }

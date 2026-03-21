@@ -16,9 +16,9 @@ interface BigThreeEntry {
 }
 
 interface BigThreeCardProps {
-  sun: { sign: string; degree: number; glyph: string }
-  moon: { sign: string; degree: number; glyph: string }
-  ascendant: { sign: string; degree: number; glyph: string }
+  sun: { sign: string; degree: number; glyph: string; house: number }
+  moon: { sign: string; degree: number; glyph: string; house: number }
+  ascendant: { sign: string; degree: number; glyph: string; house: number }
 }
 
 export function BigThreeCard({ sun, moon, ascendant }: BigThreeCardProps) {
@@ -28,7 +28,7 @@ export function BigThreeCard({ sun, moon, ascendant }: BigThreeCardProps) {
     {
       planet: 'Sun',
       sign: sun.sign,
-      house: 9,
+      house: sun.house,
       glyph: sun.glyph,
       color: PLANET_COLORS['Sun'] ?? '#F59E0B',
       roleLabel: 'Your inner self',
@@ -37,7 +37,7 @@ export function BigThreeCard({ sun, moon, ascendant }: BigThreeCardProps) {
     {
       planet: 'Moon',
       sign: moon.sign,
-      house: 5,
+      house: moon.house,
       glyph: moon.glyph,
       color: PLANET_COLORS['Moon'] ?? '#94A3B8',
       roleLabel: 'Your emotional side',
@@ -46,7 +46,7 @@ export function BigThreeCard({ sun, moon, ascendant }: BigThreeCardProps) {
     {
       planet: 'Ascendant',
       sign: ascendant.sign,
-      house: 1,
+      house: ascendant.house,
       glyph: ascendant.glyph,
       color: PLANET_COLORS['Ascendant'] ?? '#22C55E',
       roleLabel: 'Your outer self',

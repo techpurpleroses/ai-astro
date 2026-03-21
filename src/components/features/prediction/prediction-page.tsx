@@ -6,6 +6,7 @@ import { useInView } from 'react-intersection-observer'
 import { ArrowLeft, Sparkles, TrendingUp, Heart, Briefcase, Shield } from 'lucide-react'
 import Image from 'next/image'
 import { FeatureGate } from '@/components/billing/feature-gate'
+import { useUserProfile } from '@/hooks/use-profile'
 
 function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.05 })
@@ -20,15 +21,66 @@ function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
   )
 }
 
-const THEMES = [
-  { icon: Heart,     label: 'Love & Relationships', color: '#F43F5E', summary: 'Venus trine your natal Moon opens a powerful window for deep connection in Q3 2026.' },
-  { icon: Briefcase, label: 'Career & Finances',    color: '#06B6D4', summary: 'Saturn's discipline meets Jupiter's expansion — a career breakthrough is building slowly but surely.' },
-  { icon: Shield,    label: 'Health & Wellbeing',   color: '#84CC16', summary: 'Mars in your 6th house pushes you toward structure. Build the habits now that carry you through the year.' },
-  { icon: TrendingUp,label: 'Personal Growth',      color: '#A78BFA', summary: 'Your progressed Sun moves into a new sign this year — a major identity shift is underway.' },
-]
+// ── Element lookup ─────────────────────────────────────────────────────────────
+
+type Element = 'fire' | 'earth' | 'air' | 'water'
+
+const SIGN_ELEMENT: Record<string, Element> = {
+  aries: 'fire', leo: 'fire', sagittarius: 'fire',
+  taurus: 'earth', virgo: 'earth', capricorn: 'earth',
+  gemini: 'air', libra: 'air', aquarius: 'air',
+  cancer: 'water', scorpio: 'water', pisces: 'water',
+}
+
+interface ThemeSummaries {
+  love: string
+  career: string
+  health: string
+  growth: string
+}
+
+const THEMES_BY_ELEMENT: Record<Element, ThemeSummaries> = {
+  fire: {
+    love:    'Venus ignites your already magnetic energy in Q3 2026 — a bold, passionate connection you didn\'t see coming is on the horizon.',
+    career:  'Your natural drive gets a Jupiter boost this year. A leadership opportunity will test your confidence — take it.',
+    health:  'Your high-energy nature peaks mid-year. Channel that fire into consistent movement before the year\'s final quarter asks for rest.',
+    growth:  'Your progressed Sun deepens your sense of purpose. This is the year you stop chasing and start building.',
+  },
+  earth: {
+    love:    'Venus trine your natal Moon in Q3 2026 opens a steady, deeply rooted connection — the kind built to last.',
+    career:  'Saturn\'s discipline rewards your patience this year. The slow project you\'ve been building is about to bear fruit.',
+    health:  'Mars in your 6th house asks you to establish structure now. The routines you build this year carry you for the next three.',
+    growth:  'Your progressed Sun moves into new territory — a quiet but profound identity shift is already underway.',
+  },
+  air: {
+    love:    'Mercury and Venus align in your relationship sector this summer. A meeting of minds becomes something much deeper.',
+    career:  'Your ideas finally find the right audience in 2026. Jupiter\'s expansion meets your natural curiosity — pitch the vision.',
+    health:  'Mental clarity is your wellness target this year. Reduce scattered energy and the physical benefits follow naturally.',
+    growth:  'Your progressed Sun asks you to commit to one path. The breadth you\'ve gathered is now ready to go deep.',
+  },
+  water: {
+    love:    'Neptune heightens your intuitive sense of connection in Q3 2026 — you\'ll know before they say a word.',
+    career:  'Your emotional intelligence is your greatest professional asset this year. Lead with empathy and results follow.',
+    health:  'Emotional and physical wellness are deeply linked for you in 2026. Prioritize rest and creative expression equally.',
+    growth:  'Your progressed Sun illuminates long-buried gifts. What you once called a flaw reveals itself as your greatest strength.',
+  },
+}
+
+const FALLBACK_THEMES = THEMES_BY_ELEMENT.water
 
 export function PredictionClient() {
   const router = useRouter()
+  const { data: profile } = useUserProfile()
+
+  const element = SIGN_ELEMENT[profile?.sunSign?.toLowerCase() ?? ''] ?? null
+  const summaries = element ? THEMES_BY_ELEMENT[element] : FALLBACK_THEMES
+
+  const THEMES = [
+    { icon: Heart,      label: 'Love & Relationships', color: '#F43F5E', summary: summaries.love    },
+    { icon: Briefcase,  label: 'Career & Finances',    color: '#06B6D4', summary: summaries.career  },
+    { icon: Shield,     label: 'Health & Wellbeing',   color: '#84CC16', summary: summaries.health  },
+    { icon: TrendingUp, label: 'Personal Growth',      color: '#A78BFA', summary: summaries.growth  },
+  ]
 
   return (
     <div className="flex flex-col">

@@ -3,9 +3,20 @@ import { createServerLogger } from "@/server/foundation/observability/logger";
 import { observeApiRoute } from "@/server/foundation/observability/route";
 import { AppError } from "@/server/foundation/errors";
 import { getAstroAiRuntime } from "@/server/products/astroai/runtime";
+import { getServerSupabaseClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 const logger = createServerLogger("api.dashboard.advisors");
+
+async function getAuthUserId(): Promise<string | null> {
+  try {
+    const supabase = await getServerSupabaseClient();
+    const { data } = await supabase.auth.getUser();
+    return data.user?.id ?? null;
+  } catch {
+    return null;
+  }
+}
 
 export async function GET(req: NextRequest) {
   return observeApiRoute({
@@ -13,8 +24,11 @@ export async function GET(req: NextRequest) {
     request: req,
     handler: async () => {
       try {
+        // userId is optional — unauthenticated users still get the advisor list,
+        // just without their personal recentChats
+        const userId = await getAuthUserId();
         const { advisorsService } = getAstroAiRuntime();
-        const result = await advisorsService.listAdvisors();
+        const result = await advisorsService.listAdvisors(userId ?? undefined);
         return NextResponse.json(result, { status: 200 });
       } catch (error) {
         if (error instanceof AppError) {

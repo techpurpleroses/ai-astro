@@ -36,30 +36,12 @@ const PRICE_ANCHORS: Record<string, string> = {
   year: '$239/yr',
 }
 
-// Credit packs — decoy pricing: 100 pack is same rate as 50, making 200 look like obvious best value
-const CREDIT_PACKS = [
-  {
-    lookupKey: 'astroai_credits_50_usd',
-    credits: 50,
-    price: '$9.99',
-    label: 'Starter Pack',
-    perCredit: '$0.20/credit',
-  },
-  {
-    lookupKey: 'astroai_credits_100_usd',
-    credits: 100,
-    price: '$19.99',
-    label: 'Value Pack',
-    perCredit: '$0.20/credit', // intentionally same rate — makes 200 look great
-  },
-  {
-    lookupKey: 'astroai_credits_200_usd',
-    credits: 200,
-    price: '$29.99',
-    label: 'Best Value',
-    perCredit: '$0.15/credit — Save 25%',
-    popular: true,
-  },
+// Credit packs — lookup keys match billing.plan_price_versions (USD, one_time)
+// Decoy pricing: 100 pack is same rate as 50, making 200 look like obvious best value
+const CREDIT_PACK_DEFS = [
+  { lookupKey: 'astroai_credits_50_usd',  credits: 50,  label: 'Starter Pack', popular: false },
+  { lookupKey: 'astroai_credits_100_usd', credits: 100, label: 'Value Pack',    popular: false },
+  { lookupKey: 'astroai_credits_200_usd', credits: 200, label: 'Best Value',    popular: true  },
 ]
 
 // ---------------------------------------------------------------------------
@@ -92,6 +74,7 @@ interface Props {
   prices: PriceRow[]
   subscription: ActiveSubscription | null
   creditBalance: number
+  hasUsedTrial: boolean
 }
 
 // ---------------------------------------------------------------------------
@@ -121,7 +104,7 @@ function getPriceForInterval(
 
 type Interval = 'week' | 'month' | 'year'
 
-export function PricingPage({ plans, prices, subscription, creditBalance }: Props) {
+export function PricingPage({ plans, prices, subscription, creditBalance, hasUsedTrial }: Props) {
   const router = useRouter()
   const [interval, setInterval] = useState<Interval>('year') // default yearly (pushes annual LTV)
   const [loading, setLoading] = useState<string | null>(null)
@@ -130,8 +113,6 @@ export function PricingPage({ plans, prices, subscription, creditBalance }: Prop
     subscription?.status === 'active' || subscription?.status === 'trialing'
       ? subscription.planCode
       : 'free'
-
-  const hasUsedTrial = false // TODO: wire from DB when trial tracking is implemented
 
   async function handleSubscribe(lookupKey: string, withTrial = false) {
     if (loading) return
@@ -415,40 +396,49 @@ export function PricingPage({ plans, prices, subscription, creditBalance }: Prop
             Chat with AI advisors. 1 credit = 1 message exchange. Available on all plans.
           </p>
           <div className="space-y-2">
-            {CREDIT_PACKS.map((pack) => (
-              <div
-                key={pack.lookupKey}
-                className="rounded-xl px-4 py-3 flex items-center justify-between gap-3"
-                style={{
-                  background: pack.popular ? 'rgba(245,158,11,0.08)' : 'rgba(15,30,53,0.82)',
-                  border: pack.popular
-                    ? '1px solid rgba(245,158,11,0.3)'
-                    : '1px solid rgba(255,255,255,0.07)',
-                }}
-              >
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-display text-base font-bold text-text-primary">
-                      {pack.credits} Credits
-                    </span>
-                    {pack.popular && (
-                      <span className="text-xs font-bold px-1.5 py-0.5 rounded-full bg-amber-400/15 text-amber-400">
-                        ⭐ Best Value
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-xs text-text-muted">{pack.perCredit}</div>
-                </div>
-                <button
-                  onClick={() => void handleSubscribe(pack.lookupKey, false)}
-                  disabled={loading === pack.lookupKey}
-                  className="shrink-0 text-sm font-bold px-4 py-2 rounded-xl transition-opacity disabled:opacity-50"
-                  style={{ background: 'rgba(245,158,11,0.15)', color: '#f59e0b' }}
+            {CREDIT_PACK_DEFS.map((def) => {
+              const priceRow = prices.find((p) => p.lookupKey === def.lookupKey)
+              const displayPrice = priceRow
+                ? formatAmount(priceRow.amountMinor, priceRow.currency)
+                : null
+              const perCredit = priceRow
+                ? `${formatAmount(Math.round(priceRow.amountMinor / def.credits), priceRow.currency)}/credit${def.popular ? ' — Save 25%' : ''}`
+                : ''
+              return (
+                <div
+                  key={def.lookupKey}
+                  className="rounded-xl px-4 py-3 flex items-center justify-between gap-3"
+                  style={{
+                    background: def.popular ? 'rgba(245,158,11,0.08)' : 'rgba(15,30,53,0.82)',
+                    border: def.popular
+                      ? '1px solid rgba(245,158,11,0.3)'
+                      : '1px solid rgba(255,255,255,0.07)',
+                  }}
                 >
-                  {loading === pack.lookupKey ? '…' : pack.price}
-                </button>
-              </div>
-            ))}
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-display text-base font-bold text-text-primary">
+                        {def.credits} Credits
+                      </span>
+                      {def.popular && (
+                        <span className="text-xs font-bold px-1.5 py-0.5 rounded-full bg-amber-400/15 text-amber-400">
+                          ⭐ Best Value
+                        </span>
+                      )}
+                    </div>
+                    {perCredit && <div className="text-xs text-text-muted">{perCredit}</div>}
+                  </div>
+                  <button
+                    onClick={() => void handleSubscribe(def.lookupKey, false)}
+                    disabled={loading === def.lookupKey || !priceRow}
+                    className="shrink-0 text-sm font-bold px-4 py-2 rounded-xl transition-opacity disabled:opacity-50"
+                    style={{ background: 'rgba(245,158,11,0.15)', color: '#f59e0b' }}
+                  >
+                    {loading === def.lookupKey ? '…' : (displayPrice ?? '—')}
+                  </button>
+                </div>
+              )
+            })}
           </div>
         </section>
 

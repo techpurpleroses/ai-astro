@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Camera } from 'lucide-react'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
+import type { PalmScanScores } from './palm-camera-scanner'
 
 const PalmCameraScanner = dynamic(
   () => import('./palm-camera-scanner').then((m) => ({ default: m.PalmCameraScanner })),
@@ -29,7 +30,7 @@ function PalmIllustration({ hand }: { hand: 'left' | 'right' }) {
 
 // ── Metric bar ────────────────────────────────────────────────────────────────
 
-const METRICS = [
+const INITIAL_METRICS = [
   { label: 'Sensitivity',  value: 78, color: '#F43F5E', line: 'Heart Line',  description: 'Your empathic nature runs deep. You feel others\' emotions as if they were your own — a rare and powerful gift.' },
   { label: 'Longevity',    value: 85, color: '#84CC16', line: 'Life Line',   description: 'Strong vitality and resilience. Your life force is robust, supporting long-term health and physical endurance.' },
   { label: 'Intelligence', value: 92, color: '#06B6D4', line: 'Head Line',   description: 'Exceptional analytical depth. Your head line suggests a naturally gifted mind with strong problem-solving intuition.' },
@@ -38,7 +39,7 @@ const METRICS = [
 
 function MetricBar({
   label, value, color, line, description, delay,
-}: typeof METRICS[0] & { delay: number }) {
+}: typeof INITIAL_METRICS[0] & { delay: number }) {
   const [expanded, setExpanded] = useState(false)
 
   return (
@@ -114,6 +115,17 @@ export function PalmReadingClient() {
   const router = useRouter()
   const [hand, setHand] = useState<'left' | 'right'>('left')
   const [scannerOpen, setScannerOpen] = useState(false)
+  const [metrics, setMetrics] = useState(INITIAL_METRICS)
+
+  function handleScanComplete(scores: PalmScanScores) {
+    setMetrics([
+      { ...INITIAL_METRICS[0], value: scores.heart, description: scores.suggestions.heart },
+      { ...INITIAL_METRICS[1], value: scores.life,  description: scores.suggestions.life  },
+      { ...INITIAL_METRICS[2], value: scores.head,  description: scores.suggestions.head  },
+      { ...INITIAL_METRICS[3], value: scores.fate,  description: scores.suggestions.fate  },
+    ])
+    setScannerOpen(false)
+  }
 
   return (
     <div className="flex flex-col">
@@ -181,7 +193,7 @@ export function PalmReadingClient() {
         {/* Metrics */}
         <div className="space-y-2.5">
           <h2 className="font-display text-sm font-semibold text-text-primary">Your Palm Analysis</h2>
-          {METRICS.map((metric, i) => (
+          {metrics.map((metric, i) => (
             <MetricBar key={metric.label} {...metric} delay={0.1 * i} />
           ))}
         </div>
@@ -212,7 +224,7 @@ export function PalmReadingClient() {
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             className="fixed inset-0 z-[80]"
           >
-            <PalmCameraScanner hand={hand} onClose={() => setScannerOpen(false)} />
+            <PalmCameraScanner hand={hand} onClose={() => setScannerOpen(false)} onScanComplete={handleScanComplete} />
           </motion.div>
         )}
       </AnimatePresence>

@@ -11,16 +11,20 @@ export function useAdvisors() {
   return useQuery<{ advisors: Advisor[]; recentChats: string[] }>({
     queryKey: ['advisors'],
     queryFn: async () => {
-      const data = await astroFetchJson<{ advisors: Array<Advisor & { avatarUrl?: string | null }> }>(
+      const data = await astroFetchJson<{
+        advisors: Array<Advisor & { avatarUrl?: string | null }>
+        recentChats?: string[]
+      }>(
         '/api/dashboard/advisors',
         { debugOrigin: 'hooks.use-advisors.list' }
       )
       return {
         advisors: (data.advisors ?? []).map((a) => ({ ...a, avatar: a.avatarUrl ?? undefined })),
-        recentChats: [],
+        recentChats: data.recentChats ?? [],
       }
     },
-    staleTime: 5 * 60 * 1000,
+    // 30s keeps online status reasonably fresh without hammering the server
+    staleTime: 30 * 1000,
   })
 }
 

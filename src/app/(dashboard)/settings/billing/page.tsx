@@ -36,11 +36,12 @@ export default async function BillingSettingsPage() {
   const db = getServiceRoleSupabaseClient();
   const billing = new BillingService(db);
 
-  const [subscription, credits, plans, prices] = await Promise.all([
+  const [subscription, credits, plans, prices, hasUsedTrial] = await Promise.all([
     billing.getActiveSubscription(user.id),
     billing.getCreditBalance(user.id),
     billing.getActivePlans(),
     billing.getActivePlanPrices(),
+    billing.getHasUsedTrial(user.id),
   ]);
 
   // 3. Render pricing page — all state comes from DB (cross-device accurate)
@@ -50,6 +51,7 @@ export default async function BillingSettingsPage() {
       prices={prices}
       subscription={subscription}
       creditBalance={credits.balance}
+      hasUsedTrial={hasUsedTrial}
     />
   );
 }

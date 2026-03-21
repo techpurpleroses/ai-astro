@@ -43,6 +43,8 @@ export function useUpdateProfile() {
       queryClient.setQueryData(['user-profile'], data)
       // Invalidate the Today BFF — it owns horoscope, transits, moon, compatibility
       void queryClient.invalidateQueries({ queryKey: ['today'] })
+      // Birth chart is tied to birth data — invalidate so it recomputes on next view
+      void queryClient.invalidateQueries({ queryKey: ['birth-chart'] })
       // daily-readings re-triggers via todayQuery.dataUpdatedAt in its key
     },
   })

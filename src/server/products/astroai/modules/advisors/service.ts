@@ -48,36 +48,68 @@ function rowToDTO(row: AdvisorRow): AdvisorDTO {
 export class AdvisorsService {
   constructor(private readonly supabase: SupabaseClient) {}
 
-  async listAdvisors(): Promise<AdvisorsListDTO> {
+  async listAdvisors(userId?: string): Promise<AdvisorsListDTO> {
     const logger = createServerLogger("astroai.advisors.service");
     const startedAt = Date.now();
-    logger.info("listAdvisors.start");
-    const { data, error } = await this.supabase
-      .schema("chat")
-      .from("advisors")
-      .select(
-        "slug, name, specialty, specialty_icon, tagline, bio, zodiac_sign, years_of_experience, skills, languages, rate_per_minute, rating, review_count, is_online, response_time, total_sessions, avatar_url"
-      )
-      .eq("is_active", true)
-      .order("rating", { ascending: false });
+    logger.info("listAdvisors.start", { hasUserId: Boolean(userId) });
 
-    if (error) {
+    const [advisorsResult, recentChats] = await Promise.all([
+      this.supabase
+        .schema("chat")
+        .from("advisors")
+        .select(
+          "slug, name, specialty, specialty_icon, tagline, bio, zodiac_sign, years_of_experience, skills, languages, rate_per_minute, rating, review_count, is_online, response_time, total_sessions, avatar_url"
+        )
+        .eq("is_active", true)
+        .order("rating", { ascending: false }),
+      userId ? this._getRecentChats(userId) : Promise.resolve([]),
+    ]);
+
+    if (advisorsResult.error) {
       logger.error("listAdvisors.error", {
         durationMs: durationMs(startedAt),
-        error,
+        error: advisorsResult.error,
       });
-      throw new AppError(`Failed to load advisors: ${error.message}`, "DB_ERROR", 500);
+      throw new AppError(`Failed to load advisors: ${advisorsResult.error.message}`, "DB_ERROR", 500);
     }
 
-    const advisors = ((data as AdvisorRow[] | null) ?? []).map(rowToDTO);
+    const advisors = ((advisorsResult.data as AdvisorRow[] | null) ?? []).map(rowToDTO);
     logger.info("listAdvisors.success", {
       durationMs: durationMs(startedAt),
       outcome: "success",
       count: advisors.length,
+      recentChatsCount: recentChats.length,
     });
-    return {
-      advisors,
-    };
+    return { advisors, recentChats };
+  }
+
+  private async _getRecentChats(userId: string): Promise<string[]> {
+    const logger = createServerLogger("astroai.advisors.service");
+    const { data, error } = await this.supabase
+      .schema("chat")
+      .from("chat_sessions")
+      .select("advisor_id, advisors(slug)")
+      .eq("user_id", userId)
+      .order("started_at", { ascending: false })
+      .limit(20);
+
+    if (error || !data) {
+      logger.warn("getRecentChats.error", { userId, error });
+      return [];
+    }
+
+    // Deduplicate by advisor_id — keep insertion order (most recent first)
+    const seen = new Set<string>();
+    const slugs: string[] = [];
+    for (const row of data as Array<{ advisor_id: string; advisors: { slug: string } | null }>) {
+      const slug = row.advisors?.slug;
+      if (slug && !seen.has(slug)) {
+        seen.add(slug);
+        slugs.push(slug);
+        if (slugs.length >= 5) break;
+      }
+    }
+    return slugs;
   }
 
   async getAdvisor(slug: string): Promise<AdvisorDTO> {

@@ -1,19 +1,21 @@
 import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { astroFetch } from '@/lib/client/astro-fetch'
+import { astroFetch, astroFetchJson } from '@/lib/client/astro-fetch'
 import { useToday } from '@/hooks/use-today'
 import type { CompatibilityData, CompatibilityScore, ZodiacMatch } from '@/types'
 
-// useCompatibility — still used by the Compatibility page (reads static JSON).
-// TODO: migrate Compatibility page to its own BFF route.
+// Curated editorial content: bestMatches + todaysMatches.
+// Per-pair live scores are fetched separately via useCompatibilityPair().
 export function useCompatibility() {
   return useQuery<CompatibilityData>({
     queryKey: ['compatibility'],
     queryFn: async () => {
-      const data = await import('@/data/compatibility.json')
-      return data as unknown as CompatibilityData
+      const data = await astroFetchJson<Omit<CompatibilityData, 'pairs'>>('/api/dashboard/compatibility', {
+        debugOrigin: 'hooks.use-compatibility',
+      })
+      return { ...data, pairs: {} } as CompatibilityData
     },
-    staleTime: Infinity,
+    staleTime: 60 * 60 * 1000, // 1h — editorial content, stable
   })
 }
 
