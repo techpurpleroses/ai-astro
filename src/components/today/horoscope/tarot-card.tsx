@@ -5,6 +5,21 @@ import Image from 'next/image'
 import { BottomSheet } from '@/components/ui/bottom-sheet'
 import type { TarotCard as TarotCardType } from '@/types'
 
+const CARD_FALLBACK_SRC = '/assets/scraped/misc/unclassified/card-default-949c5c3cc1ff82cb6d13e4d031149887.png'
+const SUPABASE_URL = (process.env.NEXT_PUBLIC_SUPABASE_URL ?? '').replace(/\/+$/, '')
+const TAROT_CDN = `${SUPABASE_URL}/storage/v1/object/public/tarot-cards`
+
+function CardFaceImage({ imageSlug, alt }: { imageSlug: string | null | undefined; alt: string }) {
+  const [errored, setErrored] = useState(false)
+  const src = errored || !imageSlug || !SUPABASE_URL
+    ? CARD_FALLBACK_SRC
+    : `${TAROT_CDN}/${imageSlug}.jpg`
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={src} alt={alt} className="w-full h-full object-cover rounded-xl" onError={() => setErrored(true)} />
+  )
+}
+
 interface TarotCardProps {
   card: TarotCardType
 }
@@ -53,14 +68,13 @@ export function TarotCard({ card }: TarotCardProps) {
         <div className="space-y-4">
           <div className="flex justify-center">
             <div
-              className="h-28 w-20 rounded-xl flex items-center justify-center text-4xl"
+              className="h-36 w-24 rounded-xl overflow-hidden"
               style={{
-                background: 'linear-gradient(135deg, #0f2547, #1D3054)',
-                border: '1px solid rgba(245,158,11,0.4)',
-                boxShadow: '0 0 20px rgba(245,158,11,0.2)',
+                border: '1px solid rgba(245,158,11,0.35)',
+                boxShadow: '0 0 24px rgba(245,158,11,0.18)',
               }}
             >
-              *
+              <CardFaceImage imageSlug={card.imageSlug} alt={card.name} />
             </div>
           </div>
 

@@ -1,9 +1,18 @@
 'use client'
 
-import Image from 'next/image'
 import { ChevronRight } from 'lucide-react'
 import { useReportProducts } from '@/hooks/use-reports'
 import { cn } from '@/lib/utils'
+
+// Client-side icon fallback — used when DB icon_url is empty/null
+const REPORT_ICON_MAP: Record<string, string> = {
+  'astrocartography-report': '/assets/features/astrocartography.png',
+  'moon-report':             '/assets/features/moon.png',
+  'compatibility-report':    '/assets/features/compatibility.png',
+  'birth-chart-report':      '/assets/features/birth-chart.png',
+  'soulmate-sketch':         '/assets/soulmate-sketch.webp',
+  'prediction-2026-report':  '/assets/prediction-2026.png',
+}
 
 interface ReportsFromAdvisorsProps {
   className?: string
@@ -49,7 +58,15 @@ export function ReportsFromAdvisors({
             }}
           >
             <div className="h-11 w-11 shrink-0 rounded-xl overflow-hidden border border-white/10 bg-midnight-700/60">
-              <Image src={report.icon} alt={report.title} width={44} height={44} className="h-full w-full object-cover" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={REPORT_ICON_MAP[report.id] || '/assets/features/horoscope.png'}
+                alt={report.title}
+                width={44}
+                height={44}
+                className="h-full w-full object-cover"
+                onError={(e) => { e.currentTarget.src = '/assets/features/horoscope.png' }}
+              />
             </div>
 
             <div className="min-w-0 flex-1">

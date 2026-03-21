@@ -5,6 +5,7 @@ import { format } from 'date-fns'
 import { BottomSheet } from '@/components/ui/bottom-sheet'
 import { Button } from '@/components/ui/button'
 import { useHoroscope } from '@/hooks/use-horoscope'
+import { useTransits } from '@/hooks/use-transits'
 import { useUserProfile } from '@/hooks/use-profile'
 import { SkeletonCard } from '@/components/ui/skeleton'
 import { ZODIAC_NAMES } from '@/lib/constants'
@@ -12,10 +13,11 @@ import { SectionHeroCard } from '@/components/today/shared/section-hero-card'
 
 export function YourHoroscopeCard() {
   const [detailOpen, setDetailOpen] = useState(false)
-  const dateStr = format(new Date(), 'yyyy-MM-dd')
   const { data: profile } = useUserProfile()
-  const { data: reading, isLoading } = useHoroscope(dateStr)
+  const { data: reading, isLoading } = useHoroscope()
+  const { data: transits } = useTransits()
   const signName = profile?.sunSign ? (ZODIAC_NAMES[profile.sunSign as keyof typeof ZODIAC_NAMES] ?? profile.sunSign) : null
+  const transitCount = (transits?.shortTerm?.length ?? 0) + (transits?.longTerm?.length ?? 0)
 
   if (isLoading) return <SkeletonCard className="mx-4" />
 
@@ -32,17 +34,21 @@ export function YourHoroscopeCard() {
           <p className="text-[11px] text-slate-300 mb-1">{signName ?? 'Your Sign'}</p>
           <h3 className="font-display text-[40px] leading-none font-bold text-white mb-2">Your Horoscope</h3>
 
-          <div
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3"
-            style={{ background: 'rgba(107,114,128,0.5)', border: '1px solid rgba(255,255,255,0.2)' }}
-          >
-            <div className="flex -space-x-1">
-              <span className="h-3 w-3 rounded-full bg-cyan-300/80 border border-white/20" />
-              <span className="h-3 w-3 rounded-full bg-amber-300/80 border border-white/20" />
-              <span className="h-3 w-3 rounded-full bg-slate-200/80 border border-white/20" />
+          {transitCount > 0 && (
+            <div
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3"
+              style={{ background: 'rgba(107,114,128,0.5)', border: '1px solid rgba(255,255,255,0.2)' }}
+            >
+              <div className="flex -space-x-1">
+                <span className="h-3 w-3 rounded-full bg-cyan-300/80 border border-white/20" />
+                <span className="h-3 w-3 rounded-full bg-amber-300/80 border border-white/20" />
+                <span className="h-3 w-3 rounded-full bg-slate-200/80 border border-white/20" />
+              </div>
+              <span className="text-[10px] font-display font-semibold text-white">
+                Transits influencing: {transitCount}
+              </span>
             </div>
-            <span className="text-[10px] font-display font-semibold text-white">Transits influencing: 4</span>
-          </div>
+          )}
 
           {reading ? (
             <>

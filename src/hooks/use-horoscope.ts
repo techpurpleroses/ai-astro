@@ -1,97 +1,51 @@
+import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { astroFetch } from '@/lib/client/astro-fetch'
-import { useUserProfile } from '@/hooks/use-profile'
+import { useToday } from '@/hooks/use-today'
 import type { HoroscopeReading, AlternativeHoroscope, DailyReadings, TarotCard, MagicBallData } from '@/types'
 
-// ── Shared API shapes ─────────────────────────────────────────────────────────
-
-interface LiveHoroscopeDTO {
-  main: {
-    title: string
-    text: string
-    energy: number
-    emotionalTone: string
-    challenges: string[]
-    opportunities: string[]
-  }
-  categories: {
-    'your-day': { text: string; rating: number; keywords: string[] }
-    love: { text: string; rating: number; keywords: string[] }
-    health: { text: string; rating: number; keywords: string[] }
-    career: { text: string; rating: number; keywords: string[] }
-  }
-}
-
-async function fetchLiveHoroscope(sign: string, date: string): Promise<LiveHoroscopeDTO | null> {
-  const res = await astroFetch(`/api/dashboard/horoscope?sign=${sign}&date=${date}`, {
-    debugOrigin: 'hooks.use-horoscope.live',
-  })
-  if (!res.ok) return null
-  const json = await res.json() as { data: LiveHoroscopeDTO; errors?: string[] }
-  if (!json.data || json.errors?.length) return null
-  return json.data
-}
-
 // ── useHoroscope ──────────────────────────────────────────────────────────────
+// Selector over useToday — extracts HoroscopeReading from the horoscope section.
+// The `_date` parameter is kept for API compatibility but the BFF owns the date.
 
-export function useHoroscope(date: string) {
-  const { data: profile } = useUserProfile()
-  const sign = profile?.sunSign ?? null
+export function useHoroscope(_date?: string) {
+  const todayQuery = useToday()
 
-  return useQuery({
-    queryKey: ['horoscope', date, sign ?? 'no-sign'],
-    queryFn: async (): Promise<HoroscopeReading | undefined> => {
-      if (sign) {
-        const live = await fetchLiveHoroscope(sign, date)
-        if (live) {
-          return {
-            date,
-            title: live.main.title,
-            text: live.main.text,
-            energy: live.main.energy,
-            emotionalTone: live.main.emotionalTone,
-            challenges: live.main.challenges,
-            opportunities: live.main.opportunities,
-          }
-        }
-      }
-      // Fallback: static JSON
-      const data = await import('@/data/horoscope.json')
-      const readings = (data as { readings: HoroscopeReading[] }).readings
-      if (!readings.length) return undefined
-      const exact = readings.find((r) => r.date === date)
-      if (exact) return exact
-      const sorted = [...readings].sort((a, b) => a.date.localeCompare(b.date))
-      return [...sorted].reverse().find((r) => r.date <= date) ?? sorted[sorted.length - 1]
-    },
-    enabled: profile !== undefined,
-    staleTime: 1000 * 60 * 60,
-  })
+  const data: HoroscopeReading | undefined = useMemo(() => {
+    const raw = todayQuery.data?.sections.horoscope.data?.main
+    if (!raw) return undefined
+    return {
+      date: todayQuery.data?.subject.localDate ?? '',
+      title: raw.title,
+      text: raw.text,
+      energy: raw.energy,
+      emotionalTone: raw.emotionalTone,
+      challenges: raw.challenges,
+      opportunities: raw.opportunities,
+    }
+  }, [todayQuery.data])
+
+  return { ...todayQuery, data }
 }
 
 // ── useAlternativeHoroscope ───────────────────────────────────────────────────
+// Selector over useToday — extracts category readings from the horoscope section.
 
 export function useAlternativeHoroscope() {
-  const { data: profile } = useUserProfile()
-  const sign = profile?.sunSign ?? null
-  const date = new Date().toISOString().slice(0, 10)
+  const todayQuery = useToday()
 
-  return useQuery({
-    queryKey: ['alternative-horoscope', sign ?? 'no-sign'],
-    queryFn: async (): Promise<AlternativeHoroscope> => {
-      if (sign) {
-        const live = await fetchLiveHoroscope(sign, date)
-        if (live?.categories) return live.categories as AlternativeHoroscope
-      }
-      const data = await import('@/data/alternative-horoscope.json')
-      return data as unknown as AlternativeHoroscope
-    },
-    enabled: profile !== undefined,
-    staleTime: 1000 * 60 * 60,
-  })
+  const data: AlternativeHoroscope | undefined = useMemo(() => {
+    const cats = todayQuery.data?.sections.horoscope.data?.categories
+    if (!cats) return undefined
+    return cats as AlternativeHoroscope
+  }, [todayQuery.data])
+
+  return { ...todayQuery, data }
 }
 
 // ── useDailyReadings ──────────────────────────────────────────────────────────
+// Calls magic-ball and tarot feature endpoints (those remain separate).
+// Dos/donts and love detail come from useToday data — no second horoscope call.
 
 function luckyNumberFromDate(date: string): number {
   const hash = date.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0)
@@ -105,24 +59,21 @@ function cardOfDay(cards: TarotCard[], date: string): TarotCard | undefined {
 }
 
 export function useDailyReadings() {
-  const { data: profile } = useUserProfile()
-  const sign = profile?.sunSign ?? null
+  const todayQuery = useToday()
 
   return useQuery({
-    queryKey: ['daily-readings', sign ?? 'no-sign'],
+    queryKey: ['daily-readings', todayQuery.dataUpdatedAt],
     queryFn: async (): Promise<DailyReadings> => {
-      const today = new Date().toISOString().slice(0, 10)
+      const today = todayQuery.data?.subject.localDate ?? new Date().toISOString().slice(0, 10)
       const luckyNumber = luckyNumberFromDate(today)
 
-      // Fetch magic ball + tarot in parallel, horoscope if we have a sign
-      const [mbRes, tarotRes, horoscopeData] = await Promise.all([
+      const [mbRes, tarotRes] = await Promise.all([
         astroFetch('/api/dashboard/features/magic-ball', {
           debugOrigin: 'hooks.use-horoscope.daily.magic-ball',
         }).then((r) => r.ok ? r.json() as Promise<MagicBallData> : null),
         astroFetch('/api/dashboard/features/tarot', {
           debugOrigin: 'hooks.use-horoscope.daily.tarot',
         }).then((r) => r.ok ? r.json() as Promise<{ cards: TarotCard[] }> : null),
-        sign ? fetchLiveHoroscope(sign, today) : null,
       ])
 
       const magicBall: MagicBallData = mbRes ?? { answers: [], suggestedQuestions: [] }
@@ -134,19 +85,23 @@ export function useDailyReadings() {
         imageSlug: '',
       }
 
+      // Dos/donts and love come from BFF data — no extra provider call
+      const horoscopeMain = todayQuery.data?.sections.horoscope.data?.main
+      const loveCategory = todayQuery.data?.sections.horoscope.data?.categories.love
+
       let dos: string[] = ['Trust your instincts', 'Connect with loved ones', 'Take time for yourself']
       let donts: string[] = ['Avoid unnecessary conflict', "Don't overcommit", 'Skip social media']
       let loveTip = 'Venus aligns with your heart today — be open to connection.'
       let loveDetail = 'The stars support romance and meaningful conversations. Express what you feel honestly.'
 
-      if (horoscopeData) {
-        if (horoscopeData.main.opportunities?.length) dos = horoscopeData.main.opportunities
-        if (horoscopeData.main.challenges?.length) donts = horoscopeData.main.challenges
-        if (horoscopeData.categories.love?.text) {
-          loveDetail = horoscopeData.categories.love.text
-          loveTip = loveDetail.slice(0, 120).trimEnd()
-          if (loveTip.length < loveDetail.length) loveTip += '…'
-        }
+      if (horoscopeMain) {
+        if (horoscopeMain.opportunities?.length) dos = horoscopeMain.opportunities
+        if (horoscopeMain.challenges?.length) donts = horoscopeMain.challenges
+      }
+      if (loveCategory?.text) {
+        loveDetail = loveCategory.text
+        loveTip = loveDetail.slice(0, 120).trimEnd()
+        if (loveTip.length < loveDetail.length) loveTip += '…'
       }
 
       return {
@@ -161,7 +116,7 @@ export function useDailyReadings() {
         trendingQuestion: magicBall.suggestedQuestions?.[0] ?? 'Will things improve soon?',
       }
     },
-    enabled: profile !== undefined,
+    enabled: !todayQuery.isLoading,
     staleTime: 1000 * 60 * 60,
   })
 }

@@ -1,6 +1,11 @@
-import { useQuery } from '@tanstack/react-query'
-import { astroFetchJson } from '@/lib/client/astro-fetch'
+import { useMemo } from 'react'
+import { useToday } from '@/hooks/use-today'
 import type { TransitsData, RetrogradData, Transit, AstroEvent } from '@/types'
+
+// ── Shared mapping helpers ────────────────────────────────────────────────────
+
+const VALID_ASPECTS = new Set(['conjunction', 'opposition', 'trine', 'square', 'sextile', 'quincunx'])
+const VALID_EVENT_TYPES = new Set(['ingress', 'aspect', 'eclipse', 'retrograde', 'station'])
 
 type RawTransit = {
   title: string | null
@@ -17,19 +22,9 @@ type RawEvent = {
   eventAt: string
 }
 
-type TodayApiResponse = {
-  data: {
-    transits: RawTransit[]
-    events: RawEvent[]
-  }
-}
-
-const VALID_ASPECTS = new Set(['conjunction', 'opposition', 'trine', 'square', 'sextile', 'quincunx'])
-const VALID_EVENT_TYPES = new Set(['ingress', 'aspect', 'eclipse', 'retrograde', 'station'])
-
-function adaptTransitsData(raw: RawTransit[], events: RawEvent[], today: Date): TransitsData {
-  const todayStr = today.toISOString()
-  const endStr = new Date(today.getTime() + 7 * 86_400_000).toISOString()
+function mapTransits(raw: RawTransit[], events: RawEvent[], localDate: string): TransitsData {
+  const todayStr = new Date(localDate).toISOString()
+  const endStr = new Date(new Date(localDate).getTime() + 7 * 86_400_000).toISOString()
 
   const mapped: Transit[] = raw.map((t, i) => {
     const aspect = t.aspectType && VALID_ASPECTS.has(t.aspectType)
@@ -89,10 +84,11 @@ function adaptTransitsData(raw: RawTransit[], events: RawEvent[], today: Date): 
   }
 }
 
-function adaptRetrogradData(events: RawEvent[], today: Date): RetrogradData {
+function mapRetrogrades(events: RawEvent[], localDate: string): RetrogradData {
   const retroEvents = events.filter(
     (e) => e.eventType === 'retrograde' || e.eventType === 'station'
   )
+  const today = new Date(localDate)
   return {
     active: retroEvents.slice(0, 3).map((e) => {
       const planet = e.title.split(' ')[0] ?? 'Mercury'
@@ -110,41 +106,34 @@ function adaptRetrogradData(events: RawEvent[], today: Date): RetrogradData {
   }
 }
 
-async function fetchTodayData(): Promise<TodayApiResponse> {
-  const date = new Date().toISOString().slice(0, 10)
-  return astroFetchJson<TodayApiResponse>(`/api/astro/today?date=${date}`, {
-    debugOrigin: 'hooks.use-transits.today',
-  })
-}
+// ── useTransits ───────────────────────────────────────────────────────────────
+// Selector over useToday — extracts TransitsData from the today section.
 
 export function useTransits() {
-  return useQuery({
-    queryKey: ['transits'],
-    queryFn: async (): Promise<TransitsData> => {
-      try {
-        const json = await fetchTodayData()
-        return adaptTransitsData(json.data.transits, json.data.events, new Date())
-      } catch {
-        const data = await import('@/data/transits.json')
-        return data as unknown as TransitsData
-      }
-    },
-    staleTime: 1000 * 60 * 60,
-  })
+  const todayQuery = useToday()
+
+  const data: TransitsData | undefined = useMemo(() => {
+    const section = todayQuery.data?.sections.today
+    if (!section?.data) return undefined
+    const localDate = todayQuery.data?.subject.localDate ?? new Date().toISOString().slice(0, 10)
+    return mapTransits(section.data.transits, section.data.events, localDate)
+  }, [todayQuery.data])
+
+  return { ...todayQuery, data }
 }
 
+// ── useRetrogrades ────────────────────────────────────────────────────────────
+// Selector over useToday — extracts RetrogradData from the today section events.
+
 export function useRetrogrades() {
-  return useQuery({
-    queryKey: ['retrogrades'],
-    queryFn: async (): Promise<RetrogradData> => {
-      try {
-        const json = await fetchTodayData()
-        return adaptRetrogradData(json.data.events, new Date())
-      } catch {
-        const data = await import('@/data/retrogrades.json')
-        return data as unknown as RetrogradData
-      }
-    },
-    staleTime: 1000 * 60 * 60,
-  })
+  const todayQuery = useToday()
+
+  const data: RetrogradData | undefined = useMemo(() => {
+    const section = todayQuery.data?.sections.today
+    if (!section?.data) return undefined
+    const localDate = todayQuery.data?.subject.localDate ?? new Date().toISOString().slice(0, 10)
+    return mapRetrogrades(section.data.events, localDate)
+  }, [todayQuery.data])
+
+  return { ...todayQuery, data }
 }

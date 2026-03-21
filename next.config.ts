@@ -3,6 +3,22 @@ import { withSentryConfig } from "@sentry/nextjs";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  images: {
+    remotePatterns: [
+      // Supabase storage (report icons, avatars, etc.)
+      {
+        protocol: 'https',
+        hostname: '*.supabase.co',
+        pathname: '/storage/v1/object/public/**',
+      },
+      // Supabase CDN transform endpoint
+      {
+        protocol: 'https',
+        hostname: '*.supabase.co',
+        pathname: '/storage/v1/render/image/**',
+      },
+    ],
+  },
 };
 
 export default withSentryConfig(nextConfig, {

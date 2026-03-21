@@ -20,6 +20,16 @@ interface ProductRow {
   metadata: unknown;
 }
 
+// Fallback local icons when DB icon_url is null/empty
+const SLUG_ICON_MAP: Record<string, string> = {
+  "astrocartography-report": "/assets/features/astrocartography.png",
+  "moon-report":             "/assets/features/moon.png",
+  "compatibility-report":    "/assets/features/compatibility.png",
+  "birth-chart-report":      "/assets/features/birth-chart.png",
+  "soulmate-sketch":         "/assets/soulmate-sketch.webp",
+  "prediction-2026-report":  "/assets/prediction-2026.png",
+};
+
 function rowToProductDTO(row: ProductRow): ReportProductDTO {
   return {
     id: row.slug,
@@ -28,7 +38,7 @@ function rowToProductDTO(row: ProductRow): ReportProductDTO {
     price: row.price_inr != null ? Number(row.price_inr) : null,
     status: (row.status as ReportProductDTO["status"]) ?? "buy",
     badge: row.badge,
-    icon: row.icon_url ?? "",
+    icon: row.icon_url || SLUG_ICON_MAP[row.slug] || "/assets/features/horoscope.png",
     accent: row.accent ?? "#84CC16",
   };
 }

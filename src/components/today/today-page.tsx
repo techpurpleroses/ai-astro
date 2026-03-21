@@ -2,44 +2,23 @@
 
 import { useCallback, useMemo, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Settings, Gem, CircleDot, Moon, Sparkles } from 'lucide-react'
+import { Settings, Gem, Sun, Moon, CircleDot } from 'lucide-react'
 import { TodaySectionTabs } from './today-section-tabs'
 import { HoroscopeSection } from './horoscope/horoscope-section'
 import { AstroEventsSection } from './astro-events/astro-events-section'
 import { MoonSection } from './moon/moon-section'
 import { TopInsightsStrip } from './horoscope/top-insights-strip'
-import { TopCardsStrip, type TopCardsStripItem } from './shared/top-cards-strip'
+import { AstroCardStrip } from './astro-events/astro-card-strip'
+import { MoonCardStrip } from './moon/moon-card-strip'
 import { TabHeroSlider } from './shared/tab-hero-slider'
 import { AskAdvisorCard } from './shared/ask-advisor-card'
 import { BirthDataPrompt } from '@/components/shared/birth-data-prompt'
+import { useUserProfile } from '@/hooks/use-profile'
+import { useBirthChart } from '@/hooks/use-birth-chart'
+import { ZODIAC_NAMES } from '@/lib/constants'
 
 type TodaySection = 'horoscope' | 'events' | 'moon'
 const SECTION_ORDER: TodaySection[] = ['horoscope', 'events', 'moon']
-
-const ASTRO_TOP_CARDS: TopCardsStripItem[] = [
-  { id: 'short-transit', label: 'Your Short-Term Transit', image: '/assets/today/events/short-transit.webp' },
-  { id: 'long-transit', label: 'Your Long-Term Transit', image: '/assets/today/events/long-transit.webp' },
-  { id: 'active-retrogrades', label: 'Active Retrogrades', image: '/assets/today/events/active-retrogrades.webp' },
-  { id: 'what-are-transits', label: 'What Are Transits?', image: '/assets/today/events/what-are-transits.webp' },
-]
-
-const MOON_TOP_CARDS: TopCardsStripItem[] = [
-  { id: 'waning-gibbous', label: 'Waning Gibbous', image: '/assets/today/moon/waning-gibbous.webp' },
-  { id: 'moon-in-libra', label: 'Moon In Libra', image: '/assets/today/moon/moon-in-libra.webp' },
-  { id: 'moon-rituals', label: 'Moon Rituals', image: '/assets/today/moon/moon-rituals.webp' },
-  { id: 'moon-do-dont', label: 'Do / Dont', image: '/assets/today/moon/do-dont.webp' },
-]
-
-const TOP_STRIP_CARD_SIZING = {
-  minCardHeight: 116,
-  cardHeightRatio: 1.1,
-} as const
-
-const HEADER_SIGNS = [
-  { id: 'capricorn', label: 'Capricorn', Icon: CircleDot },
-  { id: 'scorpio', label: 'Scorpio', Icon: Moon },
-  { id: 'cancer', label: 'Cancer', Icon: Sparkles },
-] as const
 
 function isValidSection(s: string | null): s is TodaySection {
   return s === 'horoscope' || s === 'events' || s === 'moon'
@@ -53,6 +32,21 @@ export function TodayClient() {
   const touchStartX = useRef<number | null>(null)
   const touchStartY = useRef<number | null>(null)
   const sectionIndex = useMemo(() => SECTION_ORDER.indexOf(activeSection), [activeSection])
+
+  const { data: profile } = useUserProfile()
+  const { data: chart } = useBirthChart()
+
+  const headerSigns = useMemo(() => {
+    const sun = profile?.sunSign
+    const moonSign = chart?.bigThree?.moon?.sign
+    const rising = chart?.bigThree?.ascendant?.sign
+    const signs = [
+      sun ? { key: 'sun', label: ZODIAC_NAMES[sun as keyof typeof ZODIAC_NAMES] ?? sun, Icon: Sun } : null,
+      moonSign ? { key: 'moon', label: ZODIAC_NAMES[moonSign as keyof typeof ZODIAC_NAMES] ?? moonSign, Icon: Moon } : null,
+      rising ? { key: 'rising', label: ZODIAC_NAMES[rising as keyof typeof ZODIAC_NAMES] ?? rising, Icon: CircleDot } : null,
+    ].filter((s): s is NonNullable<typeof s> => s !== null)
+    return signs.length > 0 ? signs : null
+  }, [profile, chart])
 
   const setSection = useCallback(
     (section: TodaySection) => {
@@ -121,19 +115,21 @@ export function TodayClient() {
         <div className="flex items-start justify-between gap-3">
           <div>
             <h1 className="font-display text-2xl font-bold leading-none text-white">You &gt;</h1>
-            <div className="mt-1 flex items-center gap-2 text-slate-300">
-              {HEADER_SIGNS.map(({ id, label, Icon }, idx) => (
-                <div key={id} className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1">
-                    <Icon size={10} strokeWidth={2.1} className="text-[#C9B08A]" />
-                    <span className="font-display text-[12px] font-semibold text-slate-300">{label}</span>
-                  </span>
-                  {idx < HEADER_SIGNS.length - 1 ? (
-                    <span className="font-display text-[11px] text-slate-500">|</span>
-                  ) : null}
-                </div>
-              ))}
-            </div>
+            {headerSigns && (
+              <div className="mt-1 flex items-center gap-2 text-slate-300">
+                {headerSigns.map(({ key, label, Icon }, idx) => (
+                  <div key={key} className="flex items-center gap-2">
+                    <span className="inline-flex items-center gap-1">
+                      <Icon size={10} strokeWidth={2.1} className="text-[#C9B08A]" />
+                      <span className="font-display text-[12px] font-semibold text-slate-300">{label}</span>
+                    </span>
+                    {idx < headerSigns.length - 1 ? (
+                      <span className="font-display text-[11px] text-slate-500">|</span>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="flex items-center gap-2">
@@ -158,23 +154,8 @@ export function TodayClient() {
 
       <div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
         {activeSection === 'horoscope' && <TopInsightsStrip />}
-        {activeSection === 'events' && (
-          <TopCardsStrip
-            items={ASTRO_TOP_CARDS}
-            borderColor="rgba(34,211,238,0.86)"
-            minCardHeight={TOP_STRIP_CARD_SIZING.minCardHeight}
-            cardHeightRatio={TOP_STRIP_CARD_SIZING.cardHeightRatio}
-          />
-        )}
-        {activeSection === 'moon' && (
-          <TopCardsStrip
-            items={MOON_TOP_CARDS}
-            borderColor="rgba(231,196,79,0.86)"
-            imageClassName="object-cover object-center scale-[0.95]"
-            minCardHeight={TOP_STRIP_CARD_SIZING.minCardHeight}
-            cardHeightRatio={TOP_STRIP_CARD_SIZING.cardHeightRatio}
-          />
-        )}
+        {activeSection === 'events' && <AstroCardStrip />}
+        {activeSection === 'moon' && <MoonCardStrip />}
 
         <BirthDataPrompt />
         <TabHeroSlider active={activeSection} />

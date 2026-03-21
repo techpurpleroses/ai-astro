@@ -6,6 +6,7 @@ export interface UserProfile {
   isPlaceholder: boolean
   sunSign: string | null   // e.g. 'scorpio', null when placeholder
   timezone: string         // e.g. 'America/New_York'
+  birthDate: string | null // YYYY-MM-DD, null when placeholder
 }
 
 export function useUserProfile() {
@@ -39,12 +40,10 @@ export function useUpdateProfile() {
       })
     },
     onSuccess: (data) => {
-      // Replace the cached profile so all dependent queries (horoscope, daily-readings) re-fire
       queryClient.setQueryData(['user-profile'], data)
-      // Invalidate sign-dependent queries so they re-fetch with the new sign
-      void queryClient.invalidateQueries({ queryKey: ['horoscope'] })
-      void queryClient.invalidateQueries({ queryKey: ['alternative-horoscope'] })
-      void queryClient.invalidateQueries({ queryKey: ['daily-readings'] })
+      // Invalidate the Today BFF — it owns horoscope, transits, moon, compatibility
+      void queryClient.invalidateQueries({ queryKey: ['today'] })
+      // daily-readings re-triggers via todayQuery.dataUpdatedAt in its key
     },
   })
 }

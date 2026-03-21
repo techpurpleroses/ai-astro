@@ -8,12 +8,14 @@ interface BottomNavItemProps {
   icon: React.ReactNode
   label: string
   isActive: boolean
+  onClick?: () => void
 }
 
-export function BottomNavItem({ href, icon, label, isActive }: BottomNavItemProps) {
+export function BottomNavItem({ href, icon, label, isActive, onClick }: BottomNavItemProps) {
   return (
     <Link
       href={href}
+      onClick={onClick}
       className={cn(
         'flex flex-1 flex-col items-center justify-center gap-1 py-2',
         'transition-colors duration-200',

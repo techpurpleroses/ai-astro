@@ -7,6 +7,7 @@ export default function CardOfTheDayPage() {
       subtitle="✦ Daily Cosmic Guidance ✦"
       promptText="Close your eyes, take a breath, and focus on today. When you feel ready, choose one card."
       accentColor="#F59E0B"
+      spreadType="single"
     />
   )
 }

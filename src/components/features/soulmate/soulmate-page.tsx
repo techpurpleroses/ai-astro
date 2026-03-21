@@ -3,7 +3,9 @@
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { ArrowLeft, Stars, Heart, Sparkles } from 'lucide-react'
+import { ArrowLeft, Heart, Sparkles } from 'lucide-react'
+import Image from 'next/image'
+import { FeatureGate } from '@/components/billing/feature-gate'
 
 function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.05 })
@@ -18,38 +20,38 @@ function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
   )
 }
 
-// ── Soulmate sketch portrait SVG ──────────────────────────────────────────────
+// ── Soulmate sketch portrait ───────────────────────────────────────────────────
 
 function SoulmatePortrait() {
   return (
     <div
-      className="rounded-3xl overflow-hidden p-6 flex flex-col items-center gap-4"
+      className="rounded-3xl overflow-hidden flex flex-col items-center gap-4"
       style={{
         background: 'linear-gradient(160deg, rgba(6,182,212,0.08), rgba(15,30,53,0.9))',
         border: '1px solid rgba(6,182,212,0.2)',
       }}
     >
-      {/* Abstract portrait */}
-      <div className="relative">
+      <div className="relative w-full aspect-square max-h-64">
+        <Image
+          src="/assets/soulmate-sketch.webp"
+          alt="Soulmate sketch"
+          fill
+          className="object-cover"
+        />
+        {/* Gradient fade at bottom */}
         <div
-          className="h-28 w-28 rounded-full flex items-center justify-center"
-          style={{
-            background: 'radial-gradient(circle, rgba(6,182,212,0.2), rgba(6,182,212,0.04))',
-            border: '1px solid rgba(6,182,212,0.3)',
-            boxShadow: '0 0 40px rgba(6,182,212,0.15)',
-          }}
-        >
-          <Stars size={40} className="text-cyan-glow" style={{ opacity: 0.7 }} />
-        </div>
+          className="absolute inset-x-0 bottom-0 h-20"
+          style={{ background: 'linear-gradient(to top, rgba(10,22,40,0.95), transparent)' }}
+        />
+        {/* Heart badge */}
         <div
-          className="absolute -bottom-1 -right-1 h-8 w-8 rounded-full flex items-center justify-center"
+          className="absolute bottom-3 right-3 h-8 w-8 rounded-full flex items-center justify-center"
           style={{ background: 'rgba(244,63,94,0.2)', border: '1px solid rgba(244,63,94,0.4)' }}
         >
           <Heart size={14} className="text-rose-accent" />
         </div>
       </div>
-
-      <div className="text-center">
+      <div className="text-center px-4 pb-4">
         <p className="font-mystical text-sm text-cyan-glow mb-1">Your Cosmic Soulmate</p>
         <p className="text-xs text-text-muted">Based on your Scorpio Sun · Cancer Moon · Aquarius Rising</p>
       </div>
@@ -112,77 +114,73 @@ export function SoulmateClient() {
         </FadeIn>
 
         <FadeIn delay={0.08}>
-          <SectionBlock title="Their Zodiac Profile" accentColor="#06B6D4">
-            <div className="grid grid-cols-3 gap-2 mt-1">
-              {[
-                { label: 'Sun Sign',    value: 'Capricorn', glyph: '♑', color: '#78716C' },
-                { label: 'Moon Sign',   value: 'Pisces',    glyph: '♓', color: '#6366F1' },
-                { label: 'Rising Sign', value: 'Libra',     glyph: '♎', color: '#A78BFA' },
-              ].map(({ label, value, glyph, color }) => (
-                <div key={label}
-                  className="rounded-xl p-2.5 flex flex-col items-center gap-1 text-center"
-                  style={{ background: `${color}10`, border: `1px solid ${color}20` }}
-                >
-                  <span className="text-xl" style={{ color }}>{glyph}</span>
-                  <p className="text-[9px] text-text-muted">{label}</p>
-                  <p className="text-[10px] font-display font-bold text-text-primary">{value}</p>
+          <FeatureGate feature="soulmate.generate">
+            <div className="space-y-4">
+              <SectionBlock title="Their Zodiac Profile" accentColor="#06B6D4">
+                <div className="grid grid-cols-3 gap-2 mt-1">
+                  {[
+                    { label: 'Sun Sign',    value: 'Capricorn', glyph: '♑', color: '#78716C' },
+                    { label: 'Moon Sign',   value: 'Pisces',    glyph: '♓', color: '#6366F1' },
+                    { label: 'Rising Sign', value: 'Libra',     glyph: '♎', color: '#A78BFA' },
+                  ].map(({ label, value, glyph, color }) => (
+                    <div key={label}
+                      className="rounded-xl p-2.5 flex flex-col items-center gap-1 text-center"
+                      style={{ background: `${color}10`, border: `1px solid ${color}20` }}
+                    >
+                      <span className="text-xl" style={{ color }}>{glyph}</span>
+                      <p className="text-[9px] text-text-muted">{label}</p>
+                      <p className="text-[10px] font-display font-bold text-text-primary">{value}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </SectionBlock>
-        </FadeIn>
+              </SectionBlock>
 
-        <FadeIn delay={0.14}>
-          <SectionBlock title="Connection Type" accentColor="#F43F5E">
-            <p className="text-sm text-text-secondary leading-relaxed">
-              Your charts reveal a <strong className="text-text-primary">karmic soulmate bond</strong> — a connection forged in past lives and destined to continue in this one. The magnetic pull you'll feel is not coincidence; it's cosmic recognition.
-            </p>
-          </SectionBlock>
-        </FadeIn>
+              <SectionBlock title="Connection Type" accentColor="#F43F5E">
+                <p className="text-sm text-text-secondary leading-relaxed">
+                  Your charts reveal a <strong className="text-text-primary">karmic soulmate bond</strong> — a connection forged in past lives and destined to continue in this one. The magnetic pull you'll feel is not coincidence; it's cosmic recognition.
+                </p>
+              </SectionBlock>
 
-        <FadeIn delay={0.18}>
-          <SectionBlock title="Timing of Meeting" accentColor="#84CC16">
-            <div className="space-y-2">
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Jupiter's transit through your 7th house in late 2026 creates the most powerful window for meeting your soulmate. Key dates to remain open:
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                {['Oct 12–28, 2026', 'Dec 3–20, 2026'].map((date) => (
-                  <div key={date}
-                    className="rounded-xl px-3 py-2 text-center"
-                    style={{ background: 'rgba(132,204,22,0.08)', border: '1px solid rgba(132,204,22,0.2)' }}
-                  >
-                    <p className="text-[10px] font-display font-semibold text-lime-accent">{date}</p>
+              <SectionBlock title="Timing of Meeting" accentColor="#84CC16">
+                <div className="space-y-2">
+                  <p className="text-sm text-text-secondary leading-relaxed">
+                    Jupiter's transit through your 7th house in late 2026 creates the most powerful window for meeting your soulmate. Key dates to remain open:
+                  </p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {['Oct 12–28, 2026', 'Dec 3–20, 2026'].map((date) => (
+                      <div key={date}
+                        className="rounded-xl px-3 py-2 text-center"
+                        style={{ background: 'rgba(132,204,22,0.08)', border: '1px solid rgba(132,204,22,0.2)' }}
+                      >
+                        <p className="text-[10px] font-display font-semibold text-lime-accent">{date}</p>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              </SectionBlock>
+
+              <SectionBlock title="Your Magnetic Qualities" accentColor="#F59E0B">
+                <ul className="space-y-1.5">
+                  {[
+                    'Intense emotional depth that draws souls seeking transformation',
+                    'Psychic sensitivity that creates instant recognition between soulmates',
+                    "Loyalty that others sense even before you've spoken",
+                  ].map((q, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <Sparkles size={11} className="text-gold-accent shrink-0 mt-0.5" />
+                      <p className="text-xs text-text-secondary">{q}</p>
+                    </li>
+                  ))}
+                </ul>
+              </SectionBlock>
+
+              <SectionBlock title="Compatibility Aspects" accentColor="#A78BFA">
+                <p className="text-sm text-text-secondary leading-relaxed">
+                  Your Scorpio-Capricorn Venus synastry creates profound sexual and emotional compatibility. Their Pisces Moon will harmonize deeply with your Cancer Moon — you'll feel immediately understood in ways that surprise both of you.
+                </p>
+              </SectionBlock>
             </div>
-          </SectionBlock>
-        </FadeIn>
-
-        <FadeIn delay={0.22}>
-          <SectionBlock title="Your Magnetic Qualities" accentColor="#F59E0B">
-            <ul className="space-y-1.5">
-              {[
-                'Intense emotional depth that draws souls seeking transformation',
-                'Psychic sensitivity that creates instant recognition between soulmates',
-                "Loyalty that others sense even before you've spoken",
-              ].map((q, i) => (
-                <li key={i} className="flex items-start gap-2">
-                  <Sparkles size={11} className="text-gold-accent shrink-0 mt-0.5" />
-                  <p className="text-xs text-text-secondary">{q}</p>
-                </li>
-              ))}
-            </ul>
-          </SectionBlock>
-        </FadeIn>
-
-        <FadeIn delay={0.26}>
-          <SectionBlock title="Compatibility Aspects" accentColor="#A78BFA">
-            <p className="text-sm text-text-secondary leading-relaxed">
-              Your Scorpio-Capricorn Venus synastry creates profound sexual and emotional compatibility. Their Pisces Moon will harmonize deeply with your Cancer Moon — you'll feel immediately understood in ways that surprise both of you.
-            </p>
-          </SectionBlock>
+          </FeatureGate>
         </FadeIn>
 
       </div>

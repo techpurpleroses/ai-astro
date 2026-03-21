@@ -7,6 +7,7 @@ export default function YesNoPage() {
       subtitle="✦ The Oracle Speaks ✦"
       promptText="Form your question clearly in your mind. Yes or no only — the universe speaks in absolutes. Choose when ready."
       accentColor="#06B6D4"
+      spreadType="yes-no"
     />
   )
 }

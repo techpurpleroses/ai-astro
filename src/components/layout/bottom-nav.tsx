@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import {
   Sun,
@@ -20,6 +21,12 @@ const TABS = [
 
 export function BottomNav() {
   const pathname = usePathname()
+  const [pendingHref, setPendingHref] = useState<string | null>(null)
+
+  // Clear the optimistic pending state once navigation actually lands
+  useEffect(() => {
+    setPendingHref(null)
+  }, [pathname])
 
   return (
     <nav
@@ -38,7 +45,8 @@ export function BottomNav() {
           href={tab.href}
           icon={tab.icon}
           label={tab.label}
-          isActive={pathname.startsWith(tab.href)}
+          isActive={pathname.startsWith(tab.href) || pendingHref === tab.href}
+          onClick={() => setPendingHref(tab.href)}
         />
       ))}
     </nav>

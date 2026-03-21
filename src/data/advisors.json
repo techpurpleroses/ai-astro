@@ -3,6 +3,7 @@
     {
       "id": "luna-rose",
       "name": "Luna Rose",
+      "avatar": "/assets/advisors/advisor-1.png",
       "specialty": "Love & Relationships",
       "specialtyIcon": "♥",
       "rating": 4.9,
@@ -21,6 +22,7 @@
     {
       "id": "orion-black",
       "name": "Orion Black",
+      "avatar": "/assets/advisors/advisor-2.png",
       "specialty": "Career & Purpose",
       "specialtyIcon": "⭐",
       "rating": 4.8,
@@ -39,6 +41,7 @@
     {
       "id": "celeste-moon",
       "name": "Celeste Moon",
+      "avatar": "/assets/advisors/advisor-3.png",
       "specialty": "Spiritual Growth",
       "specialtyIcon": "🌙",
       "rating": 4.9,
@@ -57,6 +60,7 @@
     {
       "id": "atlas-grey",
       "name": "Atlas Grey",
+      "avatar": "/assets/advisors/advisor-4.png",
       "specialty": "Predictions & Timing",
       "specialtyIcon": "🔮",
       "rating": 4.7,
@@ -75,6 +79,7 @@
     {
       "id": "nova-star",
       "name": "Nova Star",
+      "avatar": "/assets/advisors/advisor-5.png",
       "specialty": "Family & Home",
       "specialtyIcon": "🏠",
       "rating": 4.8,

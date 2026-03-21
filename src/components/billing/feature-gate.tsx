@@ -60,6 +60,11 @@ const GATE_COPY: Record<FeatureKey, {
     title: 'The cards have more to reveal',
     description: 'Unlock love readings, near future spreads, and yes/no oracle — beyond the daily card.',
   },
+  'prediction.report': {
+    title: 'Your cosmic year ahead, decoded',
+    description: 'A comprehensive AI-powered prediction report covering love, career, health, and major life themes for the year ahead — powered by your full birth chart.',
+    preview: "Jupiter's shift into your 2nd house signals a major financial turning point in late 2026\u2026",
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -180,11 +185,11 @@ export function FeatureGate({ feature, children, title, description }: FeatureGa
   const preview = copy.preview
 
   return (
-    <div className="relative rounded-2xl overflow-hidden">
+    <div className="relative rounded-2xl overflow-hidden min-h-105">
       {/* Blurred preview of children underneath */}
       <div
         className="pointer-events-none select-none"
-        style={{ filter: 'blur(8px)', opacity: 0.35, maxHeight: 160, overflow: 'hidden' }}
+        style={{ filter: 'blur(8px)', opacity: 0.35, maxHeight: 200, overflow: 'hidden' }}
         aria-hidden
       >
         {children}

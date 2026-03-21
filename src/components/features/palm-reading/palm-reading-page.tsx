@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Camera } from 'lucide-react'
+import Image from 'next/image'
 import dynamic from 'next/dynamic'
 
 const PalmCameraScanner = dynamic(
@@ -11,98 +12,18 @@ const PalmCameraScanner = dynamic(
   { ssr: false },
 )
 
-// ── Palm SVG illustration ─────────────────────────────────────────────────────
+// ── Palm hand image ───────────────────────────────────────────────────────────
 
 function PalmIllustration({ hand }: { hand: 'left' | 'right' }) {
-  // SVG hand outline with key palm lines
-  const isMirrored = hand === 'right'
-
   return (
-    <svg
-      viewBox="0 0 200 280"
-      className="w-full max-w-[200px] mx-auto"
-      style={{ transform: isMirrored ? 'scaleX(-1)' : undefined }}
-    >
-      {/* Palm outline */}
-      <path
-        d="M 60 260 Q 30 250 28 210 L 25 155 Q 24 140 32 138 L 36 138 Q 40 100 42 80 Q 43 68 52 68 Q 61 68 62 80 L 63 95
-           M 63 95 L 63 60 Q 63 48 72 48 Q 81 48 82 60 L 82 88
-           M 82 88 L 82 52 Q 82 40 91 40 Q 100 40 101 52 L 101 84
-           M 101 84 L 101 58 Q 101 46 110 46 Q 119 46 120 58 L 120 92
-           M 120 92 Q 138 95 148 115 L 158 155 Q 165 175 160 200 Q 155 230 140 248 Q 120 265 95 268 Q 75 270 60 260"
-        fill="none"
-        stroke="rgba(255,255,255,0.15)"
-        strokeWidth={1.5}
-        strokeLinejoin="round"
+    <div className="relative w-full max-w-[200px] mx-auto aspect-[200/280]">
+      <Image
+        src={`/assets/palm-scan/${hand}-hand.png`}
+        alt={`${hand} hand palm`}
+        fill
+        className="object-contain drop-shadow-[0_0_24px_rgba(244,63,94,0.25)]"
       />
-
-      {/* Heart line (rose) */}
-      <path
-        d="M 42 120 Q 65 112 85 115 Q 105 118 128 108"
-        fill="none"
-        stroke="#F43F5E"
-        strokeWidth={2}
-        strokeLinecap="round"
-        opacity={0.8}
-      />
-
-      {/* Head line (cyan) */}
-      <path
-        d="M 44 145 Q 70 138 95 142 Q 118 146 138 138"
-        fill="none"
-        stroke="#06B6D4"
-        strokeWidth={2}
-        strokeLinecap="round"
-        opacity={0.8}
-      />
-
-      {/* Life line (lime) */}
-      <path
-        d="M 70 90 Q 52 120 48 160 Q 45 195 55 225"
-        fill="none"
-        stroke="#84CC16"
-        strokeWidth={2}
-        strokeLinecap="round"
-        opacity={0.8}
-      />
-
-      {/* Fate line (gold) */}
-      <path
-        d="M 90 240 Q 88 200 90 165 Q 92 130 95 100"
-        fill="none"
-        stroke="#F59E0B"
-        strokeWidth={1.5}
-        strokeLinecap="round"
-        opacity={0.7}
-        strokeDasharray="4 3"
-      />
-
-      {/* Glow overlay on lines */}
-      <path
-        d="M 42 120 Q 65 112 85 115 Q 105 118 128 108"
-        fill="none"
-        stroke="#F43F5E"
-        strokeWidth={5}
-        strokeLinecap="round"
-        opacity={0.1}
-      />
-      <path
-        d="M 44 145 Q 70 138 95 142 Q 118 146 138 138"
-        fill="none"
-        stroke="#06B6D4"
-        strokeWidth={5}
-        strokeLinecap="round"
-        opacity={0.1}
-      />
-      <path
-        d="M 70 90 Q 52 120 48 160 Q 45 195 55 225"
-        fill="none"
-        stroke="#84CC16"
-        strokeWidth={5}
-        strokeLinecap="round"
-        opacity={0.1}
-      />
-    </svg>
+    </div>
   )
 }
 

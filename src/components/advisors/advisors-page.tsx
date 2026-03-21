@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { Star, MessageCircle, Clock, Zap, Heart, ChevronRight, Settings } from 'lucide-react'
+import Image from 'next/image'
 import { useAdvisors } from '@/hooks/use-advisors'
 import { SkeletonCard } from '@/components/ui/skeleton'
 import type { Advisor } from '@/types'
@@ -23,15 +24,19 @@ function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
 }
 
 function AdvisorCard({ advisor, onChat }: { advisor: Advisor; onChat: () => void }) {
-  const initials = advisor.name.split(' ').map((part) => part[0]).join('')
   return (
     <div className="glass-card rounded-2xl p-4 flex gap-3 items-start active:bg-white/5 transition-colors">
       <div className="relative shrink-0">
-        <div
-          className="h-14 w-14 rounded-2xl flex items-center justify-center text-lg font-display font-bold"
+        <div className="h-14 w-14 rounded-2xl overflow-hidden"
           style={{ background: 'linear-gradient(135deg, rgba(6,182,212,0.25), rgba(167,139,250,0.15))' }}
         >
-          {initials}
+          {advisor.avatar ? (
+            <Image src={advisor.avatar} alt={advisor.name} width={56} height={56} className="h-full w-full object-cover" />
+          ) : (
+            <span className="h-full w-full flex items-center justify-center text-lg font-display font-bold">
+              {advisor.name.split(' ').map((p) => p[0]).join('')}
+            </span>
+          )}
         </div>
         <div
           className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-midnight-800"
@@ -108,16 +113,20 @@ function MyChatsStrip({
         <button onClick={onViewAll} className="text-[10px] text-cyan-glow font-display">All advisors &gt;</button>
       </div>
       <div className="flex gap-3 px-4 overflow-x-auto scrollbar-hide pb-1">
-        {recent.map((advisor) => {
-          const initials = advisor.name.split(' ').map((part) => part[0]).join('')
-          return (
+        {recent.map((advisor) => (
             <button key={advisor.id} onClick={() => onSelect(advisor.id)} className="flex flex-col items-center gap-1.5 shrink-0">
               <div className="relative">
                 <div
-                  className="h-14 w-14 rounded-full flex items-center justify-center text-sm font-display font-bold"
+                  className="h-14 w-14 rounded-full overflow-hidden"
                   style={{ background: 'linear-gradient(135deg, rgba(6,182,212,0.2), rgba(167,139,250,0.12))', border: '1px solid rgba(6,182,212,0.2)' }}
                 >
-                  {initials}
+                  {advisor.avatar ? (
+                    <Image src={advisor.avatar} alt={advisor.name} width={56} height={56} className="h-full w-full object-cover" />
+                  ) : (
+                    <span className="h-full w-full flex items-center justify-center text-sm font-display font-bold">
+                      {advisor.name.split(' ').map((p) => p[0]).join('')}
+                    </span>
+                  )}
                 </div>
                 <div
                   className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-midnight-800"
@@ -128,8 +137,7 @@ function MyChatsStrip({
                 {advisor.name.split(' ')[0]}
               </span>
             </button>
-          )
-        })}
+        ))}
       </div>
     </div>
   )

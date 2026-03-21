@@ -1,8 +1,11 @@
+import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { astroFetch } from '@/lib/client/astro-fetch'
-import type { CompatibilityData, CompatibilityScore } from '@/types'
+import { useToday } from '@/hooks/use-today'
+import type { CompatibilityData, CompatibilityScore, ZodiacMatch } from '@/types'
 
-// Still used by TodaysMatchesSection for daily zodiac match cards (static data)
+// useCompatibility — still used by the Compatibility page (reads static JSON).
+// TODO: migrate Compatibility page to its own BFF route.
 export function useCompatibility() {
   return useQuery<CompatibilityData>({
     queryKey: ['compatibility'],
@@ -12,6 +15,39 @@ export function useCompatibility() {
     },
     staleTime: Infinity,
   })
+}
+
+// ── useTodayCompatibility ─────────────────────────────────────────────────────
+// Selector over useToday — extracts best matches and today's love matches
+// from the BFF compatibility section. Used by the Today tab only.
+
+export interface TodayCompatibilityData {
+  bestMatches: string[]
+  todaysMatches: { love: ZodiacMatch[] }
+  status: 'ok' | 'error' | 'skipped'
+}
+
+export function useTodayCompatibility() {
+  const todayQuery = useToday()
+
+  const data: TodayCompatibilityData | undefined = useMemo(() => {
+    const compat = todayQuery.data?.sections.compatibility
+    if (!compat) return undefined
+    return {
+      bestMatches: compat.bestMatches,
+      todaysMatches: {
+        love: compat.todaysMatches.map((m) => ({
+          sign1: m.sign1 as ZodiacMatch['sign1'],
+          sign2: m.sign2 as ZodiacMatch['sign2'],
+          score: m.score,
+          note: m.note,
+        })),
+      },
+      status: compat.status,
+    }
+  }, [todayQuery.data])
+
+  return { ...todayQuery, data }
 }
 
 // Live per-pair compatibility from the provider

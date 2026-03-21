@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight, Globe, LogOut, Shield, CreditCard, HelpCircle, FileText, Zap, Crown, Coins } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Globe, LogOut, Shield, CreditCard, HelpCircle, FileText, Zap, Crown, Coins, User } from 'lucide-react'
 import { ReportsFromAdvisors } from '@/components/reports/reports-from-advisors'
 import { astroFetch } from '@/lib/client/astro-fetch'
 import { useQueryClient } from '@tanstack/react-query'
@@ -172,6 +172,11 @@ export function SettingsClient({
         <ReportsFromAdvisors onOpenReport={(id) => router.push(`/settings/reports/${id}`)} />
 
         <div className="space-y-2">
+          <SettingsRow
+            icon={<User size={16} className="text-cyan-400" />}
+            label="My Profile"
+            onClick={() => router.push('/settings/profile')}
+          />
           <SettingsRow icon={<Globe size={16} className="text-text-secondary" />} label="Language" value="English" />
           <SettingsRow icon={<Shield size={16} className="text-text-secondary" />} label="Privacy Policy" />
           <SettingsRow icon={<FileText size={16} className="text-text-secondary" />} label="Terms of Service" />

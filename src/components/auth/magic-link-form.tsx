@@ -66,6 +66,7 @@ export function MagicLinkForm({ mode, nextPath, initialError = null }: AuthFormP
     }
 
     setSubmitting(true);
+    let redirecting = false;
     try {
       const endpoint = mode === "signup" ? "/api/auth/magic-link" : "/api/auth/login";
       const debugOrigin =
@@ -102,18 +103,23 @@ export function MagicLinkForm({ mode, nextPath, initialError = null }: AuthFormP
           body.message ?? "Check your email and confirm your account."
         );
         setFullName("");
+        setPassword("");
       } else {
+        // Keep loading state active — don't clear password or stop spinner
+        // until the page actually navigates away.
+        redirecting = true;
         queryClient.clear();
         router.replace(nextPath);
         router.refresh();
       }
-      setPassword("");
     } catch (error) {
       setErrorMessage(
         error instanceof Error ? error.message : "Authentication request failed."
       );
     } finally {
-      setSubmitting(false);
+      if (!redirecting) {
+        setSubmitting(false);
+      }
     }
   }
 

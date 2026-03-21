@@ -72,8 +72,9 @@ function PlanetOrb({ planet, size }: { planet: string; size: number }) {
 }
 
 function HoroscopeHero() {
-  const dateStr = format(new Date(), 'yyyy-MM-dd')
-  const { data: reading } = useHoroscope(dateStr)
+  const { data: reading } = useHoroscope()
+  const { data: transits } = useTransits()
+  const transitCount = (transits?.shortTerm?.length ?? 0) + (transits?.longTerm?.length ?? 0)
 
   return (
     <SectionHeroCard
@@ -87,17 +88,21 @@ function HoroscopeHero() {
       <p className="mb-1 text-[11px] text-slate-300">{ZODIAC_NAMES[DEFAULT_SIGN]}</p>
       <h3 className="mb-2 font-display text-[30px] font-bold leading-[1.05] text-white">Your Horoscope</h3>
 
-      <div
-        className="mb-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1"
-        style={{ background: 'rgba(107,114,128,0.5)', border: '1px solid rgba(255,255,255,0.2)' }}
-      >
-        <div className="flex -space-x-1">
-          <span className="h-3 w-3 rounded-full border border-white/20 bg-cyan-300/80" />
-          <span className="h-3 w-3 rounded-full border border-white/20 bg-amber-300/80" />
-          <span className="h-3 w-3 rounded-full border border-white/20 bg-slate-200/80" />
+      {transitCount > 0 && (
+        <div
+          className="mb-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1"
+          style={{ background: 'rgba(107,114,128,0.5)', border: '1px solid rgba(255,255,255,0.2)' }}
+        >
+          <div className="flex -space-x-1">
+            <span className="h-3 w-3 rounded-full border border-white/20 bg-cyan-300/80" />
+            <span className="h-3 w-3 rounded-full border border-white/20 bg-amber-300/80" />
+            <span className="h-3 w-3 rounded-full border border-white/20 bg-slate-200/80" />
+          </div>
+          <span className="text-[10px] font-display font-semibold text-white">
+            Transits influencing: {transitCount}
+          </span>
         </div>
-        <span className="text-[10px] font-display font-semibold text-white">Transits influencing: 4</span>
-      </div>
+      )}
 
       <div className="grid grid-cols-2 gap-3">
         <div>

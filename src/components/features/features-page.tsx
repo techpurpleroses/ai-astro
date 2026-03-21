@@ -3,18 +3,18 @@
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { ChevronRight, Sparkles, Crown, Settings } from 'lucide-react'
+import { ChevronRight, Sparkles, Lock, Settings } from 'lucide-react'
 import Image from 'next/image'
 import { useStoryCategories } from '@/hooks/use-stories'
-import { FeatureGate } from '@/components/billing/feature-gate'
+import { usePlan } from '@/hooks/use-plan'
 
 function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.05 })
   return (
     <motion.div ref={ref}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.42, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
+      transition={{ duration: 0.38, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
       {children}
     </motion.div>
@@ -27,29 +27,32 @@ interface FeatureCardProps {
   title: string
   subtitle: string
   description: string
-  badge?: string
+  isPro?: boolean
   gradient: string
   borderColor: string
   accentColor: string
   onClick: () => void
+  extra?: React.ReactNode
 }
 
 function FeatureCard({
-  imageSrc, imageAlt, title, subtitle, description, badge, gradient, borderColor, accentColor, onClick,
+  imageSrc, imageAlt, title, subtitle, description, isPro, gradient, borderColor, accentColor, onClick, extra,
 }: FeatureCardProps) {
   return (
     <motion.button
       onClick={onClick}
-      whileTap={{ scale: 0.98 }}
-      className="w-full glass-card rounded-2xl overflow-hidden text-left"
-      style={{ borderColor }}
+      whileTap={{ scale: 0.985 }}
+      className="w-full rounded-2xl overflow-hidden text-left"
+      style={{
+        background: 'rgba(14,27,49,0.85)',
+        border: `1px solid ${borderColor}`,
+      }}
     >
-      {/* Header strip with image */}
+      {/* Header strip */}
       <div className="px-4 py-4 flex items-center gap-4" style={{ background: gradient }}>
-        {/* Feature image */}
         <div
           className="h-14 w-14 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden"
-          style={{ background: 'rgba(0,0,0,0.3)', border: `1px solid ${accentColor}30` }}
+          style={{ background: 'rgba(0,0,0,0.28)', border: `1px solid ${accentColor}30` }}
         >
           <Image
             src={imageSrc}
@@ -57,16 +60,24 @@ function FeatureCard({
             width={56}
             height={56}
             className="object-contain p-1"
+            unoptimized
           />
         </div>
 
-        {/* Text */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-0.5">
+          <div className="flex items-center gap-2 mb-0.5 flex-wrap">
             <span className="font-display text-base font-bold text-text-primary">{title}</span>
-            {badge && (
-              <span className="text-[9px] font-display font-bold text-gold-accent bg-gold-accent/15 border border-gold-accent/30 px-1.5 py-0.5 rounded-full uppercase tracking-wider">
-                {badge}
+            {isPro && (
+              <span
+                className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider"
+                style={{
+                  background: 'rgba(245,158,11,0.15)',
+                  border: '1px solid rgba(245,158,11,0.35)',
+                  color: '#F59E0B',
+                }}
+              >
+                <Lock size={8} />
+                PRO
               </span>
             )}
           </div>
@@ -82,20 +93,21 @@ function FeatureCard({
       <div className="px-4 py-3">
         <p className="text-xs text-text-secondary leading-relaxed">{description}</p>
       </div>
+
+      {extra}
     </motion.button>
   )
 }
 
-// ── Palm reading mini-preview ─────────────────────────────────────────────────
+// ── Palm metric bars preview ──────────────────────────────────────────────────
 
 function PalmMetricPreview() {
   const metrics = [
-    { label: 'Sensitivity', value: 78, color: '#F43F5E' },
-    { label: 'Longevity',   value: 85, color: '#84CC16' },
-    { label: 'Intelligence',value: 92, color: '#06B6D4' },
-    { label: 'Ambition',    value: 71, color: '#F59E0B' },
+    { label: 'Sensitivity',   value: 78, color: '#F43F5E' },
+    { label: 'Longevity',     value: 85, color: '#84CC16' },
+    { label: 'Intelligence',  value: 92, color: '#06B6D4' },
+    { label: 'Ambition',      value: 71, color: '#F59E0B' },
   ]
-
   return (
     <div className="px-4 pb-4 space-y-2">
       {metrics.map(({ label, value, color }) => (
@@ -121,72 +133,64 @@ function PalmMetricPreview() {
 
 export function FeaturesClient() {
   const router = useRouter()
+  const { canAccess } = usePlan()
   const { data: storiesData } = useStoryCategories()
   const storyCategories = storiesData ?? []
 
+  const palmLocked = !canAccess('palm.scan')
+  const soulmateLocked = !canAccess('soulmate.generate')
+  const predictionLocked = !canAccess('prediction.report')
+
   return (
     <div className="flex flex-col">
-      {/* ── Page header ── */}
+      {/* Header */}
       <div
         className="sticky top-0 z-30 px-4 py-3 flex items-center gap-3"
         style={{
-          background: 'linear-gradient(to bottom, rgba(10,22,40,0.95) 0%, rgba(10,22,40,0.85) 100%)',
+          background: 'rgba(10,22,40,0.97)',
           backdropFilter: 'blur(16px)',
           borderBottom: '1px solid rgba(255,255,255,0.04)',
         }}
       >
         <div
-          className="h-8 w-8 rounded-full flex items-center justify-center"
+          className="h-8 w-8 rounded-full flex items-center justify-center shrink-0"
           style={{ background: 'rgba(167,139,250,0.12)', border: '1px solid rgba(167,139,250,0.25)' }}
         >
           <Sparkles size={15} className="text-violet-400" />
         </div>
-        <div>
+        <div className="flex-1 min-w-0">
           <p className="font-mystical text-[10px] text-text-muted tracking-widest">MYSTIC TOOLS</p>
           <h1 className="font-display text-base font-bold text-text-primary leading-tight">Features</h1>
         </div>
         <button
           onClick={() => router.push('/settings')}
-          className="ml-auto h-8 w-8 rounded-full flex items-center justify-center bg-white/6 border border-white/10"
+          className="h-8 w-8 rounded-full flex items-center justify-center bg-white/6 border border-white/10"
         >
           <Settings size={14} className="text-text-secondary" />
         </button>
-        <div className="flex items-center gap-1 bg-gold-accent/10 border border-gold-accent/25 px-2.5 py-1 rounded-full">
-          <Crown size={10} className="text-gold-accent" />
-          <span className="text-[9px] font-display font-bold text-gold-accent">PRO</span>
-        </div>
       </div>
 
-      <div className="space-y-3 px-4 pt-4 pb-6">
+      <div className="px-4 pt-4 pb-6 space-y-3">
 
         {/* Palm Reading */}
         <FadeIn delay={0}>
-          <FeatureGate feature="palm.scan">
-            <div>
-              <FeatureCard
-                imageSrc="/assets/avatar-1.png"
-                imageAlt="Palm reading"
-                title="Palm Reading"
-                subtitle="Palmistry Analysis"
-                description="Unlock the secrets of your hand lines. Discover your sensitivity, longevity, intelligence, and ambition through ancient palmistry."
-                badge="NEW"
-                gradient="linear-gradient(135deg, rgba(244,63,94,0.12) 0%, rgba(244,63,94,0.04) 100%)"
-                borderColor="rgba(244,63,94,0.2)"
-                accentColor="#F43F5E"
-                onClick={() => router.push('/features/palm-reading')}
-              />
-              <div
-                className="rounded-b-2xl overflow-hidden"
-                style={{ background: 'rgba(15,30,53,0.7)', border: '1px solid rgba(244,63,94,0.15)', borderTop: 'none', marginTop: '-1px' }}
-              >
-                <PalmMetricPreview />
-              </div>
-            </div>
-          </FeatureGate>
+          <FeatureCard
+            imageSrc="/assets/features/palm-reading-hq.jpg"
+            imageAlt="Palm reading"
+            title="Palm Reading"
+            subtitle="Palmistry Analysis"
+            description="Unlock the secrets of your hand lines. Discover your sensitivity, longevity, intelligence, and ambition through ancient palmistry."
+            isPro={palmLocked}
+            gradient="linear-gradient(135deg, rgba(244,63,94,0.12) 0%, rgba(244,63,94,0.04) 100%)"
+            borderColor={palmLocked ? 'rgba(244,63,94,0.15)' : 'rgba(244,63,94,0.25)'}
+            accentColor="#F43F5E"
+            onClick={() => router.push('/features/palm-reading')}
+            extra={<PalmMetricPreview />}
+          />
         </FadeIn>
 
         {/* Tarot */}
-        <FadeIn delay={0.08}>
+        <FadeIn delay={0.06}>
           <FeatureCard
             imageSrc="/assets/prediction-2026.png"
             imageAlt="Tarot cards"
@@ -201,24 +205,39 @@ export function FeaturesClient() {
         </FadeIn>
 
         {/* Soulmate */}
-        <FadeIn delay={0.14}>
-          <FeatureGate feature="soulmate.generate">
-            <FeatureCard
-              imageSrc="/assets/soulmate-sketch.webp"
-              imageAlt="Soulmate birth chart"
-              title="Soulmate by Birth Chart"
-              subtitle="Cosmic Love Match"
-              description="Using your natal chart, discover who your cosmic soulmate is — their zodiac signature, timing of your meeting, and relationship potential."
-              gradient="linear-gradient(135deg, rgba(6,182,212,0.12) 0%, rgba(6,182,212,0.04) 100%)"
-              borderColor="rgba(6,182,212,0.2)"
-              accentColor="#06B6D4"
-              onClick={() => router.push('/features/soulmate')}
-            />
-          </FeatureGate>
+        <FadeIn delay={0.12}>
+          <FeatureCard
+            imageSrc="/assets/soulmate-sketch.webp"
+            imageAlt="Soulmate birth chart"
+            title="Soulmate by Birth Chart"
+            subtitle="Cosmic Love Match"
+            description="Using your natal chart, discover who your cosmic soulmate is — their zodiac signature, timing of your meeting, and relationship potential."
+            isPro={soulmateLocked}
+            gradient="linear-gradient(135deg, rgba(6,182,212,0.12) 0%, rgba(6,182,212,0.04) 100%)"
+            borderColor={soulmateLocked ? 'rgba(6,182,212,0.15)' : 'rgba(6,182,212,0.25)'}
+            accentColor="#06B6D4"
+            onClick={() => router.push('/features/soulmate')}
+          />
+        </FadeIn>
+
+        {/* Prediction Report */}
+        <FadeIn delay={0.18}>
+          <FeatureCard
+            imageSrc="/assets/prediction-2026.png"
+            imageAlt="Prediction report"
+            title="Prediction Report"
+            subtitle="Year Ahead Forecast"
+            description="A full AI-powered cosmic forecast for the year ahead — love, career, health, and life themes decoded from your birth chart."
+            isPro={predictionLocked}
+            gradient="linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(99,102,241,0.04) 100%)"
+            borderColor={predictionLocked ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.25)'}
+            accentColor="#6366F1"
+            onClick={() => router.push('/features/prediction')}
+          />
         </FadeIn>
 
         {/* Magic Ball */}
-        <FadeIn delay={0.20}>
+        <FadeIn delay={0.24}>
           <FeatureCard
             imageSrc="/assets/magic-ball.png"
             imageAlt="Magic ball oracle"
@@ -233,7 +252,7 @@ export function FeaturesClient() {
         </FadeIn>
 
         {/* Story */}
-        <FadeIn delay={0.24}>
+        <FadeIn delay={0.22}>
           <FeatureCard
             imageSrc="/assets/astrocartography.png"
             imageAlt="Astro stories"
@@ -247,28 +266,68 @@ export function FeaturesClient() {
           />
         </FadeIn>
 
-        <FadeIn delay={0.28}>
-          <div className="flex gap-3 overflow-x-auto scrollbar-hide -mx-4 px-4 pb-1">
-            {storyCategories.slice(0, 8).map((category) => (
-              <button
-                key={category.id}
-                onClick={() => router.push(`/features/story/${category.id}`)}
-                className="shrink-0 flex flex-col items-center gap-1.5"
-              >
-                <div
-                  className="h-14 w-14 rounded-full overflow-hidden border"
-                  style={{ borderColor: `${category.accent}70` }}
+        {/* Story category chips */}
+        {storyCategories.length > 0 && (
+          <FadeIn delay={0.26}>
+            <div className="flex gap-4 overflow-x-auto scrollbar-hide -mx-4 px-4 pb-2 pt-1">
+              {storyCategories.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => router.push(`/features/story/${category.id}`)}
+                  className="shrink-0 flex flex-col items-center gap-2"
+                  style={{ width: 64 }}
                 >
-                  <Image src={category.image} alt={category.title} width={56} height={56} className="h-full w-full object-cover" />
-                </div>
-                <span className="text-[10px] text-text-secondary font-display">{category.title}</span>
-              </button>
-            ))}
-          </div>
-        </FadeIn>
+                  {/* Circle icon with accent border + glow */}
+                  <div
+                    className="relative rounded-full overflow-hidden"
+                    style={{
+                      width: 60,
+                      height: 60,
+                      border: `2px solid ${category.accent}55`,
+                      boxShadow: `0 0 14px ${category.accent}28`,
+                    }}
+                  >
+                    <Image
+                      src={category.image}
+                      alt={category.title}
+                      width={60}
+                      height={60}
+                      className="h-full w-full object-cover"
+                      unoptimized
+                    />
+                    {/* Subtle inner gradient overlay */}
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background: `linear-gradient(135deg, ${category.accent}22 0%, transparent 60%)`,
+                      }}
+                    />
+                  </div>
+
+                  {/* Title */}
+                  <div className="text-center" style={{ width: 64 }}>
+                    <p
+                      className="font-display text-[11px] font-bold leading-tight text-text-primary"
+                      style={{
+                        overflow: 'hidden',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                      }}
+                    >
+                      {category.title}
+                    </p>
+                    <p className="text-[9px] text-text-muted truncate mt-0.5 leading-none">
+                      {category.subtitle}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </FadeIn>
+        )}
 
       </div>
     </div>
   )
 }
-

@@ -16,6 +16,7 @@ export const FEATURE_CAPABILITIES = {
   'palm.scan': 'pro',
   'soulmate.generate': 'pro',
   'tarot.modes': 'pro',
+  'prediction.report': 'pro',
 } as const satisfies Record<string, 'pro'>
 
 export type FeatureKey = keyof typeof FEATURE_CAPABILITIES

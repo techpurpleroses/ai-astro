@@ -7,6 +7,7 @@ export default function NearFuturePage() {
       subtitle="✦ The Next 3 Months ✦"
       promptText="Think about the months ahead. What do you most want to understand? Choose a card when you feel the pull."
       accentColor="#A78BFA"
+      spreadType="near-future"
     />
   )
 }
